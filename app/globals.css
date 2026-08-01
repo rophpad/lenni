@@ -1,0 +1,26 @@
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap");
+@import "./design-tokens.css";
+@import "tailwindcss";
+
+@theme inline {
+    --color-page: var(--color-canvas);
+    --color-page-subtle: var(--color-canvas-subtle);
+    --color-ui-surface: var(--color-surface);
+    --color-ui-border: var(--color-border);
+    --color-ui-border-subtle: var(--color-border-subtle);
+    --color-foreground: var(--color-text);
+    --color-muted: var(--color-text-muted);
+    --color-subtle: var(--color-text-subtle);
+    --color-accent: var(--color-brand);
+    --color-accent-hover: var(--color-brand-hover);
+    --color-accent-subtle: var(--color-brand-subtle);
+    --color-positive: var(--color-success);
+    --color-positive-subtle: var(--color-success-subtle);
+    --color-caution: var(--color-warning);
+    --color-caution-subtle: var(--color-warning-subtle);
+    --color-negative: var(--color-danger);
+    --color-negative-subtle: var(--color-danger-subtle);
+    --font-display: "Poppins", sans-serif;
+    --font-sans: "Plus Jakarta Sans", sans-serif;
+    --font-mono: "IBM Plex Mono", monospace;
+}

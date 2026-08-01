@@ -1,0 +1,77 @@
+:root {
+  /* Base palette */
+  --color-white: #fff;
+  --color-neutral-50: #f4f6fb;
+  --color-neutral-100: #f1f4f9;
+  --color-neutral-150: #edf0f5;
+  --color-neutral-200: #e3e7ee;
+  --color-neutral-250: #eaf0ff;
+  --color-neutral-500: #8a93a3;
+  --color-neutral-600: #5b6472;
+  --color-neutral-900: #161a23;
+  --color-blue-100: #e8edff;
+  --color-blue-500: #4a71ff;
+  --color-blue-600: #2f5ff5;
+  --color-blue-700: #1e46c9;
+  --color-amber-100: #fdf1dd;
+  --color-amber-500: #f5a524;
+  --color-teal-100: #e1faf5;
+  --color-teal-500: #12b7a0;
+  --color-teal-600: #0e9784;
+  --color-rose-100: #fde9ed;
+  --color-rose-500: #ef4a67;
+
+  /* Alpha colors */
+  --color-white-85: rgb(255 255 255 / 85%);
+  --color-black-20: rgb(0 0 0 / 20%);
+  --color-black-27: rgb(0 0 0 / 27%);
+  --color-text-4: rgb(22 26 35 / 4%);
+  --color-text-5: rgb(22 26 35 / 5%);
+  --color-text-10: rgb(22 26 35 / 10%);
+  --color-brand-5: rgb(47 95 245 / 5%);
+
+  /* Semantic design tokens */
+  --color-canvas: var(--color-white);
+  --color-canvas-subtle: var(--color-neutral-50);
+  --color-surface: var(--color-white);
+  --color-surface-raised: var(--color-neutral-100);
+  --color-surface-hover: var(--color-neutral-250);
+  --color-border: var(--color-neutral-200);
+  --color-border-subtle: var(--color-neutral-150);
+  --color-text: var(--color-neutral-900);
+  --color-text-muted: var(--color-neutral-600);
+  --color-text-subtle: var(--color-neutral-500);
+  --color-on-accent: var(--color-white);
+  --color-brand: var(--color-blue-600);
+  --color-brand-hover: var(--color-blue-500);
+  --color-brand-strong: var(--color-blue-700);
+  --color-brand-subtle: var(--color-blue-100);
+  --color-warning: var(--color-amber-500);
+  --color-warning-subtle: var(--color-amber-100);
+  --color-success: var(--color-teal-500);
+  --color-success-strong: var(--color-teal-600);
+  --color-success-subtle: var(--color-teal-100);
+  --color-danger: var(--color-rose-500);
+  --color-danger-subtle: var(--color-rose-100);
+  --color-contour: var(--color-brand-5);
+
+  /* Short aliases retained for existing components */
+  --ink: var(--color-canvas);
+  --ink-2: var(--color-canvas-subtle);
+  --surface: var(--color-surface);
+  --surface-raised: var(--color-surface-raised);
+  --surface-hover: var(--color-surface-hover);
+  --hairline: var(--color-border);
+  --hairline-soft: var(--color-border-subtle);
+  --text: var(--color-text);
+  --text-dim: var(--color-text-muted);
+  --text-faint: var(--color-text-subtle);
+  --blue: var(--color-brand);
+  --blue-dim: var(--color-brand-subtle);
+  --amber: var(--color-warning);
+  --amber-dim: var(--color-warning-subtle);
+  --teal: var(--color-success);
+  --teal-dim: var(--color-success-subtle);
+  --rose: var(--color-danger);
+  --rose-dim: var(--color-danger-subtle);
+}
