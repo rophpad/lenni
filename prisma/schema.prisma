@@ -1,0 +1,517 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AccountStatus {
+  pending
+  active
+  suspended
+  deleted
+
+  @@map("account_status")
+}
+
+enum SourceType {
+  resume
+  linkedin
+  github
+
+  @@map("source_type")
+}
+
+enum SourceStatus {
+  pending
+  processing
+  ready
+  failed
+
+  @@map("source_status")
+}
+
+enum RoadmapStatus {
+  draft
+  active
+  completed
+  archived
+
+  @@map("roadmap_status")
+}
+
+enum ContentStatus {
+  locked
+  available
+  in_progress
+  completed
+
+  @@map("content_status")
+}
+
+enum ProficiencyLevel {
+  novice
+  beginner
+  intermediate
+  advanced
+  expert
+
+  @@map("proficiency_level")
+}
+
+enum SkillRequirement {
+  required
+  preferred
+
+  @@map("skill_requirement")
+}
+
+enum TaskType {
+  review
+  lesson
+  exercise
+  project
+  job_action
+
+  @@map("task_type")
+}
+
+enum AiRunStatus {
+  pending
+  running
+  succeeded
+  failed
+  canceled
+
+  @@map("ai_run_status")
+}
+
+enum AiOperation {
+  profile_extraction
+  skill_inference
+  goal_benchmark
+  roadmap_generation
+  roadmap_replan
+  lesson_generation
+  exercise_grading
+  daily_planning
+  coach_summary
+  job_evaluation
+
+  @@map("ai_operation")
+}
+
+enum ExerciseType {
+  multiple_choice
+  free_text
+  code
+  project
+
+  @@map("exercise_type")
+}
+
+enum GradingStatus {
+  pending
+  graded
+  needs_review
+  failed
+
+  @@map("grading_status")
+}
+
+model User {
+  id              String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email           String              @unique @db.Citext
+  passwordHash    String?             @map("password_hash")
+  fullName        String              @map("full_name")
+  avatarUrl       String?             @map("avatar_url")
+  status          AccountStatus       @default(pending)
+  emailVerifiedAt DateTime?           @map("email_verified_at") @db.Timestamptz
+  emailVerified   Boolean             @default(false) @map("email_verified")
+  lastLoginAt     DateTime?           @map("last_login_at") @db.Timestamptz
+  createdAt       DateTime            @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime            @default(now()) @map("updated_at") @db.Timestamptz
+  deletedAt       DateTime?           @map("deleted_at") @db.Timestamptz
+  sessions        BetterAuthSession[]
+  accounts        BetterAuthAccount[]
+
+  @@map("users")
+}
+
+model BetterAuthSession {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  expiresAt DateTime @map("expires_at")
+  token     String   @unique
+  createdAt DateTime @map("created_at")
+  updatedAt DateTime @map("updated_at")
+  ipAddress String?  @map("ip_address")
+  userAgent String?  @map("user_agent")
+  userId    String   @map("user_id") @db.Uuid
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model BetterAuthAccount {
+  id                    String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  accountId             String    @map("account_id")
+  providerId            String    @map("provider_id")
+  userId                String    @map("user_id") @db.Uuid
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?   @map("access_token")
+  refreshToken          String?   @map("refresh_token")
+  idToken               String?   @map("id_token")
+  accessTokenExpiresAt  DateTime? @map("access_token_expires_at")
+  refreshTokenExpiresAt DateTime? @map("refresh_token_expires_at")
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @map("created_at")
+  updatedAt             DateTime  @map("updated_at")
+
+  @@map("accounts")
+}
+
+model BetterAuthVerification {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  identifier String
+  value      String
+  expiresAt  DateTime  @map("expires_at")
+  createdAt  DateTime? @map("created_at")
+  updatedAt  DateTime? @map("updated_at")
+
+  @@map("verifications")
+}
+
+model AuthSession {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  tokenHash String    @unique @map("token_hash")
+  userAgent String?   @map("user_agent")
+  ipAddress String?   @map("ip_address") @db.Inet
+  expiresAt DateTime  @map("expires_at") @db.Timestamptz
+  revokedAt DateTime? @map("revoked_at") @db.Timestamptz
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz
+
+  @@map("auth_sessions")
+}
+
+model Profile {
+  userId                String    @id @map("user_id") @db.Uuid
+  headline              String?
+  currentJobTitle       String?   @map("current_job_title")
+  yearsExperience       Decimal?  @map("years_experience") @db.Decimal(4, 1)
+  location              String?
+  bio                   String?
+  timezone              String    @default("UTC")
+  preferredDailyMinutes Int       @default(45) @map("preferred_daily_minutes")
+  studyDays             Int[]     @default([1, 2, 3, 4, 5]) @map("study_days") @db.SmallInt
+  reminderTime          DateTime? @map("reminder_time") @db.Time
+  emailReminders        Boolean   @default(true) @map("email_reminders")
+  pushReminders         Boolean   @default(false) @map("push_reminders")
+  onboardingCompletedAt DateTime? @map("onboarding_completed_at") @db.Timestamptz
+  createdAt             DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt             DateTime  @default(now()) @map("updated_at") @db.Timestamptz
+
+  @@map("profiles")
+}
+
+model ProfileSource {
+  id           String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId       String       @map("user_id") @db.Uuid
+  type         SourceType
+  status       SourceStatus @default(pending)
+  fileName     String?      @map("file_name")
+  storageKey   String?      @map("storage_key")
+  externalUrl  String?      @map("external_url")
+  checksum     String?
+  parsedData   Json         @default("{}") @map("parsed_data")
+  errorMessage String?      @map("error_message")
+  syncedAt     DateTime?    @map("synced_at") @db.Timestamptz
+  createdAt    DateTime     @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt    DateTime     @default(now()) @map("updated_at") @db.Timestamptz
+
+  @@map("profile_sources")
+}
+
+model AiRun {
+  id            String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId        String?     @map("user_id") @db.Uuid
+  operation     AiOperation
+  status        AiRunStatus @default(pending)
+  provider      String?
+  model         String?
+  promptVersion String?     @map("prompt_version")
+  inputData     Json        @default("{}") @map("input_data")
+  outputData    Json        @default("{}") @map("output_data")
+  confidence    Decimal?    @db.Decimal(4, 3)
+  inputTokens   Int?        @map("input_tokens")
+  outputTokens  Int?        @map("output_tokens")
+  errorMessage  String?     @map("error_message")
+  startedAt     DateTime?   @map("started_at") @db.Timestamptz
+  completedAt   DateTime?   @map("completed_at") @db.Timestamptz
+  createdAt     DateTime    @default(now()) @map("created_at") @db.Timestamptz
+
+  @@map("ai_runs")
+}
+
+model Role {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  slug        String   @unique
+  title       String
+  description String?
+  iconKey     String?  @map("icon_key")
+  colorKey    String?  @map("color_key")
+  isCustom    Boolean  @default(false) @map("is_custom")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  @@map("roles")
+}
+
+model Skill {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  slug        String   @unique
+  name        String
+  category    String
+  description String?
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  @@map("skills")
+}
+
+model CareerGoal {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId      String    @map("user_id") @db.Uuid
+  roleId      String?   @map("role_id") @db.Uuid
+  customTitle String?   @map("custom_title")
+  isActive    Boolean   @default(true) @map("is_active")
+  targetDate  DateTime? @map("target_date") @db.Date
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime  @default(now()) @map("updated_at") @db.Timestamptz
+
+  @@map("career_goals")
+}
+
+model CareerGoalSkill {
+  careerGoalId String           @map("career_goal_id") @db.Uuid
+  skillId      String           @map("skill_id") @db.Uuid
+  requirement  SkillRequirement @default(required)
+  targetLevel  ProficiencyLevel @map("target_level")
+  weight       Decimal          @default(1) @db.Decimal(5, 2)
+  rationale    String?
+  aiRunId      String?          @map("ai_run_id") @db.Uuid
+
+  @@id([careerGoalId, skillId])
+  @@map("career_goal_skills")
+}
+
+model UserSkill {
+  userId         String           @map("user_id") @db.Uuid
+  skillId        String           @map("skill_id") @db.Uuid
+  level          ProficiencyLevel @default(novice)
+  score          Decimal          @default(0) @db.Decimal(5, 2)
+  displayScore   Decimal          @default(dbgenerated()) @map("display_score") @db.Decimal(3, 1)
+  confidence     Decimal          @default(0) @db.Decimal(4, 3)
+  lastAssessedAt DateTime?        @map("last_assessed_at") @db.Timestamptz
+  updatedAt      DateTime         @default(now()) @map("updated_at") @db.Timestamptz
+
+  @@id([userId, skillId])
+  @@map("user_skills")
+}
+
+model Roadmap {
+  id                      String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId                  String        @map("user_id") @db.Uuid
+  careerGoalId            String        @map("career_goal_id") @db.Uuid
+  previousRoadmapId       String?       @map("previous_roadmap_id") @db.Uuid
+  aiRunId                 String?       @map("ai_run_id") @db.Uuid
+  title                   String
+  status                  RoadmapStatus @default(draft)
+  progressPercent         Decimal       @default(0) @map("progress_percent") @db.Decimal(5, 2)
+  estimatedCompletionDate DateTime?     @map("estimated_completion_date") @db.Date
+  version                 Int           @default(1)
+  generationStatus        AiRunStatus   @default(pending) @map("generation_status")
+  generationReason        String?       @map("generation_reason")
+  generationContext       Json          @default("{}") @map("generation_context")
+  activatedAt             DateTime?     @map("activated_at") @db.Timestamptz
+  createdAt               DateTime      @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt               DateTime      @default(now()) @map("updated_at") @db.Timestamptz
+
+  @@unique([careerGoalId, version])
+  @@map("roadmaps")
+}
+
+model Milestone {
+  id          String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  roadmapId   String        @map("roadmap_id") @db.Uuid
+  title       String
+  description String?
+  position    Int
+  status      ContentStatus @default(locked)
+  completedAt DateTime?     @map("completed_at") @db.Timestamptz
+  createdAt   DateTime      @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime      @default(now()) @map("updated_at") @db.Timestamptz
+
+  @@unique([roadmapId, position])
+  @@map("milestones")
+}
+
+model Module {
+  id               String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  milestoneId      String        @map("milestone_id") @db.Uuid
+  title            String
+  description      String?
+  position         Int
+  estimatedMinutes Int?          @map("estimated_minutes")
+  status           ContentStatus @default(locked)
+  completedAt      DateTime?     @map("completed_at") @db.Timestamptz
+  createdAt        DateTime      @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt        DateTime      @default(now()) @map("updated_at") @db.Timestamptz
+
+  @@unique([milestoneId, position])
+  @@map("modules")
+}
+
+model Lesson {
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  moduleId         String   @map("module_id") @db.Uuid
+  slug             String
+  title            String
+  summary          String?
+  body             Json     @default("[]")
+  position         Int
+  estimatedMinutes Int      @default(15) @map("estimated_minutes")
+  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt        DateTime @default(now()) @map("updated_at") @db.Timestamptz
+
+  @@unique([moduleId, position])
+  @@unique([moduleId, slug])
+  @@map("lessons")
+}
+
+model Exercise {
+  id          String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  lessonId    String       @map("lesson_id") @db.Uuid
+  type        ExerciseType @default(multiple_choice)
+  prompt      String
+  explanation String?
+  rubric      Json         @default("{}")
+  maxScore    Decimal      @default(1) @map("max_score") @db.Decimal(7, 2)
+  position    Int          @default(0)
+  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz
+
+  @@unique([lessonId, position])
+  @@map("exercises")
+}
+
+model ExerciseOption {
+  id         String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  exerciseId String  @map("exercise_id") @db.Uuid
+  label      String
+  isCorrect  Boolean @default(false) @map("is_correct")
+  position   Int
+
+  @@unique([exerciseId, position])
+  @@map("exercise_options")
+}
+
+model ExerciseAttempt {
+  id               String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId           String        @map("user_id") @db.Uuid
+  exerciseId       String        @map("exercise_id") @db.Uuid
+  selectedOptionId String?       @map("selected_option_id") @db.Uuid
+  isCorrect        Boolean?      @map("is_correct")
+  score            Decimal?      @db.Decimal(7, 2)
+  response         Json          @default("{}")
+  feedback         String?
+  gradingStatus    GradingStatus @default(pending) @map("grading_status")
+  aiRunId          String?       @map("ai_run_id") @db.Uuid
+  gradedAt         DateTime?     @map("graded_at") @db.Timestamptz
+  attemptedAt      DateTime      @default(now()) @map("attempted_at") @db.Timestamptz
+
+  @@map("exercise_attempts")
+}
+
+model LessonProgress {
+  id               String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId           String        @map("user_id") @db.Uuid
+  lessonId         String        @map("lesson_id") @db.Uuid
+  status           ContentStatus @default(available)
+  progressPercent  Decimal       @default(0) @map("progress_percent") @db.Decimal(5, 2)
+  startedAt        DateTime?     @map("started_at") @db.Timestamptz
+  completedAt      DateTime?     @map("completed_at") @db.Timestamptz
+  timeSpentSeconds Int           @default(0) @map("time_spent_seconds")
+  updatedAt        DateTime      @default(now()) @map("updated_at") @db.Timestamptz
+
+  @@unique([userId, lessonId])
+  @@map("lesson_progress")
+}
+
+model DailyPlan {
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId           String    @map("user_id") @db.Uuid
+  planDate         DateTime  @map("plan_date") @db.Date
+  estimatedMinutes Int       @default(45) @map("estimated_minutes")
+  aiRunId          String?   @map("ai_run_id") @db.Uuid
+  completedAt      DateTime? @map("completed_at") @db.Timestamptz
+  createdAt        DateTime  @default(now()) @map("created_at") @db.Timestamptz
+
+  @@unique([userId, planDate])
+  @@map("daily_plans")
+}
+
+model DailyTask {
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  dailyPlanId      String    @map("daily_plan_id") @db.Uuid
+  type             TaskType
+  title            String
+  lessonId         String?   @map("lesson_id") @db.Uuid
+  exerciseId       String?   @map("exercise_id") @db.Uuid
+  projectId        String?   @map("project_id") @db.Uuid
+  jobEvaluationId  String?   @map("job_evaluation_id") @db.Uuid
+  estimatedMinutes Int       @map("estimated_minutes")
+  position         Int
+  completedAt      DateTime? @map("completed_at") @db.Timestamptz
+
+  @@unique([dailyPlanId, position])
+  @@map("daily_tasks")
+}
+
+model Streak {
+  userId           String    @id @map("user_id") @db.Uuid
+  currentDays      Int       @default(0) @map("current_days")
+  longestDays      Int       @default(0) @map("longest_days")
+  lastActivityDate DateTime? @map("last_activity_date") @db.Date
+  updatedAt        DateTime  @default(now()) @map("updated_at") @db.Timestamptz
+
+  @@map("streaks")
+}
+
+model CoachMessage {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId      String    @map("user_id") @db.Uuid
+  message     String
+  triggerType String?   @map("trigger_type")
+  aiRunId     String?   @map("ai_run_id") @db.Uuid
+  metadata    Json      @default("{}")
+  readAt      DateTime? @map("read_at") @db.Timestamptz
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz
+
+  @@map("coach_messages")
+}
+
+model JobEvaluation {
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId           String    @map("user_id") @db.Uuid
+  rawDescription   String    @map("raw_description")
+  detectedTitle    String?   @map("detected_title")
+  score            Decimal   @db.Decimal(5, 2)
+  aiRunId          String?   @map("ai_run_id") @db.Uuid
+  matchedSkills    Json      @default("[]") @map("matched_skills")
+  missingSkills    Json      @default("[]") @map("missing_skills")
+  addedToRoadmapAt DateTime? @map("added_to_roadmap_at") @db.Timestamptz
+  createdAt        DateTime  @default(now()) @map("created_at") @db.Timestamptz
+
+  @@map("job_evaluations")
+}

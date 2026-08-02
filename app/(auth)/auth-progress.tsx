@@ -14,6 +14,7 @@ export function useAuthProgress(step: number) {
 export function AuthShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const [step, setStep] = useState(pathname === "/register" ? 1 : 2);
+  const steps = ["Account", "Profile", "Career", "Roadmap"];
 
   useEffect(() => {
     if (pathname === "/register") setStep(1);
@@ -25,11 +26,12 @@ export function AuthShell({ children }: { children: ReactNode }) {
         <div className="w-full max-w-115">
           <Logo />
           <div className="mb-7.5 text-[13.5px] text-subtle">Your AI Career Copilot</div>
-          {pathname === "/register" || pathname === "/onboarding" && (
-            <div className="mb-8.5 flex gap-1.5" aria-label={`Step ${step} of 4`}>
-              {[1, 2, 3, 4].map((item) => (
-                <span className={`h-0.75 flex-1 rounded-sm ${item <= step ? "bg-accent" : "bg-ui-border"}`} key={item}/>
-              ))}
+          {(pathname === "/register" || pathname === "/onboarding") && (
+            <div className="mb-8.5" aria-label={`Step ${step} of ${steps.length}: ${steps[step - 1]}`}>
+              <div className="mb-2 flex items-center justify-between text-[11px] font-medium uppercase tracking-[.08em] text-subtle"><span>Step {step} of {steps.length}</span><span className="text-accent">{steps[step - 1]}</span></div>
+              <div className="flex gap-1.5">{steps.map((label, index) => (
+                <span aria-label={label} aria-current={index + 1 === step ? "step" : undefined} className={`h-0.75 flex-1 rounded-sm transition-colors ${index + 1 <= step ? "bg-accent" : "bg-ui-border"}`} key={label}/>
+              ))}</div>
             </div>
           )}
           {children}

@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
+import { authClient } from "../../lib/auth-client";
+import { useRouter } from "next/navigation";
 
 const nav = [
   ["/dashboard", "Dashboard", <path key="d" d="M3 12l9-9 9 9M5 10v10h14V10" />],
@@ -59,8 +61,9 @@ const nav = [
   ],
 ] as const;
 
-export function ConnectedShell({ children }: { children: ReactNode }) {
+export function ConnectedShell({ children, user }: { children: ReactNode; user: { name: string; career: string } }) {
   const pathname = usePathname();
+  const router = useRouter();
   return (
     <div className="relative z-1 flex min-h-screen">
       <aside className="sticky top-0 flex h-screen w-59 shrink-0 flex-col border-r border-ui-border-subtle bg-page-subtle px-4.5 py-7 max-[760px]:fixed max-[760px]:inset-x-0 max-[760px]:bottom-0 max-[760px]:top-auto max-[760px]:z-20 max-[760px]:h-auto max-[760px]:w-full max-[760px]:flex-row max-[760px]:overflow-x-auto max-[760px]:border-r-0 max-[760px]:border-t max-[760px]:px-3.5 max-[760px]:py-2.5">
@@ -96,15 +99,16 @@ export function ConnectedShell({ children }: { children: ReactNode }) {
         <div className="mt-auto border-t border-ui-border-subtle px-3 py-3.5 max-[760px]:hidden">
           <div className="flex items-center gap-2.5">
             <span className="flex size-8.5 items-center justify-center rounded-full bg-linear-to-br from-accent to-positive font-display text-sm font-semibold text-white">
-              MT
+              {user.name.split(/\s+/).map(part => part[0]).slice(0, 2).join("").toUpperCase()}
             </span>
             <div>
-              <p className="text-[13.5px] font-semibold">Maya Torres</p>
-              <p className="text-[11.5px] text-subtle">→ AI Engineer</p>
+              <p className="text-[13.5px] font-semibold">{user.name}</p>
+              <p className="text-[11.5px] text-subtle">→ {user.career}</p>
             </div>
           </div>
-          <Link
-            href="/login"
+          <button
+            type="submit"
+            onClick={async () => { await authClient.signOut(); router.push("/login"); router.refresh(); }}
             className="mt-3 flex w-full items-center gap-2.5 rounded-lg px-2 py-2 text-[13px] font-medium text-muted transition hover:bg-negative-subtle hover:text-negative"
           >
             <svg className="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -112,7 +116,7 @@ export function ConnectedShell({ children }: { children: ReactNode }) {
               <path d="M14 3h5a2 2 0 012 2v14a2 2 0 01-2 2h-5" />
             </svg>
             Log out
-          </Link>
+          </button>
         </div>
       </aside>
       <main className="min-w-0 flex-1 px-11 pb-20 pt-9 max-[760px]:px-4.5 max-[760px]:pb-25 max-[760px]:pt-6">

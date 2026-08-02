@@ -31,15 +31,55 @@ $$;
 CREATE TABLE users (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   email citext NOT NULL UNIQUE,
-  password_hash text NOT NULL,
+  password_hash text,
   full_name text NOT NULL,
   avatar_url text,
   status account_status NOT NULL DEFAULT 'pending',
   email_verified_at timestamptz,
+  email_verified boolean NOT NULL DEFAULT false,
   last_login_at timestamptz,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
   deleted_at timestamptz
+);
+
+-- Better Auth owns these tables. Legacy auth_sessions remains available for migration only.
+CREATE TABLE sessions (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  expires_at timestamp NOT NULL,
+  token text NOT NULL UNIQUE,
+  created_at timestamp NOT NULL,
+  updated_at timestamp NOT NULL,
+  ip_address text,
+  user_agent text,
+  user_id uuid NOT NULL REFERENCES users(id) ON DELETE CASCADE
+);
+CREATE INDEX sessions_user_id_idx ON sessions(user_id);
+
+CREATE TABLE accounts (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  account_id text NOT NULL,
+  provider_id text NOT NULL,
+  user_id uuid NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  access_token text,
+  refresh_token text,
+  id_token text,
+  access_token_expires_at timestamp,
+  refresh_token_expires_at timestamp,
+  scope text,
+  password text,
+  created_at timestamp NOT NULL,
+  updated_at timestamp NOT NULL
+);
+CREATE INDEX accounts_user_id_idx ON accounts(user_id);
+
+CREATE TABLE verifications (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  identifier text NOT NULL,
+  value text NOT NULL,
+  expires_at timestamp NOT NULL,
+  created_at timestamp,
+  updated_at timestamp
 );
 
 CREATE TABLE auth_sessions (

@@ -2,6 +2,8 @@
 
 PostgreSQL is the source of truth. Apply [`schema.sql`](./schema.sql) to an empty database before wiring an ORM or query layer.
 
+The application uses Prisma for queries and Better Auth for identity. Better Auth stores credentials in `accounts` and sessions in `sessions`; `auth_sessions` remains a legacy-compatible table and is not used by the current application.
+
 ## Domain map
 
 ```text
