@@ -193,21 +193,22 @@ export default function Home() {
             <a href="#faq">FAQ</a>
           </div>
           <button
-            className="btn relative inline-flex cursor-pointer items-center justify-center gap-2 rounded-2xl border-2 border-transparent px-6 py-3.25 text-[13.5px] font-extrabold uppercase tracking-[.03em] transition disabled:cursor-not-allowed disabled:opacity-45 border-accent bg-accent text-white shadow-[0_4px_0_var(--color-brand-strong)] hover:border-accent-hover hover:bg-accent-hover active:translate-y-0.75 active:shadow-[0_1px_0_var(--color-brand-strong)]"
+            className="btn relative inline-flex cursor-pointer items-center justify-center gap-2 rounded-2xl border-2 border-transparent px-6 py-3.25 text-xs font-extrabold uppercase tracking-[.03em] transition disabled:cursor-not-allowed disabled:opacity-45 border-accent bg-accent text-white shadow-[0_4px_0_var(--color-brand-strong)] hover:border-accent-hover hover:bg-accent-hover active:translate-y-0.75 active:shadow-[0_1px_0_var(--color-brand-strong)]"
             onClick={start}
           >
             Start your roadmap
           </button>
         </nav>
         <section className="">
-          <div className="mx-auto mt-14 max-w-190 px-6 text-center">
-            <div className="mb-4 font-mono text-[11px] font-medium uppercase tracking-[.14em] text-accent justify-center text-center">
+          <div className="mx-auto mt-14 w-full px-6 text-center">
+            <div className="mb-4 text-[11px] font-medium uppercase tracking-[.14em] text-accent justify-center text-center">
               Your AI Career Copilot
             </div>
-            <div className="relative inline-block">
-              <h1 className="font-display text-[54px] font-bold leading-[1.12] tracking-[-.02em] max-[760px]:text-3xl max-[400px]:text-[25px]">
+            <div className="w-full relative inline-block">
+              <h1 className="font-display text-4xl md:text-6xl font-bold leading-[1.12] tracking-[-.02em] mx-auto">
                 <span className="block whitespace-nowrap">
-                  The <span className="text-accent">roadmap</span> that gets you
+                  The <span className="text-accent">roadmap</span>{" "}
+                  <br className="" /> that gets you
                 </span>
                 <span className="block whitespace-nowrap">
                   <span className="mt-2.5 inline-block -rotate-3 rounded-[18px] bg-positive px-5 pb-2.5 pt-0.5 text-white shadow-[0_6px_0_var(--color-success-strong)] animate-pulse">
@@ -215,21 +216,16 @@ export default function Home() {
                   </span>
                 </span>
               </h1>
-              <Spark className="-top-3.5 -right-0.5" color="amber" />
+              <Spark className="-top-3.5 right-8 md:right-36" color="amber" />
               <Spark
-                className="bottom-1.5 -left-6.5 size-3.75 max-[760px]:-left-2.5"
+                className="bottom-1.5 left-12 md:left-48 size-3.75 "
                 color="blue"
               />
-              <Spark
-                className="top-[46%] -right-8.5 size-2.75 max-[760px]:-right-2"
-                color="teal"
-                circle
-              />
             </div>
-            <p className="mx-auto mt-6 max-w-135 text-[16.5px] leading-[1.65] text-muted">
-              Lenni turns “become an AI Engineer” into a roadmap built from your
-              actual résumé — then walks it with you, one lesson at a time,
-              until you get there.
+            <p className="mx-auto mt-6 max-w-sm md:max-w-md text-sm md:text-base leading-[1.65] text-muted">
+              Lenni turns "become an AI Engineer" into a roadmap built from your
+              actual profile then walks it with you, one lesson at a time, until
+              you get there.
             </p>
           </div>
 
@@ -263,7 +259,7 @@ export default function Home() {
           <div className="mx-auto mt-6 max-w-190 px-6 text-center">
             <div className="mt-8 flex justify-center gap-3">
               <button
-                className="btn relative inline-flex cursor-pointer items-center justify-center gap-2 rounded-2xl border-2 border-transparent px-6 py-3.25 text-[13.5px] font-extrabold uppercase tracking-[.03em] transition disabled:cursor-not-allowed disabled:opacity-45 border-accent bg-accent text-white shadow-[0_4px_0_var(--color-brand-strong)] hover:border-accent-hover hover:bg-accent-hover active:translate-y-0.75 active:shadow-[0_1px_0_var(--color-brand-strong)]"
+                className="btn relative inline-flex cursor-pointer items-center justify-center gap-2 rounded-2xl border-2 border-transparent px-6 py-3.25 text-xs font-extrabold uppercase tracking-[.03em] transition disabled:cursor-not-allowed disabled:opacity-45 border-accent bg-accent text-white shadow-[0_4px_0_var(--color-brand-strong)] hover:border-accent-hover hover:bg-accent-hover active:translate-y-0.75 active:shadow-[0_1px_0_var(--color-brand-strong)]"
                 onClick={start}
               >
                 Start your roadmap →
@@ -339,7 +335,7 @@ export default function Home() {
           title="Everything you need, nothing you have to plan yourself."
         >
           <div className="h-8" />
-          <div className="grid grid-cols-3 gap-4 max-[760px]:grid-cols-2">
+          <div className="flex flex-col md:flex-row items-center gap-4">
             {features.map(([icon, title, text]) => (
               <article
                 className="rounded-xl border border-ui-border-subtle bg-ui-surface p-6 shadow-(--shadow) [&_h3]:mb-2 [&_h3]:font-display [&_h3]:text-[17px] [&_h3]:font-semibold [&_p]:text-[13.5px] [&_p]:leading-[1.55] [&_p]:text-muted"
@@ -357,7 +353,7 @@ export default function Home() {
           kicker="How it starts"
           title="From résumé to roadmap in four steps."
         >
-          <div className="mt-11 grid grid-cols-4 gap-4 max-[760px]:grid-cols-2">
+          <div className="mt-11 flex flex-col md:flex-row items-center gap-4">
             {[
               ["Import your profile", "LinkedIn and résumé, GitHub optional."],
               ["Name your goal", "Pick a role, or type your own."],
@@ -365,7 +361,7 @@ export default function Home() {
               ["Walk the roadmap", "Daily lessons until you arrive."],
             ].map(([t, d], i) => (
               <button
-                className={`relative overflow-hidden rounded-xl border-[1.5px] bg-ui-surface px-5 pb-6 pt-5.5 text-left shadow-(--shadow) transition ${step === i ? "active -translate-y-1 border-accent opacity-100 shadow-[0_0_0_3px_var(--color-brand-subtle),var(--shadow)]" : "border-ui-border-subtle opacity-70"}`}
+                className={`w-full relative overflow-hidden rounded-xl border-[1.5px] bg-ui-surface px-5 pb-6 pt-5.5 text-left shadow-(--shadow) transition ${step === i ? "active -translate-y-1 border-accent opacity-100 shadow-[0_0_0_3px_var(--color-brand-subtle),var(--shadow)]" : "border-ui-border-subtle opacity-70"}`}
                 onClick={() => setStep(i)}
                 key={t}
               >
@@ -479,7 +475,7 @@ export default function Home() {
               Import your profile, pick a goal, and get your first lesson today.
             </p>
             <button
-              className="btn relative inline-flex cursor-pointer items-center justify-center gap-2 rounded-2xl border-2 border-transparent px-6 py-3.25 text-[13.5px] font-extrabold uppercase tracking-[.03em] transition disabled:cursor-not-allowed disabled:opacity-45 border-accent bg-accent text-white shadow-[0_4px_0_var(--color-brand-strong)] hover:border-accent-hover hover:bg-accent-hover active:translate-y-0.75 active:shadow-[0_1px_0_var(--color-brand-strong)]"
+              className="btn relative inline-flex cursor-pointer items-center justify-center gap-2 rounded-2xl border-2 border-transparent px-6 py-3.25 text-xs font-extrabold uppercase tracking-[.03em] transition disabled:cursor-not-allowed disabled:opacity-45 border-accent bg-accent text-white shadow-[0_4px_0_var(--color-brand-strong)] hover:border-accent-hover hover:bg-accent-hover active:translate-y-0.75 active:shadow-[0_1px_0_var(--color-brand-strong)]"
               onClick={start}
             >
               Start your roadmap →
@@ -630,14 +626,15 @@ function Price({
   );
 }
 function Footer({ start }: { start: () => void }) {
+  const year = new Date().getFullYear();
   return (
     <footer className="mx-auto mt-20 w-full max-w-295 px-11 pb-8.5 pt-12.5">
       <div className="grid grid-cols-[1.4fr_1fr_1fr_1fr] gap-7.5 border-b border-ui-border-subtle pb-9 max-[760px]:grid-cols-2">
         <div className="[&_p]:max-w-55 [&_p]:text-[13px] [&_p]:leading-[1.6] [&_p]:text-subtle">
           <Logo />
           <p>
-            The AI Career Copilot that guides you until you reach your goal —
-            not just a one-time answer.
+            The AI Career Copilot that guides you until you reach your goal not
+            just a one-time answer.
           </p>
         </div>
         <div className="[&_a]:mb-2.75 [&_a]:block [&_a]:text-[13.5px] [&_a]:text-muted [&_button]:mb-2.75 [&_button]:block [&_button]:text-[13.5px] [&_button]:text-muted">
@@ -663,8 +660,8 @@ function Footer({ start }: { start: () => void }) {
         </div>
       </div>
       <div className="flex justify-between gap-2.5 pt-5.5 [&_span]:text-[12.5px] [&_span]:text-subtle">
-        <span>© 2026 Lenni. All rights reserved.</span>
-        <span>Made for people, not for résumés.</span>
+        <span>© {year} Lenni. All rights reserved.</span>
+        <span>Made for self learner.</span>
       </div>
     </footer>
   );
