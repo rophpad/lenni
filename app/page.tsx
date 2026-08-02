@@ -335,7 +335,7 @@ export default function Home() {
           title="Everything you need, nothing you have to plan yourself."
         >
           <div className="h-8" />
-          <div className="flex flex-col md:flex-row items-center gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 items-center gap-4">
             {features.map(([icon, title, text]) => (
               <article
                 className="rounded-xl border border-ui-border-subtle bg-ui-surface p-6 shadow-(--shadow) [&_h3]:mb-2 [&_h3]:font-display [&_h3]:text-[17px] [&_h3]:font-semibold [&_p]:text-[13.5px] [&_p]:leading-[1.55] [&_p]:text-muted"
