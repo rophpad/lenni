@@ -2,6 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { Logo } from "./components/logo";
+import { ThemeToggle } from "./components/theme-toggle";
+import { CAREER_CATALOG } from "../lib/careers";
 import {
   RoleIcon,
   roleIconColors,
@@ -17,16 +19,18 @@ import {
   type ReactNode,
 } from "react";
 
-const roles: Array<[string, string, RoleColor, RoleIconName]> = [
-  ["AI Engineer", "Foundations → LLMs", "blue", "network"],
-  ["Product Manager", "Discovery → Strategy", "teal", "flag"],
-  ["Product Designer", "Craft → Systems", "amber", "pen"],
-  ["UX Designer", "Research → Flows", "blue", "layout"],
-  ["Frontend Engineer", "JS → Frameworks", "teal", "browser"],
-  ["Backend Engineer", "APIs → Systems", "amber", "server"],
-  ["Data Scientist", "Stats → Modeling", "blue", "chart"],
-  ["DevOps Engineer", "CI/CD → Cloud", "teal", "infinity"],
+const NAV_LINKS: Array<[string, string]> = [
+  ["#problem", "Why Lenni"],
+  ["#features", "Features"],
+  ["#pricing", "Pricing"],
+  ["#faq", "FAQ"],
 ];
+const roles: Array<[string, string, RoleColor, RoleIconName]> = CAREER_CATALOG.map(career => [
+  career.title,
+  career.tagline,
+  career.colorKey as RoleColor,
+  career.iconKey as RoleIconName,
+]);
 const features = [
   [
     "◆",
@@ -130,6 +134,7 @@ function Contours() {
 export default function Home() {
   const [annual, setAnnual] = useState(false),
     [faq, setFaq] = useState(-1),
+    [menu, setMenu] = useState(false),
     [step, setStep] = useState(0);
   const router = useRouter();
   const roleScrollRef = useRef<HTMLDivElement>(null);
@@ -184,62 +189,101 @@ export default function Home() {
     <>
       <Contours />
       <main id="landing" className="relative z-1 flex min-h-screen flex-col">
-        <nav className="mx-auto flex w-full max-w-295 items-center justify-between px-11 py-5.5 max-[760px]:px-4.5 max-[760px]:py-5">
-          <Logo />
-          <div className="flex items-center gap-7.5 max-[760px]:hidden [&_a]:text-[13.5px] [&_a]:font-semibold [&_a]:text-muted [&_a]:transition-colors [&_a:hover]:text-accent">
-            <a href="#problem">Why Lenni</a>
-            <a href="#features">Features</a>
-            <a href="#pricing">Pricing</a>
-            <a href="#faq">FAQ</a>
+        <nav className="sticky top-0 z-30 border-b border-transparent bg-page/80 backdrop-blur-md">
+          <div className="mx-auto flex w-full max-w-content items-center justify-between gap-4 px-4 py-4 sm:px-8 sm:py-6 lg:px-11">
+            <Logo />
+            <div className="hidden items-center gap-8 md:flex [&_a]:text-body-s [&_a]:font-semibold [&_a]:text-muted [&_a]:transition-colors [&_a:hover]:text-accent">
+              {NAV_LINKS.map(([href, label]) => (
+                <a href={href} key={href}>
+                  {label}
+                </a>
+              ))}
+            </div>
+            <div className="flex items-center gap-2">
+              <ThemeToggle compact />
+              <button className="btn btn-primary max-sm:px-4 max-sm:py-2.5" onClick={start}>
+                <span className="sm:hidden">Start</span>
+                <span className="max-sm:hidden">Start your roadmap</span>
+              </button>
+              <button
+                aria-expanded={menu}
+                aria-label={menu ? "Close menu" : "Open menu"}
+                className="btn btn-ghost -mr-1 p-2 md:hidden"
+                onClick={() => setMenu(!menu)}
+                type="button"
+              >
+                <svg
+                  className="size-5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeWidth="1.9"
+                  viewBox="0 0 24 24"
+                >
+                  {menu ? (
+                    <path d="M6 6l12 12M18 6L6 18" />
+                  ) : (
+                    <path d="M3.5 7h17M3.5 12h17M3.5 17h17" />
+                  )}
+                </svg>
+              </button>
+            </div>
           </div>
-          <button
-            className="btn relative inline-flex cursor-pointer items-center justify-center gap-2 rounded-2xl border-2 border-transparent px-6 py-3.25 text-xs font-extrabold uppercase tracking-[.03em] transition disabled:cursor-not-allowed disabled:opacity-45 border-accent bg-accent text-white shadow-[0_4px_0_var(--color-brand-strong)] hover:border-accent-hover hover:bg-accent-hover active:translate-y-0.75 active:shadow-[0_1px_0_var(--color-brand-strong)]"
-            onClick={start}
-          >
-            Start your roadmap
-          </button>
+          {menu && (
+            <div className="border-t border-ui-border-subtle bg-page px-4 pb-4 pt-2 md:hidden">
+              {NAV_LINKS.map(([href, label]) => (
+                <a
+                  className="block rounded-chip px-3 py-3 text-body font-semibold text-muted transition hover:bg-ui-raised hover:text-foreground"
+                  href={href}
+                  key={href}
+                  onClick={() => setMenu(false)}
+                >
+                  {label}
+                </a>
+              ))}
+            </div>
+          )}
         </nav>
         <section className="">
           <div className="mx-auto mt-14 w-full px-6 text-center">
-            <div className="mb-4 text-[11px] font-medium uppercase tracking-[.14em] text-accent justify-center text-center">
+            <div className="mb-4 kicker text-accent justify-center text-center">
               Your AI Career Copilot
             </div>
             <div className="w-full relative inline-block">
-              <h1 className="font-display text-4xl md:text-6xl font-bold leading-[1.12] tracking-[-.02em] mx-auto">
+              <h1 className="mx-auto font-display text-display-l font-semibold md:text-display-2xl">
                 <span className="block whitespace-nowrap">
                   The <span className="text-accent">roadmap</span>{" "}
                   <br className="" /> that gets you
                 </span>
                 <span className="block whitespace-nowrap">
-                  <span className="mt-2.5 inline-block -rotate-3 rounded-[18px] bg-positive px-5 pb-2.5 pt-0.5 text-white shadow-[0_6px_0_var(--color-success-strong)] animate-pulse">
+                  {/* Stamped, not a plastic pill — the wax-seal motif that
+                      carries through to completed milestones. */}
+                  <span className="animate-stamp-in mt-2 inline-block rounded-[20px] border-2 border-positive-strong bg-positive px-5 pb-2 pt-1 text-white">
                     hired.
                   </span>
                 </span>
               </h1>
-              <Spark className="-top-3.5 right-8 md:right-36" color="amber" />
-              <Spark
-                className="bottom-1.5 left-12 md:left-48 size-3.75 "
-                color="blue"
-              />
+              <Spark className="-top-4 right-8 md:right-36" color="sun" />
+              <Spark className="bottom-2 left-12 size-4 md:left-48" color="ember" />
             </div>
-            <p className="mx-auto mt-6 max-w-sm md:max-w-md text-sm md:text-base leading-[1.65] text-muted">
-              Lenni turns "become an AI Engineer" into a roadmap built from your
+            <p className="mx-auto mt-6 max-w-sm text-body text-muted md:max-w-md md:text-body-l">
+              Lenni turns “become an AI Engineer” into a roadmap built from your
               actual profile then walks it with you, one lesson at a time, until
               you get there.
             </p>
           </div>
 
           <div className="relative mx-auto mt-6 w-full max-w-260">
-            {/*<div className="mb-3.5 font-mono text-[11px] uppercase tracking-[.08em] text-subtle justify-center text-center">
+            {/*<div className="mb-3 kicker text-subtle justify-center text-center">
               Whatever the goal, Lenni builds the roadmap
             </div>*/}
             <div
               ref={roleScrollRef}
-              className="flex snap-x gap-3.5 overflow-x-auto px-11 pb-4.5 pt-1.5 [scrollbar-width:none] max-[760px]:px-4.5 [&::-webkit-scrollbar]:hidden"
+              className="flex snap-x gap-3 overflow-x-auto px-11 pb-4 pt-1 [scrollbar-width:none] max-[760px]:px-4 [&::-webkit-scrollbar]:hidden"
             >
               {roles.map(([title, tag, color, icon]) => (
                 <article
-                  className="w-43 shrink-0 snap-start rounded-xl border border-ui-border-subtle bg-ui-surface px-4.5 py-5 text-left shadow-(--shadow) transition hover:-translate-y-0.75 hover:shadow-[0_10px_26px_var(--color-text-10)]"
+                  className="card card-interactive w-44 shrink-0 snap-start px-4 py-5 text-left"
                   key={title}
                 >
                   <div
@@ -247,8 +291,8 @@ export default function Home() {
                   >
                     <RoleIcon name={icon} />
                   </div>
-                  <div className="text-sm font-bold leading-[1.3]">{title}</div>
-                  <div className="mt-1.5 font-mono text-[10.5px] text-subtle">
+                  <div className="text-body font-semibold">{title}</div>
+                  <div className="mt-1 font-mono text-label text-subtle">
                     {tag}
                   </div>
                 </article>
@@ -259,13 +303,13 @@ export default function Home() {
           <div className="mx-auto mt-6 max-w-190 px-6 text-center">
             <div className="mt-8 flex justify-center gap-3">
               <button
-                className="btn relative inline-flex cursor-pointer items-center justify-center gap-2 rounded-2xl border-2 border-transparent px-6 py-3.25 text-xs font-extrabold uppercase tracking-[.03em] transition disabled:cursor-not-allowed disabled:opacity-45 border-accent bg-accent text-white shadow-[0_4px_0_var(--color-brand-strong)] hover:border-accent-hover hover:bg-accent-hover active:translate-y-0.75 active:shadow-[0_1px_0_var(--color-brand-strong)]"
+                className="btn btn-primary"
                 onClick={start}
               >
                 Start your roadmap →
               </button>
             </div>
-            <div className="mt-4 text-[12.5px] text-subtle">
+            <div className="mt-4 text-body-s text-subtle">
               Free to start · No credit card required
             </div>
           </div>
@@ -277,7 +321,7 @@ export default function Home() {
           title="Generic advice doesn’t get you hired."
           sub="Everyone’s using AI to figure out their next career move. Almost none of it actually moves them."
         >
-          <div className="mt-11 grid grid-cols-2 gap-3.5 max-[760px]:grid-cols-1">
+          <div className="mt-11 grid grid-cols-2 gap-3 max-[760px]:grid-cols-1">
             {[
               "Roadmaps that ignore your actual background and start you from zero",
               "AI chats that forget everything the moment you close the tab",
@@ -285,13 +329,13 @@ export default function Home() {
               "Learning that never ties back to a real job you could get",
             ].map((x) => (
               <div
-                className="flex items-start gap-3.5 rounded-xl border border-ui-border-subtle bg-ui-surface px-5.5 py-5 shadow-(--shadow)"
+                className="flex items-start gap-3 card px-6 py-5"
                 key={x}
               >
-                <div className="flex size-6.5 shrink-0 items-center justify-center rounded-full bg-negative-subtle text-[13px] font-extrabold text-negative">
+                <div className="flex size-6.5 shrink-0 items-center justify-center rounded-full bg-negative-subtle text-body-s font-extrabold text-negative">
                   ✕
                 </div>
-                <div className="pt-0.5 text-[14.5px] leading-normal">{x}</div>
+                <div className="pt-1 text-body leading-normal">{x}</div>
               </div>
             ))}
           </div>
@@ -314,7 +358,7 @@ export default function Home() {
               ]}
               old
             />
-            <div className="text-[22px] font-bold text-subtle max-[760px]:hidden">
+            <div className="text-display-s font-bold text-subtle max-[760px]:hidden">
               →
             </div>
             <Compare
@@ -338,10 +382,10 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 items-center gap-4">
             {features.map(([icon, title, text]) => (
               <article
-                className="rounded-xl border border-ui-border-subtle bg-ui-surface p-6 shadow-(--shadow) [&_h3]:mb-2 [&_h3]:font-display [&_h3]:text-[17px] [&_h3]:font-semibold [&_p]:text-[13.5px] [&_p]:leading-[1.55] [&_p]:text-muted"
+                className="card p-6 [&_h3]:mb-2 [&_h3]:font-display [&_h3]:text-body-l [&_h3]:font-semibold [&_p]:text-body-s [&_p]:leading-[1.55] [&_p]:text-muted"
                 key={title}
               >
-                <div className="mb-3.5 text-[22px] text-accent">{icon}</div>
+                <div className="mb-3 text-display-s text-accent">{icon}</div>
                 <h3>{title}</h3>
                 <p>{text}</p>
               </article>
@@ -361,18 +405,18 @@ export default function Home() {
               ["Walk the roadmap", "Daily lessons until you arrive."],
             ].map(([t, d], i) => (
               <button
-                className={`w-full relative overflow-hidden rounded-xl border-[1.5px] bg-ui-surface px-5 pb-6 pt-5.5 text-left shadow-(--shadow) transition ${step === i ? "active -translate-y-1 border-accent opacity-100 shadow-[0_0_0_3px_var(--color-brand-subtle),var(--shadow)]" : "border-ui-border-subtle opacity-70"}`}
+                className={`w-full relative overflow-hidden card px-5 pb-6 pt-6 text-left transition ${step === i ? "active -translate-y-1 border-accent opacity-100 card-featured" : "border-ui-border-subtle opacity-70"}`}
                 onClick={() => setStep(i)}
                 key={t}
               >
                 <div className="absolute inset-x-0 top-0 h-0.75 bg-ui-border-subtle">
                   <div className="h-full w-0 bg-accent transition-[width] duration-3200 `in-[.active]:w-full" />
                 </div>
-                <div className="mb-4 mt-3.5 font-mono text-[26px] font-semibold text-ui-border in-[.active]:text-accent">
+                <div className="mb-4 mt-3 font-mono text-display-m font-semibold text-ui-border in-[.active]:text-accent">
                   0{i + 1}
                 </div>
-                <div className="mb-1.5 text-[15px] font-bold">{t}</div>
-                <div className="text-[13px] leading-normal text-muted">{d}</div>
+                <div className="mb-1 text-body font-bold">{t}</div>
+                <div className="text-body-s leading-normal text-muted">{d}</div>
               </button>
             ))}
           </div>
@@ -383,15 +427,15 @@ export default function Home() {
           title="Start free. Upgrade when the roadmap gets real."
           sub="No credit card to start. Cancel anytime."
         >
-          <div className="mx-auto mt-8 flex items-center justify-center gap-3 text-[13px] font-semibold text-subtle">
+          <div className="mx-auto mt-8 flex items-center justify-center gap-3 text-body-s font-semibold text-subtle">
             <span className={!annual ? "text-foreground" : ""}>Monthly</span>
             <button
               aria-label="Toggle annual pricing"
-              className={`relative h-6.25 w-11 rounded-full after:absolute after:left-0.75 after:top-0.75 after:size-4.75 after:rounded-full after:bg-white after:shadow-[0_1px_3px_var(--color-black-27)] after:transition ${annual ? "bg-accent after:translate-x-4.75" : "bg-ui-border"}`}
+              className={`relative h-6 w-11 rounded-full transition-colors after:absolute after:left-1 after:top-1 after:size-4 after:rounded-full after:bg-white after:shadow-[0_1px_3px_var(--color-ink-20)] after:transition-transform ${annual ? "bg-accent after:translate-x-5" : "bg-ui-border"}`}
               onClick={() => setAnnual(!annual)}
             />
             <span className={annual ? "text-foreground" : ""}>Annual</span>
-            <span className="rounded-md bg-positive-subtle px-2 py-0.5 font-mono text-[10.5px] font-semibold text-positive">
+            <span className="rounded-md bg-positive-subtle px-2 py-1 font-mono text-label font-semibold text-positive">
               Save 20%
             </span>
           </div>
@@ -446,36 +490,36 @@ export default function Home() {
           </div>
         </Section>
         <Section id="faq" kicker="FAQ" title="Questions people actually ask.">
-          <div className="mt-11 flex flex-col gap-2.5">
+          <div className="mt-11 flex flex-col gap-2">
             {faqs.map(([q, a], i) => (
               <article
-                className={`overflow-hidden rounded-xl border border-ui-border-subtle bg-ui-surface shadow-(--shadow) ${faq === i ? "open" : ""}`}
+                className={`overflow-hidden card ${faq === i ? "open" : ""}`}
                 key={q}
               >
                 <button
-                  className="flex w-full items-center justify-between gap-4 px-5.5 py-4.75 text-left text-[14.5px] font-semibold"
+                  className="flex w-full items-center justify-between gap-4 px-6 py-4 text-left text-body font-semibold"
                   onClick={() => setFaq(faq === i ? -1 : i)}
                 >
                   <span>{q}</span>
-                  <span className="text-lg text-accent transition in-[.open]:rotate-45">
+                  <span className="text-display-s text-accent transition in-[.open]:rotate-45">
                     +
                   </span>
                 </button>
-                <div className="grid grid-rows-[0fr] transition-[grid-template-rows] in-[.open]:grid-rows-[1fr] [&_p]:overflow-hidden [&_p]:px-5.5 [&_p]:text-[13.5px] [&_p]:leading-[1.6] [&_p]:text-muted [.open_&_p]:pb-5">
+                <div className="grid grid-rows-[0fr] transition-[grid-template-rows] in-[.open]:grid-rows-[1fr] [&_p]:overflow-hidden [&_p]:px-6 [&_p]:text-body-s [&_p]:leading-[1.6] [&_p]:text-muted [.open_&_p]:pb-5">
                   <p>{a}</p>
                 </div>
               </article>
             ))}
           </div>
         </Section>
-        <section className="mx-auto mt-27.5 w-full max-w-205 px-6">
-          <div className="rounded-xl bg-linear-to-br from-accent to-(--color-brand-strong) px-10 py-14 text-center [&_h2]:font-display [&_h2]:text-3xl [&_h2]:font-bold [&_h2]:text-white [&_p]:mx-auto [&_p]:mb-6.5 [&_p]:mt-3 [&_p]:text-[14.5px] [&_p]:text-white/85 [&_.btn]:border-white [&_.btn]:bg-white [&_.btn]:text-accent">
+        <section className="mx-auto mt-24 w-full max-w-205 px-6">
+          <div className="rounded-card bg-linear-to-br from-accent to-(--color-brand-strong) px-10 py-14 text-center [&_h2]:font-display [&_h2]:text-display-l [&_h2]:font-semibold [&_h2]:text-white [&_p]:mx-auto [&_p]:mb-6 [&_p]:mt-3 [&_p]:text-body [&_p]:text-white/85 [&_.btn]:border-white [&_.btn]:bg-white [&_.btn]:text-accent">
             <h2>Ready to know what’s next?</h2>
             <p>
               Import your profile, pick a goal, and get your first lesson today.
             </p>
             <button
-              className="btn relative inline-flex cursor-pointer items-center justify-center gap-2 rounded-2xl border-2 border-transparent px-6 py-3.25 text-xs font-extrabold uppercase tracking-[.03em] transition disabled:cursor-not-allowed disabled:opacity-45 border-accent bg-accent text-white shadow-[0_4px_0_var(--color-brand-strong)] hover:border-accent-hover hover:bg-accent-hover active:translate-y-0.75 active:shadow-[0_1px_0_var(--color-brand-strong)]"
+              className="btn btn-primary"
               onClick={start}
             >
               Start your roadmap →
@@ -527,17 +571,17 @@ function Section({
 }) {
   return (
     <section
-      className="mx-auto mt-25 w-full max-w-260 scroll-mt-7.5 px-6"
+      className="mx-auto mt-25 w-full max-w-260 scroll-mt-8 px-6"
       id={id}
     >
-      <div className="mb-4 text-center font-mono text-[11px] font-medium uppercase tracking-[.14em] text-accent">
+      <div className="mb-4 text-center kicker text-accent">
         {kicker}
       </div>
-      <h2 className="mx-auto max-w-160 text-center font-display text-[34px] font-bold tracking-[-.01em]">
+      <h2 className="mx-auto max-w-160 text-center font-display text-display-l font-bold tracking-[-.01em]">
         {title}
       </h2>
       {sub && (
-        <p className="mx-auto mt-3.5 max-w-130 text-center text-[15px] leading-[1.6] text-muted">
+        <p className="mx-auto mt-3 max-w-130 text-center text-body leading-[1.6] text-muted">
           {sub}
         </p>
       )}
@@ -558,14 +602,14 @@ function Compare({
 }) {
   return (
     <article
-      className={`rounded-xl border bg-ui-surface p-6.5 shadow-(--shadow) ${old ? "border-ui-border-subtle" : "border-accent shadow-[0_0_0_3px_var(--color-brand-subtle),var(--shadow)]"}`}
+      className={`rounded-xl border bg-ui-surface p-6 ${old ? "border-ui-border-subtle" : "card-featured"}`}
     >
-      <div className="mb-2.5 font-mono text-[11px] uppercase tracking-[.08em] text-subtle">
+      <div className="mb-2 kicker text-subtle">
         {label}
       </div>
-      <div className="mb-4 font-display text-lg font-semibold">{quote}</div>
+      <div className="mb-4 font-display text-display-s font-semibold">{quote}</div>
       <ul
-        className={`flex list-none flex-col gap-2.5 [&_li]:flex [&_li]:gap-2.5 [&_li]:text-[13.5px] [&_li]:leading-normal [&_li]:text-muted ${old ? "[&_li]:before:font-bold [&_li]:before:text-negative [&_li]:before:content-['✕']" : "[&_li]:before:font-bold [&_li]:before:text-positive [&_li]:before:content-['✓']"}`}
+        className={`flex list-none flex-col gap-2 [&_li]:flex [&_li]:gap-2 [&_li]:text-body-s [&_li]:leading-normal [&_li]:text-muted ${old ? "[&_li]:before:font-bold [&_li]:before:text-negative [&_li]:before:content-['✕']" : "[&_li]:before:font-bold [&_li]:before:text-positive [&_li]:before:content-['✓']"}`}
       >
         {items.map((x) => (
           <li key={x}>{x}</li>
@@ -597,27 +641,27 @@ function Price({
 }) {
   return (
     <article
-      className={`flex flex-col rounded-xl border bg-ui-surface px-6 py-7 shadow-(--shadow) ${featured ? "relative border-accent shadow-[0_0_0_3px_var(--color-brand-subtle),var(--shadow)]" : "border-ui-border-subtle"}`}
+      className={`flex flex-col rounded-xl border bg-ui-surface px-6 py-7 ${featured ? "relative card-featured" : "border-ui-border-subtle"}`}
     >
       {featured && (
-        <div className="absolute -top-3.25 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-accent px-3.5 py-1.25 font-mono text-[10.5px] font-bold uppercase tracking-[.06em] text-white">
+        <div className="absolute -top-3.25 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-accent px-3 py-1 kicker font-semibold text-white">
           Most popular
         </div>
       )}
-      <div className="font-display text-lg font-semibold">{name}</div>
-      <div className="mt-1 min-h-8 text-[13px] text-subtle">{desc}</div>
-      <div className="mb-1 mt-5 flex items-baseline gap-1.25">
-        <span className="font-mono text-[38px] font-semibold">{price}</span>
-        {period && <span className="text-[13px] text-subtle">{period}</span>}
+      <div className="font-display text-display-s font-semibold">{name}</div>
+      <div className="mt-1 min-h-8 text-body-s text-subtle">{desc}</div>
+      <div className="mb-1 mt-5 flex items-baseline gap-1">
+        <span className="font-mono text-display-xl font-semibold">{price}</span>
+        {period && <span className="text-body-s text-subtle">{period}</span>}
       </div>
-      <div className="mb-5 min-h-4 text-xs text-subtle">{billed}</div>
-      <ul className="mb-6 flex flex-1 list-none flex-col gap-2.75 [&_li]:flex [&_li]:gap-2.25 [&_li]:text-[13.5px] [&_li]:leading-[1.4] [&_li]:text-muted [&_li]:before:font-bold [&_li]:before:text-positive [&_li]:before:content-['✓']">
+      <div className="mb-5 min-h-4 text-label text-subtle">{billed}</div>
+      <ul className="mb-6 flex flex-1 list-none flex-col gap-3 [&_li]:flex [&_li]:gap-2 [&_li]:text-body-s [&_li]:leading-[1.4] [&_li]:text-muted [&_li]:before:font-bold [&_li]:before:text-positive [&_li]:before:content-['✓']">
         {features.map((x) => (
           <li key={x}>{x}</li>
         ))}
       </ul>
       <button
-        className={`relative inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-2xl border-2 px-6 py-3.25 text-[13.5px] font-extrabold uppercase tracking-[.03em] transition ${featured ? "border-accent bg-accent text-white shadow-[0_4px_0_var(--color-brand-strong)] hover:border-accent-hover hover:bg-accent-hover" : "border-ui-border bg-ui-surface text-muted shadow-[0_4px_0_var(--color-border)]"}`}
+        className={`relative inline-flex w-full cursor-pointer items-center justify-center gap-2 btn ${featured ? "border-accent bg-accent text-white hover:border-accent-hover hover:bg-accent-hover" : "border-ui-border bg-ui-surface text-muted"}`}
         onClick={start}
       >
         {action}
@@ -628,38 +672,38 @@ function Price({
 function Footer({ start }: { start: () => void }) {
   const year = new Date().getFullYear();
   return (
-    <footer className="mx-auto mt-20 w-full max-w-295 px-11 pb-8.5 pt-12.5">
-      <div className="grid grid-cols-[1.4fr_1fr_1fr_1fr] gap-7.5 border-b border-ui-border-subtle pb-9 max-[760px]:grid-cols-2">
-        <div className="[&_p]:max-w-55 [&_p]:text-[13px] [&_p]:leading-[1.6] [&_p]:text-subtle">
+    <footer className="mx-auto mt-20 w-full max-w-content px-11 pb-8 pt-12">
+      <div className="grid grid-cols-[1.4fr_1fr_1fr_1fr] gap-8 border-b border-ui-border-subtle pb-9 max-[760px]:grid-cols-2">
+        <div className="[&_p]:max-w-55 [&_p]:text-body-s [&_p]:leading-[1.6] [&_p]:text-subtle">
           <Logo />
           <p>
             The AI Career Copilot that guides you until you reach your goal not
             just a one-time answer.
           </p>
         </div>
-        <div className="[&_a]:mb-2.75 [&_a]:block [&_a]:text-[13.5px] [&_a]:text-muted [&_button]:mb-2.75 [&_button]:block [&_button]:text-[13.5px] [&_button]:text-muted">
-          <div className="mb-3.5 font-mono text-[11px] uppercase tracking-[.06em] text-subtle">
+        <div className="[&_a]:mb-3 [&_a]:block [&_a]:text-body-s [&_a]:text-muted [&_button]:mb-3 [&_button]:block [&_button]:text-body-s [&_button]:text-muted">
+          <div className="mb-3 kicker text-subtle">
             Product
           </div>
           <a href="#features">Features</a>
           <a href="#pricing">Pricing</a>
           <a href="#faq">FAQ</a>
         </div>
-        <div className="[&_a]:mb-2.75 [&_a]:block [&_a]:text-[13.5px] [&_a]:text-muted [&_button]:mb-2.75 [&_button]:block [&_button]:text-[13.5px] [&_button]:text-muted">
-          <div className="mb-3.5 font-mono text-[11px] uppercase tracking-[.06em] text-subtle">
+        <div className="[&_a]:mb-3 [&_a]:block [&_a]:text-body-s [&_a]:text-muted [&_button]:mb-3 [&_button]:block [&_button]:text-body-s [&_button]:text-muted">
+          <div className="mb-3 kicker text-subtle">
             Company
           </div>
           <a href="#problem">Why Lenni</a>
           <a href="#how-it-works">How it works</a>
         </div>
-        <div className="[&_a]:mb-2.75 [&_a]:block [&_a]:text-[13.5px] [&_a]:text-muted [&_button]:mb-2.75 [&_button]:block [&_button]:text-[13.5px] [&_button]:text-muted">
-          <div className="mb-3.5 font-mono text-[11px] uppercase tracking-[.06em] text-subtle">
+        <div className="[&_a]:mb-3 [&_a]:block [&_a]:text-body-s [&_a]:text-muted [&_button]:mb-3 [&_button]:block [&_button]:text-body-s [&_button]:text-muted">
+          <div className="mb-3 kicker text-subtle">
             Get started
           </div>
           <button onClick={start}>Start your roadmap</button>
         </div>
       </div>
-      <div className="flex justify-between gap-2.5 pt-5.5 [&_span]:text-[12.5px] [&_span]:text-subtle">
+      <div className="flex justify-between gap-2 pt-6 [&_span]:text-body-s [&_span]:text-subtle">
         <span>© {year} Lenni. All rights reserved.</span>
         <span>Made for self learner.</span>
       </div>

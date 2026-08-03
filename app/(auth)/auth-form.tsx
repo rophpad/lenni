@@ -3,9 +3,10 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { authClient } from "../../lib/auth-client";
+import { PasswordInput } from "../components/password-input";
 
 const input =
-  "w-full rounded-lg border border-ui-border bg-page-subtle px-3.25 py-2.75 text-sm outline-none focus:border-accent";
+  "w-full rounded-control border border-ui-border bg-page-subtle px-3 py-3 text-body text-foreground outline-none transition placeholder:text-subtle focus:border-accent";
 
 export function AuthForm({ mode }: { mode: "login" | "register" }) {
   const router = useRouter();
@@ -65,14 +66,14 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
       )}
       {mode === "register" && (
         <label className="mb-4 block">
-          <span className="mb-1.5 block text-[12.5px] font-medium text-subtle">
+          <span className="mb-1 block text-body-s font-medium text-subtle">
             Full name
           </span>
           <input className={input} name="name" autoComplete="name" required />
         </label>
       )}
       <label className="mb-4 block">
-        <span className="mb-1.5 block text-[12.5px] font-medium text-subtle">
+        <span className="mb-1 block text-body-s font-medium text-subtle">
           Email
         </span>
         <input
@@ -83,26 +84,16 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
           required
         />
       </label>
-      <label className="mb-2 block">
-        <span className="mb-1.5 block text-[12.5px] font-medium text-subtle">
-          Password
-        </span>
-        <input
-          className={input}
-          name="password"
-          type="password"
-          autoComplete={
-            mode === "register" ? "new-password" : "current-password"
-          }
-          minLength={8}
-          required
-        />
-      </label>
-      <div className={mode === "register" ? "mt-6.5 flex items-center justify-between" : ""}>
-      {mode === "register" && <span className="text-[13px] text-subtle">Already have an account? <a className="font-semibold text-accent hover:underline" href="/login">Login</a></span>}
+      <PasswordInput
+        autoComplete={mode === "register" ? "new-password" : "current-password"}
+        label="Password"
+        name="password"
+      />
+      <div className={mode === "register" ? "mt-6 flex items-center justify-between" : ""}>
+      {mode === "register" && <span className="text-body-s text-subtle">Already have an account? <a className="font-semibold text-accent hover:underline" href="/login">Login</a></span>}
       <button
         disabled={loading}
-        className={`${mode === "login" ? "mt-6.5 w-full" : ""} relative inline-flex items-center justify-center rounded-2xl border-2 border-accent bg-accent px-6 py-3.25 text-[13.5px] font-extrabold uppercase tracking-[.03em] text-white shadow-[0_4px_0_var(--color-brand-strong)] transition hover:border-accent-hover hover:bg-accent-hover active:translate-y-0.75 active:shadow-[0_1px_0_var(--color-brand-strong)] disabled:opacity-50`}
+        className={`${mode === "login" ? "mt-6 w-full" : ""} relative inline-flex items-center justify-center btn btn-primary disabled:opacity-50`}
         type="submit"
       >
         {loading ? "Please wait…" : mode === "register" ? "Continue" : "Log in"}

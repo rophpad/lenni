@@ -1,11 +1,12 @@
-@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap");
 @import "./design-tokens.css";
 @import "tailwindcss";
 
 @theme inline {
+    /* ---------- Color ---------- */
     --color-page: var(--color-canvas);
     --color-page-subtle: var(--color-canvas-subtle);
     --color-ui-surface: var(--color-surface);
+    --color-ui-raised: var(--color-surface-raised);
     --color-ui-border: var(--color-border);
     --color-ui-border-subtle: var(--color-border-subtle);
     --color-foreground: var(--color-text);
@@ -13,14 +14,279 @@
     --color-subtle: var(--color-text-subtle);
     --color-accent: var(--color-brand);
     --color-accent-hover: var(--color-brand-hover);
+    --color-accent-strong: var(--color-brand-strong);
     --color-accent-subtle: var(--color-brand-subtle);
+    --color-accent-faint: var(--color-brand-faint);
     --color-positive: var(--color-success);
+    --color-positive-strong: var(--color-success-strong);
     --color-positive-subtle: var(--color-success-subtle);
     --color-caution: var(--color-warning);
     --color-caution-subtle: var(--color-warning-subtle);
     --color-negative: var(--color-danger);
     --color-negative-subtle: var(--color-danger-subtle);
-    --font-display: "Poppins", sans-serif;
-    --font-sans: "Plus Jakarta Sans", sans-serif;
-    --font-mono: "IBM Plex Mono", monospace;
+    --color-machine: var(--color-machine);
+    --color-machine-subtle: var(--color-machine-subtle);
+
+    /* ---------- Type ---------- */
+    --font-display: var(--font-fraunces), Georgia, serif;
+    --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+    --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+
+    /* Fixed ramp — replaces 18 ad-hoc text-[Npx] values */
+    --text-display-2xl: 3.5rem;
+    --text-display-2xl--line-height: 1.02;
+    --text-display-2xl--letter-spacing: -0.026em;
+    --text-display-xl: 2.75rem;
+    --text-display-xl--line-height: 1.05;
+    --text-display-xl--letter-spacing: -0.022em;
+    --text-display-l: 2.125rem;
+    --text-display-l--line-height: 1.1;
+    --text-display-l--letter-spacing: -0.018em;
+    --text-display-m: 1.625rem;
+    --text-display-m--line-height: 1.15;
+    --text-display-m--letter-spacing: -0.014em;
+    --text-display-s: 1.25rem;
+    --text-display-s--line-height: 1.25;
+    --text-display-s--letter-spacing: -0.01em;
+    --text-body-l: 1.0625rem;
+    --text-body-l--line-height: 1.6;
+    --text-body: 0.9375rem;
+    --text-body--line-height: 1.6;
+    --text-body-s: 0.8125rem;
+    --text-body-s--line-height: 1.5;
+    --text-label: 0.71875rem;
+    --text-label--line-height: 1.2;
+    --text-label--letter-spacing: 0.12em;
+
+    /* ---------- Radii ---------- */
+    --radius-chip: var(--r-chip);
+    --radius-control: var(--r-control);
+    --radius-card: var(--r-card);
+
+    /* ---------- Layout ---------- */
+    --container-content: 1120px;
+    --container-prose: 680px;
+}
+
+@layer base {
+    html {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+        /* Paper grain — 1.5% opacity, keeps flat fills from feeling like plastic */
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+        background-blend-mode: multiply;
+        background-size: 120px 120px;
+    }
+
+    /* Fraunces variable axes: soft terminals + a touch of wonk.
+       This is what reads as "playful" without a single rounded plastic edge. */
+    .font-display,
+    h1,
+    h2,
+    h3 {
+        font-variation-settings: "SOFT" 40, "WONK" 1, "opsz" 36;
+    }
+
+    ::selection {
+        background: var(--color-brand-subtle);
+        color: var(--color-text);
+    }
+
+    :focus-visible {
+        outline: 2px solid var(--color-brand);
+        outline-offset: 2px;
+    }
+}
+
+@layer components {
+    /* ---------- Buttons ----------
+       Sentence case, weight 600, radius 14, solid fill.
+       Playfulness lives in a spring press, not a fake 3D edge. */
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        border-radius: var(--r-control);
+        padding: 0.6875rem 1.25rem;
+        font-size: 0.9375rem;
+        font-weight: 600;
+        letter-spacing: -0.006em;
+        line-height: 1.2;
+        cursor: pointer;
+        border: 1px solid transparent;
+        transition:
+            transform 0.12s var(--ease-spring),
+            background-color 0.16s var(--ease-out),
+            border-color 0.16s var(--ease-out),
+            box-shadow 0.16s var(--ease-out);
+    }
+
+    .btn:active {
+        transform: scale(0.97);
+    }
+
+    .btn:disabled {
+        cursor: not-allowed;
+        opacity: 0.45;
+        transform: none;
+    }
+
+    .btn-primary {
+        background: var(--color-brand);
+        color: var(--color-white);
+        box-shadow: var(--shadow-stamp);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+        background: var(--color-brand-hover);
+        box-shadow: var(--shadow);
+    }
+
+    .btn-secondary {
+        background: var(--color-surface);
+        color: var(--color-text);
+        border-color: var(--color-border);
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+        background: var(--color-surface-raised);
+        border-color: var(--color-text-subtle);
+    }
+
+    .btn-ghost {
+        background: transparent;
+        color: var(--color-text-muted);
+    }
+
+    .btn-ghost:hover:not(:disabled) {
+        background: var(--color-surface-raised);
+        color: var(--color-text);
+    }
+
+    .btn-lg {
+        padding: 0.875rem 1.75rem;
+        font-size: 1.0625rem;
+    }
+
+    .btn-sm {
+        padding: 0.5rem 0.875rem;
+        font-size: 0.8125rem;
+        border-radius: var(--r-chip);
+    }
+
+    /* ---------- Surfaces ---------- */
+    .card {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border-subtle);
+        border-radius: var(--r-card);
+        box-shadow: var(--shadow);
+    }
+
+    .card-interactive {
+        transition:
+            transform 0.2s var(--ease-out),
+            box-shadow 0.2s var(--ease-out);
+    }
+
+    .card-interactive:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lift);
+    }
+
+    .card-featured {
+        border-color: var(--color-brand);
+        box-shadow: var(--ring-accent), var(--shadow);
+    }
+
+    /* ---------- Field-notebook label ---------- */
+    .kicker {
+        font-family: var(--font-mono);
+        font-size: 0.71875rem;
+        line-height: 1.2;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        font-weight: 500;
+    }
+
+    /* ---------- Milestone stamp ----------
+       Wax-seal feel: completed stamps sit slightly askew, like they were
+       pressed by hand. This is the brand's signature detail. */
+    .stamp {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 9999px;
+        font-family: var(--font-mono);
+        font-weight: 600;
+        transition:
+            transform 0.24s var(--ease-spring),
+            background-color 0.2s var(--ease-out);
+    }
+
+    .stamp-locked {
+        background: var(--color-surface);
+        border: 1.5px dashed var(--color-border);
+        color: var(--color-text-subtle);
+    }
+
+    .stamp-active {
+        background: var(--color-brand);
+        color: var(--color-white);
+        box-shadow: 0 0 0 6px var(--color-brand-faint);
+    }
+
+    .stamp-done {
+        background: var(--color-success);
+        color: var(--color-white);
+        transform: rotate(-4deg);
+    }
+}
+
+@layer utilities {
+    .animate-stamp-in {
+        animation: stamp-in 0.42s var(--ease-spring) both;
+    }
+}
+
+/* ---------- Trail map ----------
+   Pulsing ring behind the level the learner is currently on. */
+.trail-halo {
+    transform-origin: center;
+    animation: halo-pulse 2.4s var(--ease-out) infinite;
+}
+
+@keyframes halo-pulse {
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 0.25;
+    }
+    50% {
+        transform: scale(1.55);
+        opacity: 0;
+    }
+}
+
+@keyframes stamp-in {
+    0% {
+        transform: scale(1.6) rotate(6deg);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1) rotate(-4deg);
+        opacity: 1;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
 }

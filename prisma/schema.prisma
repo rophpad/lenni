@@ -379,7 +379,9 @@ model Lesson {
   slug             String
   title            String
   summary          String?
+  /* Empty array = curriculum stub; content is generated on first open. */
   body             Json     @default("[]")
+  objectives       Json     @default("[]")
   position         Int
   estimatedMinutes Int      @default(15) @map("estimated_minutes")
   createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz
@@ -395,6 +397,7 @@ model Exercise {
   lessonId    String       @map("lesson_id") @db.Uuid
   type        ExerciseType @default(multiple_choice)
   prompt      String
+  hint        String?
   explanation String?
   rubric      Json         @default("{}")
   maxScore    Decimal      @default(1) @map("max_score") @db.Decimal(7, 2)

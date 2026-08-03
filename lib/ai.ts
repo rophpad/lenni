@@ -31,14 +31,21 @@ function responseText(payload: unknown) {
   return text.trim() || undefined;
 }
 
-export async function generateJson<T>(userId: string, operation: AiOperation, prompt: string, input: unknown): Promise<T> {
+type GenerateOptions = {
+  /** Long-form teaching content needs more deliberation than a JSON reshape. */
+  effort?: "low" | "medium" | "high";
+  maxOutputTokens?: number;
+};
+
+export async function generateJson<T>(userId: string, operation: AiOperation, prompt: string, input: unknown, options: GenerateOptions = {}): Promise<T> {
+  const { effort = "low", maxOutputTokens } = options;
   if (!process.env.IMOLE_API_KEY) throw new Error("IMOLE_API_KEY is not configured");
   const run = await prisma.aiRun.create({ data: { userId, operation, status: "running", provider: "imole", model, promptVersion: PROMPT_VERSION, inputData: input as object, startedAt: new Date() } });
   try {
     const response = await fetch(`${baseUrl.replace(/\/$/, "")}/responses`, {
       method: "POST",
       headers: { Authorization: `Bearer ${process.env.IMOLE_API_KEY}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ model, instructions: SYSTEM_PROMPT, input: `${prompt}\n\nINPUT JSON:\n${JSON.stringify(input)}`, stream: false, reasoning: { effort: "low" } }),
+      body: JSON.stringify({ model, instructions: SYSTEM_PROMPT, input: `${prompt}\n\nINPUT JSON:\n${JSON.stringify(input)}`, stream: false, reasoning: { effort }, ...(maxOutputTokens ? { max_output_tokens: maxOutputTokens } : {}) }),
     });
     const payload = await response.json();
     if (!response.ok) throw new Error(payload?.error?.message ?? `Imole request failed (${response.status})`);

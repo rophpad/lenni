@@ -1,6 +1,8 @@
 import type { ReactNode } from "react";
 
-export type RoleColor = "blue" | "teal" | "amber";
+/* Palette roles, not raw hues — see design-tokens.css.
+   ember = action, pine = earned, iris = machine, sun = momentum. */
+export type RoleColor = "iris" | "pine" | "sun" | "ember";
 export type RoleIconName =
   | "network"
   | "flag"
@@ -12,9 +14,10 @@ export type RoleIconName =
   | "infinity";
 
 export const roleIconColors: Record<RoleColor, string> = {
-  blue: "bg-accent-subtle text-accent",
-  teal: "bg-positive-subtle text-positive",
-  amber: "bg-caution-subtle text-caution",
+  iris: "bg-machine-subtle text-machine",
+  pine: "bg-positive-subtle text-positive",
+  sun: "bg-caution-subtle text-caution",
+  ember: "bg-accent-faint text-accent",
 };
 
 const paths: Record<RoleIconName, ReactNode> = {
