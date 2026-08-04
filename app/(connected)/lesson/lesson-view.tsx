@@ -56,7 +56,7 @@ function Checkpoint({
   }
 
   return (
-    <section className="card p-6">
+    <section className="card min-w-0 p-6">
       <div className="mb-4 flex items-center justify-between gap-3">
         <p className="kicker text-accent">
           Checkpoint {index + 1} of {total}
@@ -70,7 +70,7 @@ function Checkpoint({
         )}
       </div>
 
-      <h3 className="mb-4 whitespace-pre-wrap font-display text-display-s font-bold">
+      <h3 className="mb-4 break-words whitespace-pre-wrap font-display text-display-s font-bold">
         {exercise.prompt}
       </h3>
 
@@ -110,7 +110,7 @@ function Checkpoint({
               >
                 {result && isCorrect ? "✓" : result && isPicked ? "✕" : ""}
               </span>
-              <span>{option.label}</span>
+              <span className="min-w-0 break-words">{option.label}</span>
             </button>
           );
         })}
@@ -189,9 +189,9 @@ export function LessonView({
   }
 
   return (
-    <div className="max-w-prose">
+    <div className="min-w-0 max-w-full md:max-w-prose">
       <p className="mb-2 kicker text-accent">{context}</p>
-      <h1 className="font-display text-display-m md:text-display-l font-bold">{lesson.title}</h1>
+      <h1 className="break-words font-display text-display-m font-bold md:text-display-l">{lesson.title}</h1>
       <div className="mt-3 flex flex-wrap items-center gap-3">
         <span className="rounded-chip bg-accent-faint px-2 py-1 kicker text-accent">
           Lesson

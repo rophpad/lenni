@@ -18,7 +18,7 @@ const CALLOUT = {
 
 export function LessonBody({ blocks }: { blocks: LessonBlock[] }) {
   return (
-    <article className="mt-8 flex flex-col gap-5">
+    <article className="mt-8 min-w-0 max-w-full flex flex-col gap-5">
       {blocks.map((block, i) => {
         switch (block.type) {
           case "heading":
@@ -44,12 +44,12 @@ export function LessonBody({ blocks }: { blocks: LessonBlock[] }) {
           case "code": {
             const lang = block.language?.trim() || "text";
             return (
-              <figure key={i}>
-                <div className="overflow-hidden rounded-control border border-ui-border-subtle bg-page-subtle">
+              <figure className="min-w-0 max-w-full" key={i}>
+                <div className="min-w-0 max-w-full overflow-hidden rounded-control border border-ui-border-subtle bg-page-subtle">
                   <div className="flex items-center justify-between border-b border-ui-border-subtle px-4 py-2">
                     <span className="kicker text-subtle">{lang}</span>
                   </div>
-                  <pre className="overflow-x-auto px-4 py-4">
+                  <pre className="max-w-full overflow-x-auto px-4 py-4">
                     <code className="font-mono text-body-s leading-relaxed">
                       {block.code}
                     </code>

@@ -66,7 +66,7 @@ export function ConnectedShell({ children, user }: { children: ReactNode; user: 
   const pathname = usePathname();
   const router = useRouter();
   return (
-    <div className="relative z-1 flex min-h-screen">
+    <div className="relative z-1 flex min-h-screen min-w-0 overflow-x-clip">
       {/* Desktop side rail; mobile bottom tab bar with labels + safe-area inset */}
       <aside className="sticky top-0 z-20 flex h-screen w-59 shrink-0 flex-col border-r border-ui-border-subtle bg-page-subtle px-4 py-7 max-md:fixed max-md:inset-x-0 max-md:bottom-0 max-md:top-auto max-md:h-auto max-md:w-full max-md:flex-row max-md:border-r-0 max-md:border-t max-md:bg-page-subtle/95 max-md:px-1 max-md:py-1 max-md:pb-[max(0.25rem,env(safe-area-inset-bottom))] max-md:backdrop-blur-md">
         <Link
@@ -126,7 +126,7 @@ export function ConnectedShell({ children, user }: { children: ReactNode; user: 
         </div>
       </aside>
       <main className="min-w-0 flex-1 px-4 pb-24 pt-6 sm:px-8 sm:pt-9 md:px-11 md:pb-20">
-        <div className="max-w-content">{children}</div>
+        <div className="min-w-0 max-w-content">{children}</div>
       </main>
     </div>
   );

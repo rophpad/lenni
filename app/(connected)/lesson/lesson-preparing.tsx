@@ -47,7 +47,7 @@ export function LessonPreparing({ lessonId, title }: { lessonId: string; title: 
   }, [lessonId, router]);
 
   return (
-    <div className="max-w-prose">
+    <div className="min-w-0 max-w-full md:max-w-prose">
       <p className="mb-2 kicker text-accent">Preparing</p>
       <h1 className="font-display text-display-m md:text-display-l font-bold">{title}</h1>
 

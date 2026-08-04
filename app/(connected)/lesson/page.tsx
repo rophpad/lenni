@@ -17,7 +17,7 @@ export default async function LessonPage() {
 
   if (!progress)
     return (
-      <div className="max-w-prose">
+      <div className="min-w-0 max-w-full md:max-w-prose">
         <p className="mb-2 kicker text-accent">Lesson</p>
         <h1 className="font-display text-display-m md:text-display-l font-bold">No lesson available</h1>
         <p className="mt-2 text-body-s text-subtle">
