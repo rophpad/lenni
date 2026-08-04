@@ -49,7 +49,7 @@ export function LessonPreparing({ lessonId, title }: { lessonId: string; title: 
   return (
     <div className="max-w-prose">
       <p className="mb-2 kicker text-accent">Preparing</p>
-      <h1 className="font-display text-display-l font-bold">{title}</h1>
+      <h1 className="font-display text-display-m md:text-display-l font-bold">{title}</h1>
 
       {error ? (
         <div className="mt-8 card p-6">

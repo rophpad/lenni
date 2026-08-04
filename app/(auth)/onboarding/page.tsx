@@ -36,7 +36,7 @@ export default function OnboardingPage() {
   if (step === 2)
     return (
       <section className={card}>
-        <h1 className="mb-2 font-display text-display-m font-bold">Import your profile</h1>
+        <h1 className="mb-2 font-display text-display-s sm:text-display-m font-bold">Import your profile</h1>
         <p className="mb-6 text-body-s text-muted">
           Upload your résumé so Lenni can retrieve demonstrated experience.
         </p>
@@ -67,7 +67,7 @@ export default function OnboardingPage() {
   if (step === 3)
     return (
       <section className={card}>
-        <h1 className="mb-2 font-display text-display-m font-bold">Choose your goal</h1>
+        <h1 className="mb-2 font-display text-display-s sm:text-display-m font-bold">Choose your goal</h1>
         <p className="mb-5 text-body-s text-muted">
           Choose the career path Lenni should build around your current experience.
         </p>
@@ -141,7 +141,7 @@ export default function OnboardingPage() {
       {loading ? (
         <div className="py-8 text-center">
           <span className="mx-auto mb-5 block size-4 animate-pulse rounded-full bg-accent" />
-          <h1 className="font-display text-display-m font-bold">
+          <h1 className="font-display text-display-s sm:text-display-m font-bold">
             Mapping your {career.title} path
           </h1>
           <p className="mt-2 text-body-s text-muted">
@@ -162,7 +162,7 @@ export default function OnboardingPage() {
         </div>
       ) : (
         <div>
-          <h1 className="mb-2 font-display text-display-m font-bold">
+          <h1 className="mb-2 font-display text-display-s sm:text-display-m font-bold">
             Here’s your starting point
           </h1>
           <p className="mb-5 text-body-s text-muted">

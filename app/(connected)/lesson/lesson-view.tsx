@@ -191,7 +191,7 @@ export function LessonView({
   return (
     <div className="max-w-prose">
       <p className="mb-2 kicker text-accent">{context}</p>
-      <h1 className="font-display text-display-l font-bold">{lesson.title}</h1>
+      <h1 className="font-display text-display-m md:text-display-l font-bold">{lesson.title}</h1>
       <div className="mt-3 flex flex-wrap items-center gap-3">
         <span className="rounded-chip bg-accent-faint px-2 py-1 kicker text-accent">
           Lesson
@@ -225,7 +225,7 @@ export function LessonView({
       {exercises.length > 0 && (
         <div className="mt-10 flex flex-col gap-4">
           <div className="flex items-center justify-between gap-3">
-            <h2 className="font-display text-display-m font-bold">
+            <h2 className="font-display text-display-s md:text-display-m font-bold">
               Check your understanding
             </h2>
             <span className="kicker text-subtle">

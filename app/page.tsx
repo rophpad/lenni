@@ -201,12 +201,14 @@ export default function Home() {
               ))}
             </div>
             <div className="flex items-center gap-2">
-              <ThemeToggle compact />
-              <button className="btn btn-primary max-sm:px-4 max-sm:py-2.5" onClick={start}>
-                <span className="sm:hidden">Start</span>
-                <span className="max-sm:hidden">Get my roadmap</span>
-              </button>
+              <div className="hidden items-center gap-2 md:flex">
+                <ThemeToggle compact />
+                <button className="btn btn-primary" onClick={start}>
+                  Get my roadmap
+                </button>
+              </div>
               <button
+                aria-controls="mobile-navigation"
                 aria-expanded={menu}
                 aria-label={menu ? "Close menu" : "Open menu"}
                 className="btn btn-ghost -mr-1 p-2 md:hidden"
@@ -231,7 +233,10 @@ export default function Home() {
             </div>
           </div>
           {menu && (
-            <div className="border-t border-ui-border-subtle bg-page px-4 pb-4 pt-2 md:hidden">
+            <div
+              className="border-t border-ui-border-subtle bg-page px-4 pb-5 pt-2 md:hidden"
+              id="mobile-navigation"
+            >
               {NAV_LINKS.map(([href, label]) => (
                 <a
                   className="block rounded-chip px-3 py-3 text-body font-semibold text-muted transition hover:bg-ui-raised hover:text-foreground"
@@ -242,6 +247,21 @@ export default function Home() {
                   {label}
                 </a>
               ))}
+              <div className="mt-2 border-t border-ui-border-subtle pt-4">
+                <button
+                  className="btn btn-primary w-full"
+                  onClick={() => {
+                    setMenu(false);
+                    start();
+                  }}
+                  type="button"
+                >
+                  Start
+                </button>
+                <div className="mt-4 px-1">
+                  <ThemeToggle />
+                </div>
+              </div>
             </div>
           )}
         </nav>
@@ -250,19 +270,19 @@ export default function Home() {
             <div className="mb-4 kicker text-accent justify-center text-center">
               Your AI Career Copilot
             </div>
-            <div className="w-full relative inline-block">
-              <h1 className="mx-auto font-heading text-display-l md:text-display-2xl">
+            <div className="relative inline-block w-full">
+              <h1 className="mx-auto font-heading text-display-m md:text-display-2xl">
                 <span className="block">
                   Build your <span className="hidden text-accent md:inline">personalized</span>
                 </span>
                 <span className="block">
-                  <span className="whitespace-nowrap md:hidden">
+                  <span className="block whitespace-nowrap text-center md:hidden">
                     <span className="text-accent">personalized</span> career
                   </span>
-                  <span className="hidden md:inline">career</span>{" "}
+                  <span className="hidden md:inline">career{" "}</span>
                   {/* The pill sits on its own hard edge, like every other
                       pressable thing in the product. */}
-                  <span className="animate-stamp-in edge [--edge-color:var(--color-success-strong)] mt-2 inline-block -rotate-2 rounded-[20px] bg-positive px-5 pb-2.5 pt-1 text-white">
+                  <span className="animate-stamp-in edge [--edge-color:var(--color-success-strong)] mx-auto mt-2 block w-fit -rotate-2 rounded-[20px] bg-positive px-5 pb-2.5 pt-1 text-white md:mx-0 md:inline-block">
                     roadmap.
                   </span>
                 </span>
@@ -578,7 +598,7 @@ export default function Home() {
           </div>
         </Section>
         <section className="mx-auto mt-24 w-full max-w-205 px-6">
-          <div className="rounded-card bg-linear-to-br from-accent to-accent-strong px-10 py-14 text-center [&_h2]:font-display [&_h2]:text-display-l [&_h2]:text-white [&_p]:mx-auto [&_p]:mb-7 [&_p]:mt-3 [&_p]:text-body [&_p]:text-white/85 [&_.btn]:border-white [&_.btn]:bg-white [&_.btn]:text-accent [&_.btn]:shadow-[0_4px_0_var(--color-brand-subtle)]">
+          <div className="rounded-card bg-linear-to-br from-accent to-accent-strong px-10 py-14 text-center [&_h2]:font-display [&_h2]:text-display-m [&_h2]:text-white [&_p]:mx-auto [&_p]:mb-7 [&_p]:mt-3 [&_p]:text-body [&_p]:text-white/85 [&_.btn]:border-white [&_.btn]:bg-white [&_.btn]:text-accent [&_.btn]:shadow-[0_4px_0_var(--color-brand-subtle)] md:[&_h2]:text-display-l">
             <h2>Ready to know what’s next?</h2>
             <p>
               Import your profile, pick a goal, and get your first lesson today.
@@ -642,7 +662,7 @@ function Section({
       <div className="mb-4 text-center kicker text-accent">
         {kicker}
       </div>
-      <h2 className="mx-auto max-w-160 text-center font-display text-display-l font-bold tracking-[-.01em]">
+      <h2 className="mx-auto max-w-160 text-center font-display text-display-m font-bold tracking-[-.01em] md:text-display-l">
         {title}
       </h2>
       {sub && (
@@ -716,7 +736,7 @@ function Price({
       <div className="font-display text-display-s font-bold">{name}</div>
       <div className="mt-1 min-h-8 text-body-s text-subtle">{desc}</div>
       <div className="mb-1 mt-5 flex items-baseline gap-1">
-        <span className="font-mono text-display-xl font-semibold">{price}</span>
+        <span className="font-mono text-display-l font-semibold md:text-display-xl">{price}</span>
         {period && <span className="text-body-s text-subtle">{period}</span>}
       </div>
       <div className="mb-5 min-h-4 text-label text-subtle">{billed}</div>

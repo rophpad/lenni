@@ -34,7 +34,7 @@ export function LessonBody({ blocks }: { blocks: LessonBlock[] }) {
           case "analogy":
             return (
               <p
-                className="border-l-2 border-accent/50 pl-4 text-body-l italic leading-relaxed text-muted"
+                className="border-l-2 border-accent/50 pl-4 text-body md:text-body-l italic leading-relaxed text-muted"
                 key={i}
               >
                 {block.text}
@@ -134,7 +134,7 @@ export function LessonBody({ blocks }: { blocks: LessonBlock[] }) {
 
           default:
             return (
-              <p className="text-body-l leading-relaxed" key={i}>
+              <p className="text-body md:text-body-l leading-relaxed" key={i}>
                 {block.text}
               </p>
             );

@@ -46,7 +46,7 @@ export default async function RoadmapPage() {
     <>
       <div className="mb-6">
         <p className="mb-2 kicker text-accent">Roadmap</p>
-        <h1 className="font-display text-display-l font-bold">
+        <h1 className="font-display text-display-m md:text-display-l font-bold">
           {roadmap?.title ?? "Your career roadmap"}
         </h1>
         <p className="mt-1 max-w-130 text-body leading-normal text-muted">
