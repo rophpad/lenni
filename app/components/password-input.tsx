@@ -2,8 +2,8 @@
 
 import { useId, useState } from "react";
 
-const FIELD =
-  "w-full rounded-control border border-ui-border bg-page-subtle py-3 pl-3 pr-11 text-body text-foreground outline-none transition placeholder:text-subtle focus:border-accent";
+/* pr-11 leaves room for the reveal toggle that sits inside the field */
+const FIELD = "field pr-11";
 
 export function PasswordInput({
   label,

@@ -1,17 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { authClient } from "../../lib/auth-client";
 import { PasswordInput } from "../components/password-input";
 
-const input =
-  "w-full rounded-control border border-ui-border bg-page-subtle px-3 py-3 text-body text-foreground outline-none transition placeholder:text-subtle focus:border-accent";
+const input = "field";
 
 export function AuthForm({ mode }: { mode: "login" | "register" }) {
   const router = useRouter();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  // State updates are asynchronous, so keep an immediate lock as well. This
+  // prevents a fast second click from starting another authentication request.
+  const submitting = useRef(false);
   async function destination() {
     const response = await fetch("/api/auth/destination", { cache: "no-store" });
     if (!response.ok) return "/login";
@@ -19,6 +21,8 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
   }
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (submitting.current) return;
+    submitting.current = true;
     setLoading(true);
     setError("");
     const data = new FormData(event.currentTarget);
@@ -38,24 +42,22 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
         if (!existingLogin.error) {
           const next = await destination();
           if (next === "/onboarding") {
-            setLoading(false);
             router.push(next);
-            router.refresh();
             return;
           }
           await authClient.signOut();
-          setLoading(false);
           router.push(`/login?email=${encodeURIComponent(email)}&reason=existing`);
           return;
         }
       }
+      submitting.current = false;
       setLoading(false);
       return setError(result.error.message ?? "Authentication failed");
     }
-    const next = mode === "register" ? "/onboarding" : await destination();
-    setLoading(false);
-    router.push(next);
-    router.refresh();
+    // The authenticated layout already decides whether onboarding is required.
+    // Going there directly avoids an extra session lookup and three duplicate
+    // database queries before navigation can even begin.
+    router.replace(mode === "register" ? "/onboarding" : "/dashboard");
   }
   return (
     <form onSubmit={submit}>

@@ -8,7 +8,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
   const { reason } = await searchParams;
   return (
     <section className="card p-8 max-[400px]:p-6">
-      <h1 className="mb-2 font-display text-display-m font-semibold">Welcome back</h1>
+      <h1 className="mb-2 font-display text-display-m font-bold">Welcome back</h1>
       <p className="mb-6 text-sm leading-[1.55] text-muted">Log in to continue your roadmap where you left off.</p>
       {reason === "existing" && <p className="mb-4 rounded-lg bg-accent-subtle px-3 py-2 text-sm text-accent">This account already exists and onboarding is complete. Log in to continue.</p>}
       <AuthForm mode="login" />

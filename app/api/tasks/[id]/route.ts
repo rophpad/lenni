@@ -20,5 +20,5 @@ export async function PATCH(
     where: { id },
     data: { completedAt: task.completedAt ? null : new Date() },
   });
-  return NextResponse.json({ done: !!updated.completedAt });
+  return NextResponse.json({ id: updated.id, done: !!updated.completedAt });
 }

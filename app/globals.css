@@ -21,32 +21,36 @@
     --color-positive-strong: var(--color-success-strong);
     --color-positive-subtle: var(--color-success-subtle);
     --color-caution: var(--color-warning);
+    --color-caution-strong: var(--color-warning-strong);
     --color-caution-subtle: var(--color-warning-subtle);
     --color-negative: var(--color-danger);
+    --color-negative-strong: var(--color-danger-strong);
     --color-negative-subtle: var(--color-danger-subtle);
     --color-machine: var(--color-machine);
+    --color-machine-strong: var(--color-machine-strong);
     --color-machine-subtle: var(--color-machine-subtle);
 
     /* ---------- Type ---------- */
-    --font-display: var(--font-fraunces), Georgia, serif;
-    --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+    --font-display: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+    --font-sans: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
     --font-mono: var(--font-plex-mono), ui-monospace, monospace;
 
-    /* Fixed ramp — replaces 18 ad-hoc text-[Npx] values */
-    --text-display-2xl: 3.5rem;
-    --text-display-2xl--line-height: 1.02;
-    --text-display-2xl--letter-spacing: -0.026em;
-    --text-display-xl: 2.75rem;
-    --text-display-xl--line-height: 1.05;
-    --text-display-xl--letter-spacing: -0.022em;
-    --text-display-l: 2.125rem;
-    --text-display-l--line-height: 1.1;
+    /* Fixed ramp. Headings run bold-to-extrabold with tight tracking —
+       big, friendly and confident rather than editorial. */
+    --text-display-2xl: 3.75rem;
+    --text-display-2xl--line-height: 1.05;
+    --text-display-2xl--letter-spacing: -0.022em;
+    --text-display-xl: 3rem;
+    --text-display-xl--line-height: 1.08;
+    --text-display-xl--letter-spacing: -0.02em;
+    --text-display-l: 2.25rem;
+    --text-display-l--line-height: 1.14;
     --text-display-l--letter-spacing: -0.018em;
-    --text-display-m: 1.625rem;
-    --text-display-m--line-height: 1.15;
+    --text-display-m: 1.75rem;
+    --text-display-m--line-height: 1.2;
     --text-display-m--letter-spacing: -0.014em;
-    --text-display-s: 1.25rem;
-    --text-display-s--line-height: 1.25;
+    --text-display-s: 1.3125rem;
+    --text-display-s--line-height: 1.3;
     --text-display-s--letter-spacing: -0.01em;
     --text-body-l: 1.0625rem;
     --text-body-l--line-height: 1.6;
@@ -56,7 +60,7 @@
     --text-body-s--line-height: 1.5;
     --text-label: 0.71875rem;
     --text-label--line-height: 1.2;
-    --text-label--letter-spacing: 0.12em;
+    --text-label--letter-spacing: 0.06em;
 
     /* ---------- Radii ---------- */
     --radius-chip: var(--r-chip);
@@ -73,20 +77,12 @@
         -webkit-tap-highlight-color: transparent;
     }
 
-    body {
-        /* Paper grain — 1.5% opacity, keeps flat fills from feeling like plastic */
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
-        background-blend-mode: multiply;
-        background-size: 120px 120px;
-    }
-
-    /* Fraunces variable axes: soft terminals + a touch of wonk.
-       This is what reads as "playful" without a single rounded plastic edge. */
+    /* Headings carry the weight — no serif, no optical-size tricks. */
     .font-display,
     h1,
     h2,
     h3 {
-        font-variation-settings: "SOFT" 40, "WONK" 1, "opsz" 36;
+        font-weight: 800;
     }
 
     ::selection {
@@ -95,37 +91,35 @@
     }
 
     :focus-visible {
-        outline: 2px solid var(--color-brand);
+        outline: 3px solid var(--color-brand);
         outline-offset: 2px;
     }
 }
 
 @layer components {
     /* ---------- Buttons ----------
-       Sentence case, weight 600, radius 14, solid fill.
-       Playfulness lives in a spring press, not a fake 3D edge. */
+       Uppercase, extrabold, chunky radius, and a hard 4px bottom edge
+       that collapses on press. The edge is never blurred — that hard
+       offset is what makes the control read as a physical key. */
     .btn {
         display: inline-flex;
         align-items: center;
         justify-content: center;
         gap: 0.5rem;
         border-radius: var(--r-control);
-        padding: 0.6875rem 1.25rem;
-        font-size: 0.9375rem;
-        font-weight: 600;
-        letter-spacing: -0.006em;
+        padding: 0.8125rem 1.5rem;
+        font-size: 0.8125rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
         line-height: 1.2;
         cursor: pointer;
-        border: 1px solid transparent;
+        border: var(--border-width) solid transparent;
         transition:
-            transform 0.12s var(--ease-spring),
+            transform 0.08s var(--ease-out),
             background-color 0.16s var(--ease-out),
             border-color 0.16s var(--ease-out),
-            box-shadow 0.16s var(--ease-out);
-    }
-
-    .btn:active {
-        transform: scale(0.97);
+            box-shadow 0.08s var(--ease-out);
     }
 
     .btn:disabled {
@@ -134,28 +128,57 @@
         transform: none;
     }
 
+    /* Shared press mechanic: the button travels down into its own edge. */
+    .btn-primary:active:not(:disabled),
+    .btn-secondary:active:not(:disabled),
+    .btn-positive:active:not(:disabled) {
+        transform: translateY(calc(var(--edge-height) - var(--edge-press)));
+    }
+
     .btn-primary {
         background: var(--color-brand);
+        border-color: var(--color-brand);
         color: var(--color-white);
-        box-shadow: var(--shadow-stamp);
+        box-shadow: 0 var(--edge-height) 0 var(--color-brand-strong);
     }
 
     .btn-primary:hover:not(:disabled) {
         background: var(--color-brand-hover);
-        box-shadow: var(--shadow);
+        border-color: var(--color-brand-hover);
+    }
+
+    .btn-primary:active:not(:disabled) {
+        box-shadow: 0 var(--edge-press) 0 var(--color-brand-strong);
+    }
+
+    .btn-positive {
+        background: var(--color-success);
+        border-color: var(--color-success);
+        color: var(--color-white);
+        box-shadow: 0 var(--edge-height) 0 var(--color-success-strong);
+    }
+
+    .btn-positive:active:not(:disabled) {
+        box-shadow: 0 var(--edge-press) 0 var(--color-success-strong);
     }
 
     .btn-secondary {
         background: var(--color-surface);
-        color: var(--color-text);
+        color: var(--color-text-muted);
         border-color: var(--color-border);
+        box-shadow: 0 var(--edge-height) 0 var(--color-border);
     }
 
     .btn-secondary:hover:not(:disabled) {
         background: var(--color-surface-raised);
-        border-color: var(--color-text-subtle);
+        color: var(--color-text);
     }
 
+    .btn-secondary:active:not(:disabled) {
+        box-shadow: 0 var(--edge-press) 0 var(--color-border);
+    }
+
+    /* Ghost stays flat — it is a text action, not a key. */
     .btn-ghost {
         background: transparent;
         color: var(--color-text-muted);
@@ -166,88 +189,662 @@
         color: var(--color-text);
     }
 
+    .btn-ghost:active:not(:disabled) {
+        transform: scale(0.96);
+    }
+
     .btn-lg {
-        padding: 0.875rem 1.75rem;
-        font-size: 1.0625rem;
+        padding: 1rem 2rem;
+        font-size: 0.9375rem;
     }
 
     .btn-sm {
         padding: 0.5rem 0.875rem;
-        font-size: 0.8125rem;
+        font-size: 0.6875rem;
         border-radius: var(--r-chip);
     }
 
-    /* ---------- Surfaces ---------- */
+    /* ---------- Surfaces ----------
+       2px borders throughout: the outline does the work that a soft
+       shadow used to, which is what keeps the UI feeling drawn. */
     .card {
         background: var(--color-surface);
-        border: 1px solid var(--color-border-subtle);
+        border: var(--border-width) solid var(--color-border-subtle);
         border-radius: var(--r-card);
-        box-shadow: var(--shadow);
     }
 
     .card-interactive {
         transition:
-            transform 0.2s var(--ease-out),
-            box-shadow 0.2s var(--ease-out);
+            transform 0.16s var(--ease-out),
+            border-color 0.16s var(--ease-out),
+            box-shadow 0.16s var(--ease-out);
     }
 
     .card-interactive:hover {
-        transform: translateY(-2px);
+        transform: translateY(-3px);
+        border-color: var(--color-brand-subtle);
         box-shadow: var(--shadow-lift);
     }
 
     .card-featured {
         border-color: var(--color-brand);
-        box-shadow: var(--ring-accent), var(--shadow);
+        box-shadow: 0 var(--edge-height) 0 var(--color-brand-subtle);
     }
 
-    /* ---------- Field-notebook label ---------- */
+    /* ---------- Fields ----------
+       Same 2px outline language as the cards, so a form reads as a
+       stack of the same object rather than a different UI kit. */
+    .field {
+        width: 100%;
+        border-radius: var(--r-control);
+        border: var(--border-width) solid var(--color-border);
+        background: var(--color-surface);
+        padding: 0.8125rem 1rem;
+        font-size: 0.9375rem;
+        color: var(--color-text);
+        outline: none;
+        transition:
+            border-color 0.16s var(--ease-out),
+            box-shadow 0.16s var(--ease-out);
+    }
+
+    .field::placeholder {
+        color: var(--color-text-subtle);
+    }
+
+    /* The ring replaces the global focus outline here — one indicator, not two. */
+    .field:focus,
+    .field:focus-visible {
+        outline: none;
+        border-color: var(--color-brand);
+        box-shadow: var(--ring-accent);
+    }
+
+    /* ---------- Small uppercase label ---------- */
     .kicker {
-        font-family: var(--font-mono);
+        font-family: var(--font-sans);
         font-size: 0.71875rem;
         line-height: 1.2;
-        letter-spacing: 0.12em;
+        letter-spacing: 0.09em;
         text-transform: uppercase;
-        font-weight: 500;
+        font-weight: 800;
     }
 
     /* ---------- Milestone stamp ----------
-       Wax-seal feel: completed stamps sit slightly askew, like they were
-       pressed by hand. This is the brand's signature detail. */
+       Trail nodes are pressable-looking discs. Completed ones sit
+       square and proud; the active one carries the brand halo. */
     .stamp {
         display: inline-flex;
         align-items: center;
         justify-content: center;
         border-radius: 9999px;
-        font-family: var(--font-mono);
-        font-weight: 600;
+        font-weight: 800;
         transition:
             transform 0.24s var(--ease-spring),
             background-color 0.2s var(--ease-out);
     }
 
     .stamp-locked {
-        background: var(--color-surface);
-        border: 1.5px dashed var(--color-border);
+        background: var(--color-surface-raised);
+        border: var(--border-width) dashed var(--color-border);
         color: var(--color-text-subtle);
     }
 
     .stamp-active {
         background: var(--color-brand);
         color: var(--color-white);
-        box-shadow: 0 0 0 6px var(--color-brand-faint);
+        box-shadow:
+            0 var(--edge-height) 0 var(--color-brand-strong),
+            0 0 0 6px var(--color-brand-faint);
     }
 
     .stamp-done {
         background: var(--color-success);
         color: var(--color-white);
-        transform: rotate(-4deg);
+        box-shadow: 0 var(--edge-height) 0 var(--color-success-strong);
     }
 }
 
 @layer utilities {
     .animate-stamp-in {
         animation: stamp-in 0.42s var(--ease-spring) both;
+    }
+
+    /* Hard bottom edge for anything that should read as pressable but
+       isn't a .btn — trail badges, hero pills, selected chips. */
+    .edge {
+        box-shadow: 0 var(--edge-height) 0 var(--edge-color, var(--color-border));
+    }
+}
+
+/* ============================================================
+   Landing illustrations
+   ------------------------------------------------------------
+   The base rules below paint the FINISHED state of every scene.
+   Animation is added only inside `prefers-reduced-motion:
+   no-preference`, so a reduced-motion visitor gets a completed
+   roadmap rather than an empty one frozen at frame zero.
+
+   One --rm-cycle drives the whole roadmap, and every keyframe
+   is written as a percentage of it, so the trail, the nodes,
+   the progress bar and the skill chips cannot drift apart.
+   ============================================================ */
+
+.rm {
+    --rm-cycle: 12s;
+}
+
+.rm-label {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 700;
+    fill: var(--color-text-muted);
+}
+
+/* Popped-in discs sit on top of their locked twin, so only the
+   overlay needs to move. fill-box keeps each one spinning about
+   its own centre rather than the SVG origin. */
+.rm-pop,
+.rm-goal,
+.rm-burst {
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
+.rm-progress {
+    stroke-dasharray: 100;
+    stroke-dashoffset: 0;
+}
+
+.rm-bar {
+    width: 100%;
+}
+
+/* The burst is a one-off flash — never part of the resting state. */
+.rm-burst {
+    opacity: 0;
+}
+
+.rm-chip {
+    box-shadow: var(--shadow-lift);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .rm-progress {
+        animation: rm-progress var(--rm-cycle) linear infinite;
+    }
+
+    .rm-bar {
+        animation: rm-bar var(--rm-cycle) linear infinite;
+    }
+
+    .rm-pop-0 {
+        animation: rm-pop-0 var(--rm-cycle) var(--ease-spring) infinite;
+    }
+
+    .rm-pop-1 {
+        animation: rm-pop-1 var(--rm-cycle) var(--ease-spring) infinite;
+    }
+
+    .rm-pop-2 {
+        animation: rm-pop-2 var(--rm-cycle) var(--ease-spring) infinite;
+    }
+
+    .rm-pop-3 {
+        animation: rm-pop-3 var(--rm-cycle) var(--ease-spring) infinite;
+    }
+
+    .rm-goal {
+        animation: rm-goal var(--rm-cycle) var(--ease-spring) infinite;
+    }
+
+    .rm-burst {
+        animation: rm-burst var(--rm-cycle) var(--ease-out) infinite;
+    }
+
+    .rm-chip-0 {
+        animation: rm-chip-0 var(--rm-cycle) var(--ease-spring) infinite;
+    }
+
+    .rm-chip-1 {
+        animation: rm-chip-1 var(--rm-cycle) var(--ease-spring) infinite;
+    }
+
+    .rm-chip-2 {
+        animation: rm-chip-2 var(--rm-cycle) var(--ease-spring) infinite;
+    }
+
+    .rm-badge {
+        animation: rm-badge 2.6s var(--ease-out) infinite;
+    }
+}
+
+@keyframes rm-progress {
+    0%,
+    5% {
+        stroke-dashoffset: 100;
+    }
+    58%,
+    92% {
+        stroke-dashoffset: 0;
+    }
+    100% {
+        stroke-dashoffset: 100;
+    }
+}
+
+@keyframes rm-bar {
+    0%,
+    5% {
+        width: 0%;
+    }
+    58%,
+    92% {
+        width: 100%;
+    }
+    100% {
+        width: 0%;
+    }
+}
+
+/* Each milestone lands 12% of the cycle after the one below it. */
+@keyframes rm-pop-0 {
+    0%,
+    6% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+    9% {
+        opacity: 1;
+        transform: scale(1.25);
+    }
+    12%,
+    92% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+}
+
+@keyframes rm-pop-1 {
+    0%,
+    18% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+    21% {
+        opacity: 1;
+        transform: scale(1.25);
+    }
+    24%,
+    92% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+}
+
+@keyframes rm-pop-2 {
+    0%,
+    30% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+    33% {
+        opacity: 1;
+        transform: scale(1.25);
+    }
+    36%,
+    92% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+}
+
+@keyframes rm-pop-3 {
+    0%,
+    42% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+    45% {
+        opacity: 1;
+        transform: scale(1.25);
+    }
+    48%,
+    92% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+}
+
+@keyframes rm-goal {
+    0%,
+    54% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+    58% {
+        opacity: 1;
+        transform: scale(1.3);
+    }
+    62%,
+    92% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+}
+
+@keyframes rm-burst {
+    0%,
+    56% {
+        opacity: 0;
+        transform: scale(0.55);
+    }
+    62% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    74%,
+    100% {
+        opacity: 0;
+        transform: scale(1.4);
+    }
+}
+
+@keyframes rm-chip-0 {
+    0%,
+    22% {
+        opacity: 0;
+        transform: translateY(10px) scale(0.85);
+    }
+    26% {
+        opacity: 1;
+        transform: translateY(0) scale(1.06);
+    }
+    29%,
+    92% {
+        opacity: 1;
+        transform: none;
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(10px) scale(0.85);
+    }
+}
+
+@keyframes rm-chip-1 {
+    0%,
+    34% {
+        opacity: 0;
+        transform: translateY(10px) scale(0.85);
+    }
+    38% {
+        opacity: 1;
+        transform: translateY(0) scale(1.06);
+    }
+    41%,
+    92% {
+        opacity: 1;
+        transform: none;
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(10px) scale(0.85);
+    }
+}
+
+@keyframes rm-chip-2 {
+    0%,
+    46% {
+        opacity: 0;
+        transform: translateY(10px) scale(0.85);
+    }
+    50% {
+        opacity: 1;
+        transform: translateY(0) scale(1.06);
+    }
+    53%,
+    92% {
+        opacity: 1;
+        transform: none;
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(10px) scale(0.85);
+    }
+}
+
+@keyframes rm-badge {
+    0%,
+    100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.07);
+    }
+}
+
+/* ---------- Step illustrations ----------
+   Each loop is gated on its card being the active one, so the row
+   never becomes four competing animations fighting for attention. */
+
+.si-scan {
+    opacity: 0;
+}
+
+.si-out,
+.si-step,
+.si-tick {
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
+/* Resting state: everything extracted, the middle role chosen,
+   the whole mini-trail walked. */
+.si-goal .si-tick {
+    opacity: 0;
+}
+
+.si-goal .si-card-1 .si-tick {
+    opacity: 1;
+}
+
+.si-walk-progress {
+    stroke-dasharray: 100;
+    stroke-dashoffset: 0;
+}
+
+.si-bar {
+    transform-box: fill-box;
+    transform-origin: bottom;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    [data-active="true"] .si-scan {
+        animation: si-scan 3.2s var(--ease-out) infinite;
+    }
+
+    [data-active="true"] .si-out-0 {
+        animation: si-out 3.2s var(--ease-spring) 0.5s infinite;
+    }
+
+    [data-active="true"] .si-out-1 {
+        animation: si-out 3.2s var(--ease-spring) 1s infinite;
+    }
+
+    [data-active="true"] .si-out-2 {
+        animation: si-out 3.2s var(--ease-spring) 1.5s infinite;
+    }
+
+    [data-active="true"] .si-goal .si-card-0 .si-tick {
+        animation: si-tick 3.6s steps(1, end) infinite;
+    }
+
+    [data-active="true"] .si-goal .si-card-1 .si-tick {
+        animation: si-tick 3.6s steps(1, end) 1.2s infinite;
+    }
+
+    [data-active="true"] .si-goal .si-card-2 .si-tick {
+        animation: si-tick 3.6s steps(1, end) 2.4s infinite;
+    }
+
+    [data-active="true"] .si-bar-you {
+        animation: si-grow 3s var(--ease-spring) infinite;
+    }
+
+    [data-active="true"] .si-bar-role {
+        animation: si-grow 3s var(--ease-spring) 0.25s infinite;
+    }
+
+    [data-active="true"] .si-gapbox,
+    [data-active="true"] .si-arrow {
+        animation: si-flash 3s var(--ease-out) infinite;
+    }
+
+    [data-active="true"] .si-walk-progress {
+        animation: si-walk 3.4s var(--ease-out) infinite;
+    }
+
+    [data-active="true"] .si-step-0 {
+        animation: si-pop 3.4s var(--ease-spring) infinite;
+    }
+
+    [data-active="true"] .si-step-1 {
+        animation: si-pop 3.4s var(--ease-spring) 0.8s infinite;
+    }
+
+    [data-active="true"] .si-step-2 {
+        animation: si-pop 3.4s var(--ease-spring) 1.6s infinite;
+    }
+}
+
+@keyframes si-scan {
+    0% {
+        opacity: 0;
+        transform: translateY(0);
+    }
+    10%,
+    70% {
+        opacity: 0.9;
+    }
+    80%,
+    100% {
+        opacity: 0;
+        transform: translateY(52px);
+    }
+}
+
+@keyframes si-out {
+    0%,
+    5% {
+        opacity: 0;
+        transform: translateX(-10px) scale(0.8);
+    }
+    18% {
+        opacity: 1;
+        transform: translateX(0) scale(1.05);
+    }
+    24%,
+    85% {
+        opacity: 1;
+        transform: none;
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(-10px) scale(0.8);
+    }
+}
+
+@keyframes si-tick {
+    0%,
+    33% {
+        opacity: 1;
+    }
+    34%,
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes si-grow {
+    0%,
+    8% {
+        transform: scaleY(0.05);
+    }
+    38%,
+    88% {
+        transform: scaleY(1);
+    }
+    100% {
+        transform: scaleY(0.05);
+    }
+}
+
+@keyframes si-flash {
+    0%,
+    40% {
+        opacity: 0;
+    }
+    52%,
+    88% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes si-walk {
+    0%,
+    6% {
+        stroke-dashoffset: 100;
+    }
+    72%,
+    88% {
+        stroke-dashoffset: 0;
+    }
+    100% {
+        stroke-dashoffset: 100;
+    }
+}
+
+@keyframes si-pop {
+    0%,
+    8% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+    16% {
+        opacity: 1;
+        transform: scale(1.3);
+    }
+    22%,
+    85% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.3);
     }
 }
 
@@ -272,11 +869,14 @@
 
 @keyframes stamp-in {
     0% {
-        transform: scale(1.6) rotate(6deg);
+        transform: scale(0.6);
         opacity: 0;
     }
+    60% {
+        transform: scale(1.08);
+    }
     100% {
-        transform: scale(1) rotate(-4deg);
+        transform: scale(1);
         opacity: 1;
     }
 }

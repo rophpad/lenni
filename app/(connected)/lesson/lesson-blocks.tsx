@@ -24,7 +24,7 @@ export function LessonBody({ blocks }: { blocks: LessonBlock[] }) {
           case "heading":
             return (
               <h2
-                className="mt-4 font-display text-display-s font-semibold first:mt-0"
+                className="mt-4 font-display text-display-s font-bold first:mt-0"
                 key={i}
               >
                 {block.text}

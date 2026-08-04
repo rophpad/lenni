@@ -66,11 +66,13 @@ function Badge({
         />
       )}
       <span
-        className={`relative flex ${size} items-center justify-center rounded-full border-2 font-mono text-body-s font-semibold ${
+        /* Each node sits on a hard edge, so the trail reads as a row of
+           physical buttons rather than flat status dots. */
+        className={`relative flex ${size} items-center justify-center rounded-full border-2 font-mono text-body-s font-bold ${
           done
-            ? "border-positive-strong bg-positive text-white"
+            ? "border-positive bg-positive text-white shadow-[0_3px_0_var(--color-success-strong)]"
             : current
-              ? "border-accent-strong bg-accent text-white shadow-(--shadow)"
+              ? "border-accent bg-accent text-white shadow-[0_3px_0_var(--color-brand-strong)]"
               : "border-dashed border-ui-border bg-ui-raised text-subtle"
         }`}
       >

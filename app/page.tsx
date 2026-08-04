@@ -10,6 +10,7 @@ import {
   type RoleColor,
   type RoleIconName,
 } from "./components/role-icon";
+import { RoadmapIllustration, STEP_ART } from "./components/illustrations";
 
 import {
   useCallback,
@@ -203,7 +204,7 @@ export default function Home() {
               <ThemeToggle compact />
               <button className="btn btn-primary max-sm:px-4 max-sm:py-2.5" onClick={start}>
                 <span className="sm:hidden">Start</span>
-                <span className="max-sm:hidden">Start your roadmap</span>
+                <span className="max-sm:hidden">Get my roadmap</span>
               </button>
               <button
                 aria-expanded={menu}
@@ -250,16 +251,16 @@ export default function Home() {
               Your AI Career Copilot
             </div>
             <div className="w-full relative inline-block">
-              <h1 className="mx-auto font-display text-display-l font-semibold md:text-display-2xl">
-                <span className="block whitespace-nowrap">
-                  The <span className="text-accent">roadmap</span>{" "}
-                  <br className="" /> that gets you
+              <h1 className="mx-auto font-display text-display-l md:text-display-2xl">
+                <span className="block">
+                  Build your <span className="text-accent">personalized</span>
                 </span>
-                <span className="block whitespace-nowrap">
-                  {/* Stamped, not a plastic pill — the wax-seal motif that
-                      carries through to completed milestones. */}
-                  <span className="animate-stamp-in mt-2 inline-block rounded-[20px] border-2 border-positive-strong bg-positive px-5 pb-2 pt-1 text-white">
-                    hired.
+                <span className="block">
+                  career{" "}
+                  {/* The pill sits on its own hard edge, like every other
+                      pressable thing in the product. */}
+                  <span className="animate-stamp-in edge [--edge-color:var(--color-success-strong)] mt-2 inline-block -rotate-2 rounded-[20px] bg-positive px-5 pb-2.5 pt-1 text-white">
+                    roadmap.
                   </span>
                 </span>
               </h1>
@@ -279,7 +280,7 @@ export default function Home() {
             </div>*/}
             <div
               ref={roleScrollRef}
-              className="flex snap-x gap-3 overflow-x-auto px-11 pb-4 pt-1 [scrollbar-width:none] max-[760px]:px-4 [&::-webkit-scrollbar]:hidden"
+              className="flex snap-x gap-3 overflow-x-auto px-11 pb-4 pt-1 scrollbar-none max-[760px]:px-4 [&::-webkit-scrollbar]:hidden"
             >
               {roles.map(([title, tag, color, icon]) => (
                 <article
@@ -303,10 +304,10 @@ export default function Home() {
           <div className="mx-auto mt-6 max-w-190 px-6 text-center">
             <div className="mt-8 flex justify-center gap-3">
               <button
-                className="btn btn-primary"
+                className="btn btn-primary btn-lg"
                 onClick={start}
               >
-                Start your roadmap →
+                Get my roadmap →
               </button>
             </div>
             <div className="mt-4 text-body-s text-subtle">
@@ -314,6 +315,59 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        {/* The product in one glance: a roadmap that builds itself, loops,
+            and ends on a real job rather than a certificate. */}
+        {/* <section
+          className="mx-auto mt-24 w-full max-w-260 scroll-mt-8 px-6"
+          id="roadmap-demo"
+        >
+          <div className="grid items-center gap-14 md:grid-cols-2 md:gap-10">
+            <div>
+              <div className="mb-4 kicker text-accent">Lenni in action</div>
+              <h2 className="font-display text-display-l">
+                Lenni builds the roadmap. You just walk it.
+              </h2>
+              <p className="mt-3 text-body leading-[1.6] text-muted">
+                Lenni reads your résumé, measures the gap between you and the
+                role, and lays every milestone out in order. Day one, you see the
+                whole path — and exactly which step is next.
+              </p>
+              <ul className="mt-7 flex flex-col gap-4">
+                {[
+                  [
+                    "Lenni unlocks one milestone at a time",
+                    "You never open the app wondering what to study. Lenni already decided.",
+                  ],
+                  [
+                    "Lenni banks every skill you prove",
+                    "Finish a milestone and it lands on your profile as evidence, automatically.",
+                  ],
+                  [
+                    "Lenni stops when you’re hired",
+                    "The last node is the role itself — and Lenni scores you against real openings on the way.",
+                  ],
+                ].map(([title, body]) => (
+                  <li className="flex gap-3" key={title}>
+                    <span className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-positive text-body-s font-extrabold text-white shadow-[0_2px_0_var(--color-success-strong)]">
+                      ✓
+                    </span>
+                    <span>
+                      <span className="block text-body font-bold">{title}</span>
+                      <span className="block text-body-s text-muted">{body}</span>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              <button className="btn btn-primary mt-8" onClick={start}>
+                Get my roadmap →
+              </button>
+            </div>
+            <div className="mx-auto w-full max-w-95">
+              <RoadmapIllustration />
+            </div>
+          </div>
+        </section> */}
 
         <Section
           id="problem"
@@ -382,7 +436,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 items-center gap-4">
             {features.map(([icon, title, text]) => (
               <article
-                className="card p-6 [&_h3]:mb-2 [&_h3]:font-display [&_h3]:text-body-l [&_h3]:font-semibold [&_p]:text-body-s [&_p]:leading-[1.55] [&_p]:text-muted"
+                className="card p-6 [&_h3]:mb-2 [&_h3]:font-display [&_h3]:text-body-l [&_h3]:font-bold [&_p]:text-body-s [&_p]:leading-[1.55] [&_p]:text-muted"
                 key={title}
               >
                 <div className="mb-3 text-display-s text-accent">{icon}</div>
@@ -397,28 +451,36 @@ export default function Home() {
           kicker="How it starts"
           title="From résumé to roadmap in four steps."
         >
-          <div className="mt-11 flex flex-col md:flex-row items-center gap-4">
+          <div className="mt-11 flex flex-col md:flex-row items-stretch gap-4">
             {[
               ["Import your profile", "LinkedIn and résumé, GitHub optional."],
               ["Name your goal", "Pick a role, or type your own."],
               ["See the gap", "Lenni compares you to the role."],
               ["Walk the roadmap", "Daily lessons until you arrive."],
-            ].map(([t, d], i) => (
-              <button
-                className={`w-full relative overflow-hidden card px-5 pb-6 pt-6 text-left transition ${step === i ? "active -translate-y-1 border-accent opacity-100 card-featured" : "border-ui-border-subtle opacity-70"}`}
-                onClick={() => setStep(i)}
-                key={t}
-              >
-                <div className="absolute inset-x-0 top-0 h-0.75 bg-ui-border-subtle">
-                  <div className="h-full w-0 bg-accent transition-[width] duration-3200 `in-[.active]:w-full" />
-                </div>
-                <div className="mb-4 mt-3 font-mono text-display-m font-semibold text-ui-border in-[.active]:text-accent">
-                  0{i + 1}
-                </div>
-                <div className="mb-1 text-body font-bold">{t}</div>
-                <div className="text-body-s leading-normal text-muted">{d}</div>
-              </button>
-            ))}
+            ].map(([t, d], i) => {
+              const Art = STEP_ART[i];
+              return (
+                <button
+                  /* drives the illustration: only the active card animates */
+                  data-active={step === i}
+                  className={`w-full relative overflow-hidden card px-5 pb-6 pt-6 text-left transition ${step === i ? "active -translate-y-1 border-accent opacity-100 card-featured" : "border-ui-border-subtle opacity-70"}`}
+                  onClick={() => setStep(i)}
+                  key={t}
+                >
+                  <div className="absolute inset-x-0 top-0 h-0.75 bg-ui-border-subtle">
+                    <div className="h-full w-0 bg-accent transition-[width] duration-3200 `in-[.active]:w-full" />
+                  </div>
+                  {/* <div className="mb-4 mt-1 rounded-chip bg-page-subtle px-3 py-3">
+                    <Art />
+                  </div> */}
+                  <div className="mb-2 font-mono text-body-s font-bold text-subtle in-[.active]:text-accent">
+                    0{i + 1}
+                  </div>
+                  <div className="mb-1 text-body font-bold">{t}</div>
+                  <div className="text-body-s leading-normal text-muted">{d}</div>
+                </button>
+              );
+            })}
           </div>
         </Section>
         <Section
@@ -468,7 +530,7 @@ export default function Home() {
                 "Unlimited job matching & JD evaluator",
                 "Weekly AI progress summaries",
               ]}
-              action="Start your roadmap"
+              action="Get my roadmap"
               start={start}
             />
             <Price
@@ -513,16 +575,16 @@ export default function Home() {
           </div>
         </Section>
         <section className="mx-auto mt-24 w-full max-w-205 px-6">
-          <div className="rounded-card bg-linear-to-br from-accent to-(--color-brand-strong) px-10 py-14 text-center [&_h2]:font-display [&_h2]:text-display-l [&_h2]:font-semibold [&_h2]:text-white [&_p]:mx-auto [&_p]:mb-6 [&_p]:mt-3 [&_p]:text-body [&_p]:text-white/85 [&_.btn]:border-white [&_.btn]:bg-white [&_.btn]:text-accent">
+          <div className="rounded-card bg-linear-to-br from-accent to-accent-strong px-10 py-14 text-center [&_h2]:font-display [&_h2]:text-display-l [&_h2]:text-white [&_p]:mx-auto [&_p]:mb-7 [&_p]:mt-3 [&_p]:text-body [&_p]:text-white/85 [&_.btn]:border-white [&_.btn]:bg-white [&_.btn]:text-accent [&_.btn]:shadow-[0_4px_0_var(--color-brand-subtle)]">
             <h2>Ready to know what’s next?</h2>
             <p>
               Import your profile, pick a goal, and get your first lesson today.
             </p>
             <button
-              className="btn btn-primary"
+              className="btn btn-primary btn-lg"
               onClick={start}
             >
-              Start your roadmap →
+              Get my roadmap →
             </button>
           </div>
         </section>
@@ -602,12 +664,12 @@ function Compare({
 }) {
   return (
     <article
-      className={`rounded-xl border bg-ui-surface p-6 ${old ? "border-ui-border-subtle" : "card-featured"}`}
+      className={`card p-6 ${old ? "" : "card-featured"}`}
     >
       <div className="mb-2 kicker text-subtle">
         {label}
       </div>
-      <div className="mb-4 font-display text-display-s font-semibold">{quote}</div>
+      <div className="mb-4 font-display text-display-s font-bold">{quote}</div>
       <ul
         className={`flex list-none flex-col gap-2 [&_li]:flex [&_li]:gap-2 [&_li]:text-body-s [&_li]:leading-normal [&_li]:text-muted ${old ? "[&_li]:before:font-bold [&_li]:before:text-negative [&_li]:before:content-['✕']" : "[&_li]:before:font-bold [&_li]:before:text-positive [&_li]:before:content-['✓']"}`}
       >
@@ -641,14 +703,14 @@ function Price({
 }) {
   return (
     <article
-      className={`flex flex-col rounded-xl border bg-ui-surface px-6 py-7 ${featured ? "relative card-featured" : "border-ui-border-subtle"}`}
+      className={`card flex flex-col px-6 py-7 ${featured ? "relative card-featured" : ""}`}
     >
       {featured && (
         <div className="absolute -top-3.25 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-accent px-3 py-1 kicker font-semibold text-white">
           Most popular
         </div>
       )}
-      <div className="font-display text-display-s font-semibold">{name}</div>
+      <div className="font-display text-display-s font-bold">{name}</div>
       <div className="mt-1 min-h-8 text-body-s text-subtle">{desc}</div>
       <div className="mb-1 mt-5 flex items-baseline gap-1">
         <span className="font-mono text-display-xl font-semibold">{price}</span>
@@ -661,7 +723,7 @@ function Price({
         ))}
       </ul>
       <button
-        className={`relative inline-flex w-full cursor-pointer items-center justify-center gap-2 btn ${featured ? "border-accent bg-accent text-white hover:border-accent-hover hover:bg-accent-hover" : "border-ui-border bg-ui-surface text-muted"}`}
+        className={`btn w-full ${featured ? "btn-primary" : "btn-secondary"}`}
         onClick={start}
       >
         {action}
@@ -700,7 +762,7 @@ function Footer({ start }: { start: () => void }) {
           <div className="mb-3 kicker text-subtle">
             Get started
           </div>
-          <button onClick={start}>Start your roadmap</button>
+          <button onClick={start}>Get my roadmap</button>
         </div>
       </div>
       <div className="flex justify-between gap-2 pt-6 [&_span]:text-body-s [&_span]:text-subtle">

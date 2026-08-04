@@ -90,7 +90,7 @@ export function CareerGoalPicker({
           >
             <header className="flex items-start justify-between gap-3 border-b border-ui-border-subtle px-5 py-4 sm:px-6">
               <div>
-                <h2 className="font-display text-display-s font-semibold">
+                <h2 className="font-display text-display-s font-bold">
                   Change your career goal
                 </h2>
                 <p className="mt-1 text-body-s text-muted">

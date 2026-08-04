@@ -36,12 +36,12 @@ export default function OnboardingPage() {
   if (step === 2)
     return (
       <section className={card}>
-        <h1 className="mb-2 font-display text-display-m font-semibold">Import your profile</h1>
+        <h1 className="mb-2 font-display text-display-m font-bold">Import your profile</h1>
         <p className="mb-6 text-body-s text-muted">
           Upload your résumé so Lenni can retrieve demonstrated experience.
         </p>
         <label
-          className={`flex cursor-pointer items-center gap-3 rounded-control border-[1.5px] p-4 ${resume ? "border-positive bg-positive-subtle" : "border-dashed border-ui-border"}`}
+          className={`flex cursor-pointer items-center gap-3 rounded-control border-2 p-4 transition ${resume ? "border-positive bg-positive-subtle" : "border-dashed border-ui-border hover:border-accent"}`}
         >
           <span className="flex-1">
             <strong className="block text-body-s">{resume?.name ?? "Upload résumé"}</strong>
@@ -67,7 +67,7 @@ export default function OnboardingPage() {
   if (step === 3)
     return (
       <section className={card}>
-        <h1 className="mb-2 font-display text-display-m font-semibold">Choose your goal</h1>
+        <h1 className="mb-2 font-display text-display-m font-bold">Choose your goal</h1>
         <p className="mb-5 text-body-s text-muted">
           Choose the career path Lenni should build around your current experience.
         </p>
@@ -141,7 +141,7 @@ export default function OnboardingPage() {
       {loading ? (
         <div className="py-8 text-center">
           <span className="mx-auto mb-5 block size-4 animate-pulse rounded-full bg-accent" />
-          <h1 className="font-display text-display-m font-semibold">
+          <h1 className="font-display text-display-m font-bold">
             Mapping your {career.title} path
           </h1>
           <p className="mt-2 text-body-s text-muted">
@@ -150,7 +150,7 @@ export default function OnboardingPage() {
         </div>
       ) : error ? (
         <div>
-          <h1 className="font-display text-display-s font-semibold">
+          <h1 className="font-display text-display-s font-bold">
             Analysis couldn’t finish
           </h1>
           <p className="my-4 rounded-control bg-negative-subtle p-3 text-body-s text-negative">
@@ -162,7 +162,7 @@ export default function OnboardingPage() {
         </div>
       ) : (
         <div>
-          <h1 className="mb-2 font-display text-display-m font-semibold">
+          <h1 className="mb-2 font-display text-display-m font-bold">
             Here’s your starting point
           </h1>
           <p className="mb-5 text-body-s text-muted">

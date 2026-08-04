@@ -71,7 +71,7 @@ export function ConnectedShell({ children, user }: { children: ReactNode; user: 
       <aside className="sticky top-0 z-20 flex h-screen w-59 shrink-0 flex-col border-r border-ui-border-subtle bg-page-subtle px-4 py-7 max-md:fixed max-md:inset-x-0 max-md:bottom-0 max-md:top-auto max-md:h-auto max-md:w-full max-md:flex-row max-md:border-r-0 max-md:border-t max-md:bg-page-subtle/95 max-md:px-1 max-md:py-1 max-md:pb-[max(0.25rem,env(safe-area-inset-bottom))] max-md:backdrop-blur-md">
         <Link
           href="/dashboard"
-          className="flex items-baseline gap-2 px-2 pb-2 font-display text-display-s font-semibold max-md:hidden"
+          className="flex items-baseline gap-2 px-2 pb-2 font-display text-display-s font-bold max-md:hidden"
         >
           <span className="text-accent">●</span> Lenni
         </Link>
@@ -104,7 +104,7 @@ export function ConnectedShell({ children, user }: { children: ReactNode; user: 
             <ThemeToggle />
           </div>
           <div className="flex items-center gap-2">
-            <span className="flex size-8.5 items-center justify-center rounded-full bg-linear-to-br from-accent to-positive font-display text-sm font-semibold text-white">
+            <span className="flex size-8.5 items-center justify-center rounded-full bg-linear-to-br from-accent to-positive font-display text-sm font-bold text-white">
               {user.name.split(/\s+/).map(part => part[0]).slice(0, 2).join("").toUpperCase()}
             </span>
             <div>

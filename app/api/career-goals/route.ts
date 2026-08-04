@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { z } from "zod";
+import { careerGoalRequestSchema } from "../../../lib/validation";
 import { applyCareerPlan, generateCareerPlan } from "../../../lib/career-setup";
 import { careerPrompt } from "../../../lib/prompts";
 import { prisma } from "../../../lib/prisma";
@@ -17,9 +17,7 @@ export async function POST(request: Request) {
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   try {
-    const { career } = z
-      .object({ career: z.string().min(1) })
-      .parse(await request.json());
+    const { career } = careerGoalRequestSchema.parse(await request.json());
 
     const target = careerPrompt(career); // throws on unknown or disabled slug
 

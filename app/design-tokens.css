@@ -1,107 +1,119 @@
 /* ============================================================
-   Lenni — "Field Notebook" design tokens
-   Playful through craft (warm paper, hand-drawn trail, stamps),
-   not through plastic 3D buttons.
+   Lenni — "Playground" design tokens
+   Duolingo-style: bright cool canvas, saturated brand colours,
+   chunky 2px borders and a 4px bottom edge that makes every
+   control feel like a physical key you press.
    ============================================================ */
 
 :root {
   /* ---------- Base palette ---------- */
 
-  /* Ink — warm near-black, never blue-grey */
-  --color-ink-900: #1c1a17;
-  --color-ink-800: #2b2823;
-  --color-ink-700: #3e3a34;
-  --color-ink-500: #6b6459;
-  --color-ink-400: #8f887c;
+  /* Neutrals — cool, faintly blue, never warm/paper */
+  --color-neutral-900: #161a23;
+  --color-neutral-800: #232833;
+  --color-neutral-700: #3c4351;
+  --color-neutral-600: #5b6472;
+  --color-neutral-500: #8a93a3;
+  --color-neutral-400: #afb6c2;
+  --color-neutral-250: #eaf0ff;
+  --color-neutral-200: #e3e7ee;
+  --color-neutral-150: #edf0f5;
+  --color-neutral-100: #f1f4f9;
+  --color-neutral-50: #f4f6fb;
 
-  /* Paper */
-  --color-paper: #fbf8f3;
-  --color-paper-raised: #ffffff;
-  --color-paper-sunk: #f3eee5;
-  --color-rule: #e6dfd2;
-  --color-rule-soft: #f0eae0;
+  /* Blue — brand / action */
+  --color-blue-700: #1e46c9;
+  --color-blue-600: #2f5ff5;
+  --color-blue-500: #4a71ff;
+  --color-blue-200: #c3d1ff;
+  --color-blue-100: #e8edff;
 
-  /* Ember — brand / action */
-  --color-ember-700: #b03415;
-  --color-ember-600: #d4451c;
-  --color-ember-500: #f2603c;
-  --color-ember-200: #ffd9cb;
-  --color-ember-50: #fff1ec;
+  /* Teal — progress / earned mastery */
+  --color-teal-700: #0b7a6c;
+  --color-teal-600: #0e9784;
+  --color-teal-500: #12b7a0;
+  --color-teal-100: #e1faf5;
 
-  /* Pine — progress / earned mastery */
-  --color-pine-700: #093c30;
-  --color-pine-600: #0d5544;
-  --color-pine-500: #12705a;
-  --color-pine-100: #dcefe8;
+  /* Violet — AI / machine-generated moments only */
+  --color-violet-600: #6d3fe0;
+  --color-violet-500: #8358f2;
+  --color-violet-100: #eee7ff;
 
-  /* Iris — AI / machine-generated moments only */
-  --color-iris-600: #5546d1;
-  --color-iris-500: #6b5be6;
-  --color-iris-100: #e9e5fd;
+  /* Amber — streaks / momentum / caution */
+  --color-amber-600: #d98a0a;
+  --color-amber-500: #f5a524;
+  --color-amber-100: #fdf1dd;
 
-  /* Sun — streaks / momentum / caution */
-  --color-sun-600: #c98a0c;
-  --color-sun-500: #e8a317;
-  --color-sun-100: #fdf0d4;
-
-  /* Clay — errors, kept warm so it sits in the palette */
-  --color-clay-500: #d1425a;
-  --color-clay-100: #fbe2e6;
+  /* Rose — errors */
+  --color-rose-600: #d12f4d;
+  --color-rose-500: #ef4a67;
+  --color-rose-100: #fde9ed;
 
   --color-white: #fff;
 
   /* ---------- Alpha ---------- */
   --color-white-85: rgb(255 255 255 / 85%);
-  --color-ink-4: rgb(28 26 23 / 4%);
-  --color-ink-8: rgb(28 26 23 / 8%);
-  --color-ink-12: rgb(28 26 23 / 12%);
-  --color-ink-20: rgb(28 26 23 / 20%);
-  --color-brand-8: rgb(242 96 60 / 8%);
-  --color-contour: rgb(107 100 89 / 9%);
+  --color-ink-4: rgb(22 26 35 / 4%);
+  --color-ink-8: rgb(22 26 35 / 8%);
+  --color-ink-12: rgb(22 26 35 / 12%);
+  --color-ink-20: rgb(22 26 35 / 20%);
+  --color-brand-8: rgb(47 95 245 / 8%);
+  --color-contour: rgb(47 95 245 / 7%);
   /* modal / overlay backdrop */
-  --color-scrim: rgb(28 26 23 / 45%);
+  --color-scrim: rgb(22 26 35 / 45%);
 
   /* ---------- Semantic ---------- */
-  --color-canvas: var(--color-paper);
-  --color-canvas-subtle: var(--color-paper-sunk);
-  --color-surface: var(--color-paper-raised);
-  --color-surface-raised: var(--color-paper-sunk);
-  --color-surface-hover: var(--color-ember-50);
-  --color-border: var(--color-rule);
-  --color-border-subtle: var(--color-rule-soft);
-  --color-text: var(--color-ink-900);
-  --color-text-muted: var(--color-ink-500);
-  --color-text-subtle: var(--color-ink-400);
+  --color-canvas: var(--color-white);
+  --color-canvas-subtle: var(--color-neutral-50);
+  --color-surface: var(--color-white);
+  --color-surface-raised: var(--color-neutral-100);
+  --color-surface-hover: var(--color-neutral-250);
+  --color-border: var(--color-neutral-200);
+  --color-border-subtle: var(--color-neutral-150);
+  --color-text: var(--color-neutral-900);
+  --color-text-muted: var(--color-neutral-600);
+  --color-text-subtle: var(--color-neutral-500);
   --color-on-accent: var(--color-white);
 
-  --color-brand: var(--color-ember-500);
-  --color-brand-hover: var(--color-ember-600);
-  --color-brand-strong: var(--color-ember-700);
-  --color-brand-subtle: var(--color-ember-200);
-  --color-brand-faint: var(--color-ember-50);
+  --color-brand: var(--color-blue-600);
+  --color-brand-hover: var(--color-blue-500);
+  --color-brand-strong: var(--color-blue-700);
+  --color-brand-subtle: var(--color-blue-200);
+  --color-brand-faint: var(--color-blue-100);
 
-  --color-success: var(--color-pine-500);
-  --color-success-strong: var(--color-pine-700);
-  --color-success-subtle: var(--color-pine-100);
-  --color-warning: var(--color-sun-500);
-  --color-warning-strong: var(--color-sun-600);
-  --color-warning-subtle: var(--color-sun-100);
-  --color-danger: var(--color-clay-500);
-  --color-danger-subtle: var(--color-clay-100);
-  --color-machine: var(--color-iris-500);
-  --color-machine-strong: var(--color-iris-600);
-  --color-machine-subtle: var(--color-iris-100);
+  --color-success: var(--color-teal-500);
+  --color-success-strong: var(--color-teal-600);
+  --color-success-subtle: var(--color-teal-100);
+  --color-warning: var(--color-amber-500);
+  --color-warning-strong: var(--color-amber-600);
+  --color-warning-subtle: var(--color-amber-100);
+  --color-danger: var(--color-rose-500);
+  --color-danger-strong: var(--color-rose-600);
+  --color-danger-subtle: var(--color-rose-100);
+  --color-machine: var(--color-violet-500);
+  --color-machine-strong: var(--color-violet-600);
+  --color-machine-subtle: var(--color-violet-100);
 
-  /* ---------- Elevation — warm and soft, never a plastic bevel ---------- */
-  --shadow: 0 1px 2px rgb(28 26 23 / 4%), 0 8px 24px -12px rgb(28 26 23 / 10%);
-  --shadow-lift: 0 2px 4px rgb(28 26 23 / 5%), 0 16px 40px -16px rgb(28 26 23 / 16%);
-  --shadow-stamp: 0 1px 0 rgb(28 26 23 / 6%);
+  /* ---------- Elevation ----------
+     Two systems, deliberately: soft ambient shadows for surfaces that
+     merely sit above the page, and a hard offset "edge" for anything
+     the user presses. The edge is the signature — never blur it. */
+  --shadow: 0 1px 2px rgb(22 26 35 / 5%), 0 6px 18px -10px rgb(22 26 35 / 12%);
+  --shadow-lift: 0 2px 4px rgb(22 26 35 / 6%), 0 14px 32px -14px rgb(22 26 35 / 20%);
+  --shadow-stamp: 0 1px 0 rgb(22 26 35 / 6%);
   --ring-accent: 0 0 0 3px var(--color-brand-subtle);
 
-  /* ---------- Radii (distinct names so Tailwind's rounded-* defaults stay intact) ---------- */
-  --r-control: 14px;
-  --r-card: 24px;
-  --r-chip: 8px;
+  /* Depth of the pressable bottom edge, and its pressed state. */
+  --edge-height: 4px;
+  --edge-press: 1px;
+
+  /* ---------- Radii — chunkier than before, nothing sharp ---------- */
+  --r-control: 16px;
+  --r-card: 20px;
+  --r-chip: 10px;
+
+  /* ---------- Borders ---------- */
+  --border-width: 2px;
 
   /* ---------- Motion ---------- */
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -134,48 +146,49 @@
 }
 
 /* ============================================================
-   Dark mode — warm charcoal, not blue-black. Same semantic names,
-   so no component needs to know dark mode exists.
+   Dark mode — deep cool navy. Same semantic names, so no
+   component needs to know dark mode exists.
    ============================================================ */
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-canvas: #161513;
-    --color-canvas-subtle: #1e1c19;
-    --color-surface: #201e1a;
-    --color-surface-raised: #2a2722;
-    --color-surface-hover: #322c25;
-    --color-border: #38332c;
-    --color-border-subtle: #2b2721;
-    --color-text: #f5f1e9;
-    --color-text-muted: #b3aa9c;
-    --color-text-subtle: #8a8175;
+    --color-canvas: #10141d;
+    --color-canvas-subtle: #161b26;
+    --color-surface: #171d29;
+    --color-surface-raised: #1f2634;
+    --color-surface-hover: #263041;
+    --color-border: #2c3547;
+    --color-border-subtle: #232b3a;
+    --color-text: #eef2f9;
+    --color-text-muted: #a3adbf;
+    --color-text-subtle: #7c869a;
 
-    --color-brand: #ff7551;
-    --color-brand-hover: #ff8d70;
-    --color-brand-strong: #d4451c;
-    --color-brand-subtle: #4a2418;
-    --color-brand-faint: #2c1a13;
+    --color-brand: #3f68f7;
+    --color-brand-hover: #6d8dff;
+    --color-brand-strong: #1e46c9;
+    --color-brand-subtle: #26356b;
+    --color-brand-faint: #1a2140;
 
-    --color-success: #35a184;
-    --color-success-strong: #6fd0b4;
-    --color-success-subtle: #16342c;
-    --color-warning: #f0b544;
-    --color-warning-strong: #ffcf72;
-    --color-warning-subtle: #382c12;
-    --color-danger: #e8697e;
-    --color-danger-subtle: #3d1c22;
-    --color-machine: #8d80f0;
-    --color-machine-strong: #a99ef5;
+    --color-success: #1fc9b0;
+    --color-success-strong: #0e9784;
+    --color-success-subtle: #103a37;
+    --color-warning: #f5b13f;
+    --color-warning-strong: #d98a0a;
+    --color-warning-subtle: #3a2c12;
+    --color-danger: #ff6480;
+    --color-danger-strong: #d12f4d;
+    --color-danger-subtle: #3d1a25;
+    --color-machine: #9a76ff;
+    --color-machine-strong: #6d3fe0;
     --color-machine-subtle: #262048;
 
-    --color-contour: rgb(245 241 233 / 7%);
+    --color-contour: rgb(122 152 255 / 8%);
     --color-scrim: rgb(0 0 0 / 62%);
     --color-ink-8: rgb(0 0 0 / 30%);
     --color-ink-12: rgb(0 0 0 / 40%);
 
-    --shadow: 0 1px 2px rgb(0 0 0 / 30%), 0 8px 24px -12px rgb(0 0 0 / 55%);
-    --shadow-lift: 0 2px 4px rgb(0 0 0 / 35%), 0 16px 40px -16px rgb(0 0 0 / 65%);
+    --shadow: 0 1px 2px rgb(0 0 0 / 34%), 0 6px 18px -10px rgb(0 0 0 / 58%);
+    --shadow-lift: 0 2px 4px rgb(0 0 0 / 38%), 0 14px 32px -14px rgb(0 0 0 / 68%);
     --shadow-stamp: 0 1px 0 rgb(0 0 0 / 35%);
   }
 }
@@ -183,68 +196,74 @@
 /* Explicit override wins in both directions */
 :root[data-theme="light"] {
   color-scheme: light;
-  --color-canvas: var(--color-paper);
-  --color-canvas-subtle: var(--color-paper-sunk);
-  --color-surface: var(--color-paper-raised);
-  --color-surface-raised: var(--color-paper-sunk);
-  --color-surface-hover: var(--color-ember-50);
-  --color-border: var(--color-rule);
-  --color-border-subtle: var(--color-rule-soft);
-  --color-text: var(--color-ink-900);
-  --color-text-muted: var(--color-ink-500);
-  --color-text-subtle: var(--color-ink-400);
-  --color-brand: var(--color-ember-500);
-  --color-brand-hover: var(--color-ember-600);
-  --color-brand-strong: var(--color-ember-700);
-  --color-brand-subtle: var(--color-ember-200);
-  --color-brand-faint: var(--color-ember-50);
-  --color-success: var(--color-pine-500);
-  --color-success-strong: var(--color-pine-700);
-  --color-success-subtle: var(--color-pine-100);
-  --color-warning: var(--color-sun-500);
-  --color-warning-subtle: var(--color-sun-100);
-  --color-danger: var(--color-clay-500);
-  --color-danger-subtle: var(--color-clay-100);
-  --color-machine: var(--color-iris-500);
-  --color-machine-subtle: var(--color-iris-100);
-  --color-contour: rgb(107 100 89 / 9%);
-  --color-scrim: rgb(28 26 23 / 45%);
-  --color-ink-8: rgb(28 26 23 / 8%);
-  --color-ink-12: rgb(28 26 23 / 12%);
-  --shadow: 0 1px 2px rgb(28 26 23 / 4%), 0 8px 24px -12px rgb(28 26 23 / 10%);
-  --shadow-lift: 0 2px 4px rgb(28 26 23 / 5%), 0 16px 40px -16px rgb(28 26 23 / 16%);
-  --shadow-stamp: 0 1px 0 rgb(28 26 23 / 6%);
+  --color-canvas: var(--color-white);
+  --color-canvas-subtle: var(--color-neutral-50);
+  --color-surface: var(--color-white);
+  --color-surface-raised: var(--color-neutral-100);
+  --color-surface-hover: var(--color-neutral-250);
+  --color-border: var(--color-neutral-200);
+  --color-border-subtle: var(--color-neutral-150);
+  --color-text: var(--color-neutral-900);
+  --color-text-muted: var(--color-neutral-600);
+  --color-text-subtle: var(--color-neutral-500);
+  --color-brand: var(--color-blue-600);
+  --color-brand-hover: var(--color-blue-500);
+  --color-brand-strong: var(--color-blue-700);
+  --color-brand-subtle: var(--color-blue-200);
+  --color-brand-faint: var(--color-blue-100);
+  --color-success: var(--color-teal-500);
+  --color-success-strong: var(--color-teal-600);
+  --color-success-subtle: var(--color-teal-100);
+  --color-warning: var(--color-amber-500);
+  --color-warning-strong: var(--color-amber-600);
+  --color-warning-subtle: var(--color-amber-100);
+  --color-danger: var(--color-rose-500);
+  --color-danger-strong: var(--color-rose-600);
+  --color-danger-subtle: var(--color-rose-100);
+  --color-machine: var(--color-violet-500);
+  --color-machine-strong: var(--color-violet-600);
+  --color-machine-subtle: var(--color-violet-100);
+  --color-contour: rgb(47 95 245 / 7%);
+  --color-scrim: rgb(22 26 35 / 45%);
+  --color-ink-8: rgb(22 26 35 / 8%);
+  --color-ink-12: rgb(22 26 35 / 12%);
+  --shadow: 0 1px 2px rgb(22 26 35 / 5%), 0 6px 18px -10px rgb(22 26 35 / 12%);
+  --shadow-lift: 0 2px 4px rgb(22 26 35 / 6%), 0 14px 32px -14px rgb(22 26 35 / 20%);
+  --shadow-stamp: 0 1px 0 rgb(22 26 35 / 6%);
 }
 
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --color-canvas: #161513;
-  --color-canvas-subtle: #1e1c19;
-  --color-surface: #201e1a;
-  --color-surface-raised: #2a2722;
-  --color-surface-hover: #322c25;
-  --color-border: #38332c;
-  --color-border-subtle: #2b2721;
-  --color-text: #f5f1e9;
-  --color-text-muted: #b3aa9c;
-  --color-text-subtle: #8a8175;
-  --color-brand: #ff7551;
-  --color-brand-hover: #ff8d70;
-  --color-brand-strong: #d4451c;
-  --color-brand-subtle: #4a2418;
-  --color-brand-faint: #2c1a13;
-  --color-success: #35a184;
-  --color-success-strong: #6fd0b4;
-  --color-success-subtle: #16342c;
-  --color-warning: #f0b544;
-  --color-warning-subtle: #382c12;
-  --color-danger: #e8697e;
-  --color-danger-subtle: #3d1c22;
-  --color-machine: #8d80f0;
+  --color-canvas: #10141d;
+  --color-canvas-subtle: #161b26;
+  --color-surface: #171d29;
+  --color-surface-raised: #1f2634;
+  --color-surface-hover: #263041;
+  --color-border: #2c3547;
+  --color-border-subtle: #232b3a;
+  --color-text: #eef2f9;
+  --color-text-muted: #a3adbf;
+  --color-text-subtle: #7c869a;
+  --color-brand: #3f68f7;
+  --color-brand-hover: #6d8dff;
+  --color-brand-strong: #1e46c9;
+  --color-brand-subtle: #26356b;
+  --color-brand-faint: #1a2140;
+  --color-success: #1fc9b0;
+  --color-success-strong: #0e9784;
+  --color-success-subtle: #103a37;
+  --color-warning: #f5b13f;
+  --color-warning-strong: #d98a0a;
+  --color-warning-subtle: #3a2c12;
+  --color-danger: #ff6480;
+  --color-danger-strong: #d12f4d;
+  --color-danger-subtle: #3d1a25;
+  --color-machine: #9a76ff;
+  --color-machine-strong: #6d3fe0;
   --color-machine-subtle: #262048;
-  --color-contour: rgb(245 241 233 / 7%);
+  --color-contour: rgb(122 152 255 / 8%);
   --color-scrim: rgb(0 0 0 / 62%);
-  --shadow: 0 1px 2px rgb(0 0 0 / 30%), 0 8px 24px -12px rgb(0 0 0 / 55%);
-  --shadow-lift: 0 2px 4px rgb(0 0 0 / 35%), 0 16px 40px -16px rgb(0 0 0 / 65%);
+  --shadow: 0 1px 2px rgb(0 0 0 / 34%), 0 6px 18px -10px rgb(0 0 0 / 58%);
+  --shadow-lift: 0 2px 4px rgb(0 0 0 / 38%), 0 14px 32px -14px rgb(0 0 0 / 68%);
   --shadow-stamp: 0 1px 0 rgb(0 0 0 / 35%);
 }

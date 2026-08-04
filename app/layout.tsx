@@ -1,25 +1,27 @@
 import type { Metadata } from "next";
-import { Fraunces, IBM_Plex_Mono, Inter } from "next/font/google";
+import { Figtree, IBM_Plex_Mono, Poppins } from "next/font/google";
 
 import { THEME_INIT_SCRIPT } from "./components/theme-toggle";
+import { Providers } from "./providers";
 import "./globals.css";
 
-/* Display — Fraunces variable. SOFT + WONK axes are what make the
-   headings feel hand-set and warm rather than toy-like. */
-const display = Fraunces({
+/* Display — Poppins at 700/800. Geometric, round and loud: headings
+   should feel like a friendly shout, not a magazine masthead. */
+const display = Poppins({
   subsets: ["latin"],
-  axes: ["SOFT", "WONK", "opsz"],
-  variable: "--font-fraunces",
+  weight: ["600", "700", "800"],
+  variable: "--font-poppins",
   display: "swap",
 });
 
-const sans = Inter({
+/* Body — Figtree. Same geometric family feel, but comfortable at 15px. */
+const sans = Figtree({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-figtree",
   display: "swap",
 });
 
-/* Mono is reserved for field-notebook labels: dates, percentages, kickers. */
+/* Mono is reserved for figures: dates, percentages, counters. */
 const mono = IBM_Plex_Mono({
   subsets: ["latin"],
   weight: ["400", "500", "600"],
@@ -45,7 +47,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
       </head>
       <body className="min-h-screen overflow-x-hidden bg-page font-sans text-foreground antialiased">
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
