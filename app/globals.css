@@ -32,6 +32,7 @@
 
     /* ---------- Type ---------- */
     --font-display: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+    --font-heading: var(--font-plus-jakarta-sans), ui-sans-serif, system-ui, sans-serif;
     --font-sans: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
     --font-mono: var(--font-plex-mono), ui-monospace, monospace;
 

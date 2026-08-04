@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
-import { Figtree, IBM_Plex_Mono, Poppins } from "next/font/google";
+import { Figtree, IBM_Plex_Mono, Poppins, Plus_Jakarta_Sans } from "next/font/google";
 
 import { THEME_INIT_SCRIPT } from "./components/theme-toggle";
 import { Providers } from "./providers";
 import "./globals.css";
+
+import { Analytics } from '@vercel/analytics/next';
 
 /* Display — Poppins at 700/800. Geometric, round and loud: headings
    should feel like a friendly shout, not a magazine masthead. */
@@ -29,6 +31,13 @@ const mono = IBM_Plex_Mono({
   display: "swap",
 });
 
+const heading = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-plus-jakarta-sans",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "Lenni — Your AI Career Copilot",
   description: "A career roadmap built from your actual experience.",
@@ -38,7 +47,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      className={`scroll-smooth ${display.variable} ${sans.variable} ${mono.variable}`}
+      className={`scroll-smooth ${display.variable} ${sans.variable} ${mono.variable} ${heading.variable}`}
       data-scroll-behavior="smooth"
       suppressHydrationWarning
     >
@@ -47,7 +56,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
       </head>
       <body className="min-h-screen overflow-x-hidden bg-page font-sans text-foreground antialiased">
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+          <Analytics />
+        </Providers>
       </body>
     </html>
   );

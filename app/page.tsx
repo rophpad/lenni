@@ -251,12 +251,15 @@ export default function Home() {
               Your AI Career Copilot
             </div>
             <div className="w-full relative inline-block">
-              <h1 className="mx-auto font-display text-display-l md:text-display-2xl">
+              <h1 className="mx-auto font-heading text-display-l md:text-display-2xl">
                 <span className="block">
-                  Build your <span className="text-accent">personalized</span>
+                  Build your <span className="hidden text-accent md:inline">personalized</span>
                 </span>
                 <span className="block">
-                  career{" "}
+                  <span className="whitespace-nowrap md:hidden">
+                    <span className="text-accent">personalized</span> career
+                  </span>
+                  <span className="hidden md:inline">career</span>{" "}
                   {/* The pill sits on its own hard edge, like every other
                       pressable thing in the product. */}
                   <span className="animate-stamp-in edge [--edge-color:var(--color-success-strong)] mt-2 inline-block -rotate-2 rounded-[20px] bg-positive px-5 pb-2.5 pt-1 text-white">
