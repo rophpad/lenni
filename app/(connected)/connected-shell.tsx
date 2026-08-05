@@ -65,16 +65,26 @@ const nav = [
 export function ConnectedShell({ children, user }: { children: ReactNode; user: { name: string; career: string } }) {
   const pathname = usePathname();
   const router = useRouter();
+
+  async function logOut() {
+    await authClient.signOut();
+    router.push("/login");
+    router.refresh();
+  }
+
   return (
     <div className="relative z-1 flex min-h-screen min-w-0 overflow-x-clip">
       {/* Desktop side rail; mobile bottom tab bar with labels + safe-area inset */}
       <aside className="sticky top-0 z-20 flex h-screen w-59 shrink-0 flex-col border-r border-ui-border-subtle bg-page-subtle px-4 py-7 max-md:fixed max-md:inset-x-0 max-md:bottom-0 max-md:top-auto max-md:h-auto max-md:w-full max-md:flex-row max-md:border-r-0 max-md:border-t max-md:bg-page-subtle/95 max-md:px-1 max-md:py-1 max-md:pb-[max(0.25rem,env(safe-area-inset-bottom))] max-md:backdrop-blur-md">
-        <Link
-          href="/dashboard"
-          className="flex items-baseline gap-2 px-2 pb-2 font-display text-display-s font-bold max-md:hidden"
-        >
-          <span className="text-accent">●</span> Lenni
-        </Link>
+        <div className="flex items-center justify-between gap-2 px-2 pb-2 max-md:hidden">
+          <Link
+            href="/dashboard"
+            className="flex items-baseline gap-2 font-display text-display-s font-bold"
+          >
+            <span className="text-accent">●</span> Lenni
+          </Link>
+          <ThemeToggle className="size-6!" compact />
+        </div>
         <nav className="mt-9 flex flex-col gap-1 max-md:mt-0 max-md:w-full max-md:flex-row max-md:gap-0">
           {nav.map(([href, label, icon]) => {
             const active = pathname === href;
@@ -100,9 +110,6 @@ export function ConnectedShell({ children, user }: { children: ReactNode; user: 
           })}
         </nav>
         <div className="mt-auto border-t border-ui-border-subtle px-3 py-3 max-md:hidden">
-          <div className="mb-3">
-            <ThemeToggle />
-          </div>
           <div className="flex items-center gap-2">
             <span className="flex size-8.5 items-center justify-center rounded-full bg-linear-to-br from-accent to-positive font-display text-sm font-bold text-white">
               {user.name.split(/\s+/).map(part => part[0]).slice(0, 2).join("").toUpperCase()}
@@ -113,8 +120,8 @@ export function ConnectedShell({ children, user }: { children: ReactNode; user: 
             </div>
           </div>
           <button
-            type="submit"
-            onClick={async () => { await authClient.signOut(); router.push("/login"); router.refresh(); }}
+            type="button"
+            onClick={logOut}
             className="mt-3 flex w-full items-center gap-2 rounded-lg px-2 py-2 text-body-s font-medium text-muted transition hover:bg-negative-subtle hover:text-negative"
           >
             <svg className="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -126,7 +133,22 @@ export function ConnectedShell({ children, user }: { children: ReactNode; user: 
         </div>
       </aside>
       <main className="min-w-0 flex-1 px-4 pb-24 pt-6 sm:px-8 sm:pt-9 md:px-11 md:pb-20">
-        <div className="min-w-0 max-w-content">{children}</div>
+        <div className="min-w-0 max-w-content">
+          {children}
+          {pathname === "/profile" && (
+            <button
+              className="mt-6 flex w-full items-center justify-center gap-2 rounded-control border border-negative/30 px-4 py-3 text-body font-medium text-negative transition hover:bg-negative-subtle md:hidden"
+              onClick={logOut}
+              type="button"
+            >
+              <svg className="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M10 17l5-5-5-5M15 12H3" />
+                <path d="M14 3h5a2 2 0 012 2v14a2 2 0 01-2 2h-5" />
+              </svg>
+              Log out
+            </button>
+          )}
+        </div>
       </main>
     </div>
   );
