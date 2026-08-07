@@ -1,4 +1,5 @@
 import { z } from "zod";
+import type { Prisma } from "@prisma/client";
 import { generateJson } from "./ai";
 import { planDateFor } from "./daily-plan";
 import { careerMeta } from "./careers";
@@ -75,10 +76,11 @@ const SHAPE = `{ "profile": {"currentJobTitle": string|null,"yearsExperience":nu
 export async function generateCareerPlan(
   userId: string,
   careerSlug: string,
-  resumeText: string,
+  evidence: unknown,
 ): Promise<CareerPlan> {
   const prompt = careerPrompt(careerSlug);
   const generationPrompt = `${prompt.benchmark}\n${prompt.profileAnalysis}\n${prompt.roadmap}
+Treat every supplied ready source as candidate evidence. Resume, LinkedIn, GitHub, tracked profile data, and added job gaps must all influence the skill assessment and roadmap when present. Prefer concrete project and experience evidence over unsupported claims, never invent missing facts, and make job gaps explicit curriculum priorities.
 Plan the curriculum only — do NOT write lesson content or exercises here.
 For each lesson provide a specific title, a one-sentence summary of what it teaches, a realistic
 estimatedMinutes (15-45), and 1-5 concrete learning objectives phrased as things the learner will
@@ -88,7 +90,7 @@ Return this exact JSON shape: ${SHAPE}`;
 
   let raw = await generateJson<unknown>(userId, "profile_extraction", generationPrompt, {
     career: prompt.title,
-    resumeText,
+    evidence,
   });
   let parsed = careerPlanSchema.safeParse(raw);
   if (!parsed.success) {
@@ -96,7 +98,7 @@ Return this exact JSON shape: ${SHAPE}`;
       userId,
       "profile_extraction",
       `${generationPrompt}\nThe previous response failed validation. Return a complete corrected response. Validation errors: ${JSON.stringify(parsed.error.issues)}`,
-      { career: prompt.title, resumeText, previousResponse: raw },
+      { career: prompt.title, evidence, previousResponse: raw },
     );
     parsed = careerPlanSchema.safeParse(raw);
   }
@@ -114,12 +116,14 @@ export async function applyCareerPlan({
   plan,
   source,
   reason,
+  generationContext,
 }: {
   userId: string;
   careerSlug: string;
   plan: CareerPlan;
   source: SourceInput;
   reason: string;
+  generationContext?: Record<string, unknown>;
 }) {
   const career = careerPrompt(careerSlug);
   const meta = careerMeta(careerSlug);
@@ -276,7 +280,7 @@ export async function applyCareerPlan({
           generationStatus: "succeeded",
           generationReason: reason,
           activatedAt: new Date(),
-          generationContext: { sourceId, careerSlug },
+          generationContext: { ...generationContext, sourceId, careerSlug, evidenceSourceIds: generationContext?.evidenceSourceIds ?? [sourceId] } as Prisma.InputJsonValue,
         },
       });
 

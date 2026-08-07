@@ -4,6 +4,7 @@ import { applyCareerPlan, generateCareerPlan } from "../../../lib/career-setup";
 import { careerPrompt } from "../../../lib/prompts";
 import { prisma } from "../../../lib/prisma";
 import { apiUser } from "../../../lib/session";
+import { buildProfileEvidence, resumeTextFromEvidence } from "../../../lib/profile-evidence";
 
 export const runtime = "nodejs";
 export const maxDuration = 300;
@@ -34,26 +35,21 @@ export async function POST(request: Request) {
         { status: 400 },
       );
 
-    const source = await prisma.profileSource.findFirst({
-      where: { userId: user.id, type: "resume", status: "ready" },
-      orderBy: { createdAt: "desc" },
-    });
-    const text =
-      source && typeof source.parsedData === "object" && source.parsedData !== null
-        ? (source.parsedData as { text?: unknown }).text
-        : undefined;
-    if (!source || typeof text !== "string" || text.trim().length < 100)
+    const evidence = await buildProfileEvidence(user.id);
+    const resume = resumeTextFromEvidence(evidence);
+    if (!resume)
       return NextResponse.json(
         { error: "We need your résumé on file to rebuild a roadmap. Please re-run onboarding." },
         { status: 400 },
       );
 
-    const plan = await generateCareerPlan(user.id, career, text);
+    const plan = await generateCareerPlan(user.id, career, evidence);
     await applyCareerPlan({
       userId: user.id,
       careerSlug: career,
       plan,
-      source: { kind: "existing", id: source.id },
+      source: { kind: "existing", id: resume.id },
+      generationContext: { evidenceSourceIds: evidence.sources.map(source => source.id), jobGaps: evidence.jobGaps },
       reason: `Career goal changed to ${target.title}`,
     });
 

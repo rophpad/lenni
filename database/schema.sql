@@ -584,10 +584,24 @@ CREATE TABLE job_evaluations (
   ai_run_id uuid REFERENCES ai_runs(id) ON DELETE SET NULL,
   matched_skills jsonb NOT NULL DEFAULT '[]'::jsonb,
   missing_skills jsonb NOT NULL DEFAULT '[]'::jsonb,
+  preferred_skills jsonb NOT NULL DEFAULT '[]'::jsonb,
+  strengths jsonb NOT NULL DEFAULT '[]'::jsonb,
+  gaps jsonb NOT NULL DEFAULT '[]'::jsonb,
+  actions jsonb NOT NULL DEFAULT '[]'::jsonb,
+  summary text,
+  company text,
+  location text,
   added_to_roadmap_at timestamptz,
   created_at timestamptz NOT NULL DEFAULT now()
 );
 CREATE INDEX job_evaluations_user_created_idx ON job_evaluations(user_id, created_at DESC);
+
+CREATE TABLE waitlist_entries (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  email citext NOT NULL UNIQUE,
+  source text,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
 
 ALTER TABLE daily_tasks ADD CONSTRAINT daily_tasks_job_evaluation_fk
   FOREIGN KEY (job_evaluation_id) REFERENCES job_evaluations(id) ON DELETE SET NULL;

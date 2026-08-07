@@ -32,6 +32,12 @@ export const auth = betterAuth({
       if (error) throw new Error(error.message);
     },
   },
+  socialProviders: {
+    github: {
+      clientId: process.env.GITHUB_CLIENT_ID ?? "",
+      clientSecret: process.env.GITHUB_CLIENT_SECRET ?? "",
+    },
+  },
   user: {
     modelName: "User",
     fields: { name: "fullName", image: "avatarUrl", emailVerified: "emailVerified" },

@@ -3,44 +3,10 @@ import { NextResponse } from "next/server";
 import { applyCareerPlan, generateCareerPlan } from "../../../lib/career-setup";
 import { careerPrompt } from "../../../lib/prompts";
 import { apiUser } from "../../../lib/session";
+import { documentToMarkdown } from "../../../lib/document-markdown";
 
 export const runtime = "nodejs";
 export const maxDuration = 300;
-
-async function resumeText(file: File) {
-  const buffer = Buffer.from(await file.arrayBuffer());
-  if (file.name.toLowerCase().endsWith(".pdf")) {
-    const PDFParser = (await import("pdf2json")).default;
-    return new Promise<string>((resolve, reject) => {
-      const parser = new PDFParser(null, true);
-      let settled = false;
-      const settle = (callback: () => void) => {
-        if (settled) return;
-        settled = true;
-        callback();
-        parser.destroy();
-      };
-      parser.on("pdfParser_dataError", error => {
-        const cause =
-          error && typeof error === "object" && "parserError" in error
-            ? error.parserError
-            : error;
-        settle(() => reject(cause instanceof Error ? cause : new Error(String(cause))));
-      });
-      parser.on("pdfParser_dataReady", () =>
-        settle(() => resolve(parser.getRawTextContent())),
-      );
-      try {
-        parser.parseBuffer(buffer, 0);
-      } catch (error) {
-        settle(() => reject(error));
-      }
-    });
-  }
-  if (/\.docx?$/i.test(file.name))
-    return (await (await import("mammoth")).extractRawText({ buffer })).value;
-  throw new Error("Only PDF, DOC, and DOCX résumés are supported");
-}
 
 export async function POST(request: Request) {
   const user = await apiUser();
@@ -52,14 +18,14 @@ export async function POST(request: Request) {
     if (!(file instanceof File) || file.size === 0 || file.size > 10_000_000)
       throw new Error("Choose a résumé up to 10MB");
 
-    const text = (await resumeText(file)).slice(0, 60000);
+    const text = await documentToMarkdown(file, { maxBytes: 10_000_000, maxCharacters: 90_000 });
     if (text.trim().length < 100)
       throw new Error("We could not read enough text from this résumé");
 
     // Validates the slug before spending an AI call on it.
     careerPrompt(careerSlug);
 
-    const plan = await generateCareerPlan(user.id, careerSlug, text);
+    const plan = await generateCareerPlan(user.id, careerSlug, {sources:[{type:"resume",fileName:file.name,data:{text}}]});
     await applyCareerPlan({
       userId: user.id,
       careerSlug,

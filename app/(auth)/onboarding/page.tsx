@@ -45,10 +45,10 @@ export default function OnboardingPage() {
         >
           <span className="flex-1">
             <strong className="block text-body-s">{resume?.name ?? "Upload résumé"}</strong>
-            <span className="text-label text-subtle">PDF or DOCX, up to 10MB</span>
+            <span className="text-label text-subtle">PDF, Word, or OpenDocument, up to 10MB</span>
           </span>
           <input
-            accept=".pdf,.doc,.docx"
+            accept=".pdf,.doc,.docx,.docm,.odt,.rtf"
             className="sr-only"
             onChange={e => setResume(e.target.files?.[0] ?? null)}
             type="file"

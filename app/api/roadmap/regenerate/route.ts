@@ -1,0 +1,8 @@
+import {NextResponse} from "next/server";
+import {applyCareerPlan,generateCareerPlan} from "../../../../lib/career-setup";
+import {buildProfileEvidence,resumeTextFromEvidence} from "../../../../lib/profile-evidence";
+import {prisma} from "../../../../lib/prisma";
+import {featuresReleased,releaseUnavailable} from "../../../../lib/release";
+import {apiUser} from "../../../../lib/session";
+export const runtime="nodejs";export const maxDuration=300;
+export async function POST(){const user=await apiUser();if(!user)return NextResponse.json({error:"Unauthorized"},{status:401});if(!featuresReleased())return NextResponse.json(releaseUnavailable,{status:403});try{const goal=await prisma.careerGoal.findFirst({where:{userId:user.id,isActive:true},orderBy:{createdAt:"desc"}});const role=goal?.roleId?await prisma.role.findUnique({where:{id:goal.roleId}}):null;if(!role?.slug)return NextResponse.json({error:"Choose a career goal before regenerating."},{status:400});const evidence=await buildProfileEvidence(user.id);const resume=resumeTextFromEvidence(evidence);if(!resume)return NextResponse.json({error:"Upload a résumé before regenerating your roadmap."},{status:400});const plan=await generateCareerPlan(user.id,role.slug,evidence);const result=await applyCareerPlan({userId:user.id,careerSlug:role.slug,plan,source:{kind:"existing",id:resume.id},reason:"Roadmap regenerated from all current profile evidence",generationContext:{evidenceSourceIds:evidence.sources.map(source=>source.id),jobGaps:evidence.jobGaps,regeneratedAt:new Date().toISOString()}});return NextResponse.json({ok:true,...result,sourceCount:evidence.sources.length});}catch(error){return NextResponse.json({error:error instanceof Error?error.message:"Could not regenerate your roadmap."},{status:400})}}

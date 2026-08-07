@@ -1,0 +1,4 @@
+"use client";
+import Link from "next/link";
+import {useState} from "react";
+export function AddGapsButton({jobId,alreadyAdded}:{jobId:string;alreadyAdded:boolean}){const[state,setState]=useState<"idle"|"saving"|"done"|"error">(alreadyAdded?"done":"idle");const[error,setError]=useState("");async function add(){setState("saving");setError("");const response=await fetch(`/api/jobs/${jobId}/roadmap`,{method:"POST"});const data=await response.json();if(!response.ok){setState("error");setError(data.error??"Could not update your roadmap.");return}setState("done")}return <div className="flex flex-col items-stretch gap-2 sm:items-end">{state==="done"?<Link className="btn btn-secondary" href="/roadmap">✓ Gaps added — see roadmap</Link>:<button className="btn btn-primary" disabled={state==="saving"} onClick={add}>{state==="saving"?"Adding gaps…":"Add gaps to my roadmap"}</button>}{state==="error"&&<p className="max-w-80 text-body-s text-negative">{error}</p>}</div>}

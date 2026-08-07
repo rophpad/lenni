@@ -320,6 +320,23 @@ model UserSkill {
   @@map("user_skills")
 }
 
+model SkillEvidence {
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId           String   @map("user_id") @db.Uuid
+  skillId          String   @map("skill_id") @db.Uuid
+  sourceId         String?  @map("source_id") @db.Uuid
+  aiRunId          String?  @map("ai_run_id") @db.Uuid
+  lessonProgressId String?  @map("lesson_progress_id") @db.Uuid
+  evidenceText     String   @map("evidence_text")
+  score            Decimal? @db.Decimal(5, 2)
+  confidence       Decimal? @db.Decimal(4, 3)
+  metadata         Json     @default("{}")
+  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  @@index([userId, skillId])
+  @@map("skill_evidence")
+}
+
 model Roadmap {
   id                      String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   userId                  String        @map("user_id") @db.Uuid
@@ -513,8 +530,24 @@ model JobEvaluation {
   aiRunId          String?   @map("ai_run_id") @db.Uuid
   matchedSkills    Json      @default("[]") @map("matched_skills")
   missingSkills    Json      @default("[]") @map("missing_skills")
+  preferredSkills  Json      @default("[]") @map("preferred_skills")
+  strengths        Json      @default("[]")
+  gaps             Json      @default("[]")
+  actions          Json      @default("[]")
+  summary          String?
+  company          String?
+  location         String?
   addedToRoadmapAt DateTime? @map("added_to_roadmap_at") @db.Timestamptz
   createdAt        DateTime  @default(now()) @map("created_at") @db.Timestamptz
 
   @@map("job_evaluations")
+}
+
+model WaitlistEntry {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email     String   @unique @db.Citext
+  source    String?
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  @@map("waitlist_entries")
 }
