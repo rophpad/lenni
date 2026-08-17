@@ -39,8 +39,9 @@ const heading = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Lenni — Your AI Career Copilot",
-  description: "A career roadmap built from your actual experience.",
+  title: "Lenni — The AI career transition platform for tech professionals",
+  description:
+    "Lenni analyzes your skills, identifies what's missing, builds your transition plan, and guides you until you're ready for the job.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

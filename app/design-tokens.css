@@ -1,8 +1,8 @@
 /* ============================================================
-   Lenni — "Playground" design tokens
-   Duolingo-style: bright cool canvas, saturated brand colours,
-   chunky 2px borders and a 4px bottom edge that makes every
-   control feel like a physical key you press.
+   Lenni — design tokens
+   Quiet and utilitarian: one accent, hairline borders, small
+   radii, no decorative depth. Colour carries meaning (progress,
+   AI, error) and nothing else — the UI should read as a tool.
    ============================================================ */
 
 :root {
@@ -95,28 +95,21 @@
   --color-machine-subtle: var(--color-violet-100);
 
   /* ---------- Elevation ----------
-     Two systems, deliberately: soft ambient shadows for surfaces that
-     merely sit above the page, and a hard offset "edge" for anything
-     the user presses. The edge is the signature — never blur it. */
-  --shadow: 0 1px 2px rgb(22 26 35 / 5%), 0 6px 18px -10px rgb(22 26 35 / 12%);
-  --shadow-lift: 0 2px 4px rgb(22 26 35 / 6%), 0 14px 32px -14px rgb(22 26 35 / 20%);
-  --shadow-stamp: 0 1px 0 rgb(22 26 35 / 6%);
-  --ring-accent: 0 0 0 3px var(--color-brand-subtle);
+     Borders do the separating. Shadow is reserved for things that
+     genuinely float over the page — menus, modals — and stays faint. */
+  --shadow: 0 1px 2px rgb(22 26 35 / 4%);
+  --shadow-lift: 0 4px 16px -6px rgb(22 26 35 / 12%);
+  --ring-accent: 0 0 0 3px var(--color-brand-faint);
 
-  /* Depth of the pressable bottom edge, and its pressed state. */
-  --edge-height: 4px;
-  --edge-press: 1px;
-
-  /* ---------- Radii — chunkier than before, nothing sharp ---------- */
-  --r-control: 16px;
-  --r-card: 20px;
-  --r-chip: 10px;
+  /* ---------- Radii ---------- */
+  --r-control: 8px;
+  --r-card: 10px;
+  --r-chip: 6px;
 
   /* ---------- Borders ---------- */
-  --border-width: 2px;
+  --border-width: 1px;
 
   /* ---------- Motion ---------- */
-  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
 
   /* ---------- Role accent aliases (Spark / RoleIcon) ----------
@@ -187,9 +180,8 @@
     --color-ink-8: rgb(0 0 0 / 30%);
     --color-ink-12: rgb(0 0 0 / 40%);
 
-    --shadow: 0 1px 2px rgb(0 0 0 / 34%), 0 6px 18px -10px rgb(0 0 0 / 58%);
-    --shadow-lift: 0 2px 4px rgb(0 0 0 / 38%), 0 14px 32px -14px rgb(0 0 0 / 68%);
-    --shadow-stamp: 0 1px 0 rgb(0 0 0 / 35%);
+    --shadow: 0 1px 2px rgb(0 0 0 / 30%);
+    --shadow-lift: 0 4px 16px -6px rgb(0 0 0 / 55%);
   }
 }
 
@@ -227,9 +219,8 @@
   --color-scrim: rgb(22 26 35 / 45%);
   --color-ink-8: rgb(22 26 35 / 8%);
   --color-ink-12: rgb(22 26 35 / 12%);
-  --shadow: 0 1px 2px rgb(22 26 35 / 5%), 0 6px 18px -10px rgb(22 26 35 / 12%);
-  --shadow-lift: 0 2px 4px rgb(22 26 35 / 6%), 0 14px 32px -14px rgb(22 26 35 / 20%);
-  --shadow-stamp: 0 1px 0 rgb(22 26 35 / 6%);
+  --shadow: 0 1px 2px rgb(22 26 35 / 4%);
+  --shadow-lift: 0 4px 16px -6px rgb(22 26 35 / 12%);
 }
 
 :root[data-theme="dark"] {
@@ -263,7 +254,6 @@
   --color-machine-subtle: #262048;
   --color-contour: rgb(122 152 255 / 8%);
   --color-scrim: rgb(0 0 0 / 62%);
-  --shadow: 0 1px 2px rgb(0 0 0 / 34%), 0 6px 18px -10px rgb(0 0 0 / 58%);
-  --shadow-lift: 0 2px 4px rgb(0 0 0 / 38%), 0 14px 32px -14px rgb(0 0 0 / 68%);
-  --shadow-stamp: 0 1px 0 rgb(0 0 0 / 35%);
+  --shadow: 0 1px 2px rgb(0 0 0 / 30%);
+  --shadow-lift: 0 4px 16px -6px rgb(0 0 0 / 55%);
 }

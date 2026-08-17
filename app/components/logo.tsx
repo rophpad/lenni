@@ -4,9 +4,10 @@ export function Logo() {
   return (
     <Link
       href="/"
-      className="mb-1 inline-block font-display text-display-m font-bold"
+      className="inline-flex items-center gap-2 font-display text-display-s"
     >
-      <span className="text-accent">●</span> Lenni
+      <span className="size-2 rounded-full bg-accent" />
+      Lenni
     </Link>
   );
 }
