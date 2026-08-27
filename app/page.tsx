@@ -25,6 +25,7 @@ const NAV_LINKS: Array<[string, string]> = [
   ["#features", "Features"],
   ["#pricing", "Pricing"],
   ["#faq", "FAQ"],
+  ["/creators", "For Creators"],
 ];
 
 const subjects: Array<[string, string, RoleColor, RoleIconName]> =
@@ -43,8 +44,8 @@ const features = [
   ],
   [
     "◇",
-    "Any AI model, your call",
-    "Use Lenni's built-in AI or bring your own provider and API key. Same learning path, your choice of model.",
+    "Powered by the best AI models",
+    "Lenni uses top-tier AI models to generate lessons, quizzes, and exercises tailored to your exact level.",
   ],
   [
     "✎",
@@ -74,12 +75,16 @@ const faqs = [
     "No. Lenni starts from your current level, whatever that is, and builds the path from there — beginner or advanced.",
   ],
   [
-    "Can I use my own AI model?",
-    "Yes. Lenni works with OpenRouter, Lenni AI, or your own hosted model — bring your API key and pick what works best for you. Or just use Lenni's built-in AI.",
+    "How do credits work?",
+    "1 credit = 1 lesson, quiz, or exercise. You get 20 free credits to start. Buy more packs anytime — credits never expire.",
+  ],
+  [
+    "What's free and what needs credits?",
+    "Skill detection, curriculum generation, and progress tracking are always free. Consuming content (lessons, quizzes, exercises) costs 1 credit each.",
   ],
   [
     "Can I change what I'm learning later?",
-    "Yes. Set a new goal anytime, and your path re-plans around what you've already learned.",
+    "Yes. Your first learning path is free. Set a new goal anytime, or add additional paths for $5 each.",
   ],
   [
     "How is this different from asking ChatGPT or Claude directly?",
@@ -87,7 +92,7 @@ const faqs = [
   ],
   [
     "Is there a free plan?",
-    "Yes — the Free plan includes one active learning path with quizzes and basic progress tracking, no credit card required. Upgrade to Pro for unlimited paths and full progress tracking.",
+    "Yes — you get 20 free credits, 1 learning path, skill detection, and curriculum generation. No credit card required.",
   ],
   [
     "What can I actually learn on Lenni?",
@@ -1243,7 +1248,8 @@ export default function Home() {
     return () => clearInterval(t);
   }, []);
 
-  const start = useCallback(() => router.push("/register"), [router]);
+  // const start = useCallback(() => router.push("/register"), [router]);
+  const start = useCallback(() => router.push("/waitlist"), [router]);
 
   return (
     <>
@@ -1264,7 +1270,7 @@ export default function Home() {
               <div className="hidden items-center gap-2 md:flex">
                 <ThemeToggle compact />
                 <button className="btn btn-primary" onClick={start}>
-                  Start learning
+                  Join waitlist
                 </button>
               </div>
               <button
@@ -1316,7 +1322,7 @@ export default function Home() {
                   }}
                   type="button"
                 >
-                  Start
+                  Join waitlist
                 </button>
                 <div className="mt-4 px-1">
                   <ThemeToggle />
@@ -1355,14 +1361,14 @@ export default function Home() {
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
               <button className="btn btn-primary btn-lg" onClick={start}>
-                Start learning
+                Join waitlist
               </button>
               <a className="btn btn-secondary btn-lg" href="#how-it-works">
                 See how it works
               </a>
             </div>
             <div className="mt-4 text-body-s text-subtle">
-              Bring your own AI model or use Lenni's · Free to start
+              20 free credits · No subscription · Pay as you learn
             </div>
           </div>
 
@@ -1639,19 +1645,19 @@ export default function Home() {
         {/* ── Your AI ─────────────────────────────────────────────────────── */}
         <Section
           id="your-ai"
-          kicker="Use the AI you want"
-          title="Your learning environment. Your AI."
-          sub="Lenni isn't tied to a single AI model. Use the AI provided by Lenni, or connect your own provider and bring your own API key."
+          kicker="Powered by the best AI"
+          title="Enterprise-grade AI, accessible to everyone."
+          sub="Lenni uses top-tier AI models to generate personalised lessons, quizzes, and exercises. No configuration needed — just start learning."
         >
           <div className="mt-11 grid grid-cols-2 gap-3 max-[760px]:grid-cols-1">
             {[
-              ["OpenRouter", "Connect any model available through OpenRouter."],
-              ["Lenni AI", "Use Lenni AI as your learning AI provider."],
+              ["Claude & GPT-4", "Industry-leading models power your lessons and exercises."],
+              ["Personalised to you", "AI adapts content to your level, pace, and learning style."],
               [
-                "Your own hosted model",
-                "Point Lenni at a model you host yourself.",
+                "No setup required",
+                "We handle the AI infrastructure. You just focus on learning.",
               ],
-              ["More coming soon", "New providers are added as Lenni grows."],
+              ["Always improving", "New models and features are added as Lenni grows."],
             ].map(([t, d]) => (
               <div className="card px-6 py-5" key={t}>
                 <div className="text-body font-semibold">{t}</div>
@@ -1667,50 +1673,110 @@ export default function Home() {
         <Section
           id="pricing"
           kicker="Pricing"
-          title="Your AI. Or ours."
-          sub="Lenni is open source. Use your own AI for free, or let Lenni provide the AI for you."
+          title="Pay for what you use."
+          sub="Start free. Buy credits when you need them. No subscription required."
         >
-          <div className="mt-11 grid grid-cols-2 gap-4 max-[760px]:grid-cols-1">
-            <Price
-              name="Free — Bring Your Own AI"
-              desc="Use Lenni with your own AI provider."
-              price="$0"
-              billed="Forever free"
-              features={[
-                "Personalized learning paths",
-                "AI-generated lessons",
-                "Quizzes and exercises",
-                "Progress tracking",
-                "Your own API key",
-                "OpenRouter support",
-                "Local/self-hosted models",
-                "Full open-source Lenni",
-              ]}
-              note="You bring the model. Lenni provides the learning experience."
-              action="Start learning"
-              start={start}
-            />
-            <Price
-              featured
-              name="Pro — Lenni AI"
-              desc="Everything in Free, with AI included."
-              price="$25"
-              period="/ month"
-              billed="Billed monthly"
-              features={[
-                "Everything in Free",
-                "Lenni-managed AI",
-                "No API key required",
-                "No AI provider setup",
-                "Usage included",
-                "Managed AI infrastructure",
-                "Automatic model configuration",
-                "Access to new AI-powered features",
-              ]}
-              note="No configuration. Just start learning."
-              action="Start with Lenni AI"
-              start={start}
-            />
+          {/* Credit packs */}
+          <div className="mt-10">
+            <div className="mb-4 text-center font-mono text-label font-semibold text-subtle">
+              CREDIT PACKS
+            </div>
+            <div className="grid grid-cols-3 gap-4 max-[900px]:grid-cols-1">
+              <Price
+                name="Starter"
+                desc="Enough for one full learning path."
+                price="$9"
+                billed="100 credits · never expire"
+                features={[
+                  "100 credits",
+                  "1 credit = 1 lesson, quiz, or exercise",
+                  "Credits never expire",
+                  "Use across any learning path",
+                ]}
+                action="Join waitlist"
+                start={start}
+              />
+              <Price
+                featured
+                name="Pro"
+                desc="Best value for serious learners."
+                price="$19"
+                billed="300 credits · never expire"
+                features={[
+                  "300 credits",
+                  "1 credit = 1 lesson, quiz, or exercise",
+                  "Credits never expire",
+                  "Save 33% vs Starter",
+                  "Priority AI responses",
+                ]}
+                note="Most popular."
+                action="Join waitlist"
+                start={start}
+              />
+              <Price
+                name="Pay-as-you-go"
+                desc="Buy exactly what you need."
+                price="$0.10"
+                period="/ credit"
+                billed="Minimum 10 credits"
+                features={[
+                  "Pay per credit, no bundle",
+                  "1 credit = 1 lesson, quiz, or exercise",
+                  "Credits never expire",
+                  "Add more anytime",
+                ]}
+                action="Join waitlist"
+                start={start}
+              />
+            </div>
+          </div>
+
+          {/* What you get free */}
+          <div className="mt-12">
+            <div className="mb-4 text-center font-mono text-label font-semibold text-subtle">
+              ALWAYS FREE — NO CREDITS NEEDED
+            </div>
+            <div className="mx-auto grid max-w-3xl grid-cols-3 gap-3 max-[760px]:grid-cols-1">
+              {[
+                [
+                  "◆",
+                  "Skill detection",
+                  "Connect GitHub, LinkedIn, or take a test. AI identifies your level.",
+                ],
+                [
+                  "◇",
+                  "Curriculum generation",
+                  "AI builds a full learning path with chapters and lesson outlines.",
+                ],
+                [
+                  "✎",
+                  "Progress tracking",
+                  "Track what you've learned across all your paths.",
+                ],
+              ].map(([icon, title, text]) => (
+                <div
+                  className="rounded-card border border-ui-border-subtle bg-ui-raised/50 px-5 py-4"
+                  key={title}
+                >
+                  <div className="mb-2 text-display-s text-accent">{icon}</div>
+                  <div className="text-body font-semibold">{title}</div>
+                  <div className="mt-1 text-body-s leading-relaxed text-muted">
+                    {text}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Extra paths */}
+          <div className="mt-8 text-center">
+            <p className="text-body-s text-muted">
+              Free plan includes{" "}
+              <strong className="text-foreground">1 learning path</strong>. Need
+              more? Add additional paths for{" "}
+              <strong className="text-foreground">$5 each</strong> — one-time,
+              yours forever.
+            </p>
           </div>
         </Section>
 
@@ -1743,9 +1809,9 @@ export default function Home() {
         <section className="mx-auto mt-24 w-full max-w-205 px-6">
           <div className="rounded-card bg-linear-to-br from-accent to-accent-strong px-10 py-14 text-center [&_h2]:font-display [&_h2]:text-display-m [&_h2]:text-white [&_p]:mx-auto [&_p]:mb-7 [&_p]:mt-3 [&_p]:text-body [&_p]:text-white/85 [&_.btn]:border-white [&_.btn]:bg-white [&_.btn]:text-accent [&_.btn]:shadow-[0_4px_0_var(--color-brand-subtle)] md:[&_h2]:text-display-l">
             <h2>Start learning something new.</h2>
-            <p>Choose a goal. Bring your AI. Build your learning path.</p>
+            <p>Choose a goal. Lenni builds your path. You master it.</p>
             <button className="btn btn-primary btn-lg" onClick={start}>
-              Start learning for free →
+              Join waitlist →
             </button>
           </div>
         </section>
@@ -1922,6 +1988,7 @@ function Footer({ start }: { start: () => void }) {
           <a href="#features">Features</a>
           <a href="#pricing">Pricing</a>
           <a href="#faq">FAQ</a>
+          <a href="/creators">For Creators</a>
         </div>
         <div className="[&_a]:mb-3 [&_a]:block [&_a]:text-body-s [&_a]:text-muted [&_button]:mb-3 [&_button]:block [&_button]:text-body-s [&_button]:text-muted">
           <div className="mb-3 kicker text-subtle">Company</div>
@@ -1930,11 +1997,11 @@ function Footer({ start }: { start: () => void }) {
         </div>
         <div className="[&_a]:mb-3 [&_a]:block [&_a]:text-body-s [&_a]:text-muted [&_button]:mb-3 [&_button]:block [&_button]:text-body-s [&_button]:text-muted">
           <div className="mb-3 kicker text-subtle">Get started</div>
-          <button onClick={start}>Start learning</button>
+          <button onClick={start}>Join waitlist</button>
         </div>
       </div>
       <div className="flex justify-between gap-2 pt-6 [&_span]:text-body-s [&_span]:text-subtle">
-        <span>© {year} Lenni. All rights reserved.</span>
+        <span>&copy; {year} Lenni. All rights reserved.</span>
         <span>Made for self learners.</span>
       </div>
     </footer>
