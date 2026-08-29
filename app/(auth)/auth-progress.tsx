@@ -25,7 +25,7 @@ export function AuthShell({ children }: { children: ReactNode }) {
       <main className="relative z-1 flex min-h-screen items-center justify-center p-8">
         <div className="w-full max-w-115">
           <Logo />
-          <div className="mb-8 text-body-s text-subtle">Your AI Career Copilot</div>
+          <div className="mb-8 text-body-s text-subtle">AI learning platform builder</div>
           {(pathname === "/register" || pathname === "/onboarding") && (
             <div className="mb-8" aria-label={`Step ${step} of ${steps.length}: ${steps[step - 1]}`}>
               <div className="mb-2 flex items-center justify-between kicker text-subtle"><span>Step {step} of {steps.length}</span><span className="text-accent">{steps[step - 1]}</span></div>

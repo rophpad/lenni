@@ -6,6 +6,7 @@ import type { ReactNode } from "react";
 import { authClient } from "../../lib/auth-client";
 import { useRouter } from "next/navigation";
 import { ThemeToggle } from "../components/theme-toggle";
+import { Logo } from "../components/logo";
 
 const nav = [
   ["/dashboard", "Dashboard", <path key="d" d="M3 12l9-9 9 9M5 10v10h14V10" />],
@@ -81,7 +82,7 @@ export function ConnectedShell({ children, user }: { children: ReactNode; user: 
             href="/dashboard"
             className="flex items-baseline gap-2 font-display text-display-s font-bold"
           >
-            <span className="text-accent">●</span> Lenni
+            <Logo link={false} />
           </Link>
           <ThemeToggle className="size-6!" compact />
         </div>

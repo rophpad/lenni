@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { LessonBody, type LessonBlock } from "./lesson-blocks";
+import { ChatInterface } from "./chat-interface";
 
 export type Exercise = {
   id: string;
@@ -267,6 +268,7 @@ export function LessonView({
           {submitting ? "Saving…" : "Mark complete →"}
         </button>
       </div>
+      <ChatInterface lessonId={lesson.id} />
     </div>
   );
 }

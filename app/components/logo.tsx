@@ -1,12 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
 
-export function Logo() {
-  return (
-    <Link
-      href="/"
-      className="mb-1 inline-flex items-center gap-2 font-display text-display-m font-bold"
-    >
+export function Logo({ link = true }: { link?: boolean }) {
+  const logo = (
+    <span className="mb-1 inline-flex items-center gap-2 font-display text-display-m font-bold">
       <Image
         src="/blue-lenni.svg"
         alt="Lenni"
@@ -24,6 +21,11 @@ export function Logo() {
         priority
       />
       Lenni
-    </Link>
+    </span>
   );
+
+  if (link) {
+    return <Link href="/" className="flex items-center">{logo}</Link>;
+  }
+  return logo;
 }
