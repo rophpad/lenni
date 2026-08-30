@@ -3,7 +3,6 @@
 import { useRouter } from "next/navigation";
 import { Logo } from "./components/logo";
 import { ThemeToggle } from "./components/theme-toggle";
-import { CAREER_CATALOG } from "../lib/careers";
 import {
   RoleIcon,
   roleIconColors,
@@ -25,78 +24,88 @@ const NAV_LINKS: Array<[string, string]> = [
   ["#features", "Features"],
   ["#pricing", "Pricing"],
   ["#faq", "FAQ"],
-  ["/creators", "For Creators"],
 ];
 
-const subjects: Array<[string, string, RoleColor, RoleIconName]> =
-  CAREER_CATALOG.map((subject) => [
-    subject.title,
-    subject.tagline,
-    subject.colorKey as RoleColor,
-    subject.iconKey as RoleIconName,
-  ]);
+// Header subjects dropdown — recommended label: "Subjects" (fits curriculum context)
+// Alternative considered: "Explore" — more discovery-oriented but less explicit for students/parents.
+// Only Mathematics is live; others show "Coming soon".
+const SUBJECTS: Array<{
+  label: string;
+  icon: string;
+  desc: string;
+  available: boolean;
+}> = [
+  { label: "Mathematics", icon: "∑", desc: "WAEC, Grade 7–12 · Available now", available: true },
+  { label: "Physics", icon: "◈", desc: "Mechanics, waves & energy", available: false },
+  { label: "Chemistry", icon: "⬡", desc: "Atoms, reactions & lab skills", available: false },
+  { label: "Biology", icon: "◎", desc: "Cells, systems & evolution", available: false },
+  { label: "English", icon: "✎", desc: "Grammar, writing & comprehension", available: false },
+  { label: "Computer Science", icon: "▣", desc: "Algorithms & programming", available: false },
+  { label: "AI", icon: "◇", desc: "Models, prompting & agents", available: false },
+  { label: "Blockchain", icon: "⬢", desc: "Bitcoin, protocols & apps", available: false },
+];
 
 const features = [
   [
     "◆",
-    "A path built from you",
-    "Lenni starts from what you already know and plots the shortest real path to your goal — no generic curriculum.",
+    "Aligned with your curriculum",
+    "Select your country and class. Learning builds a path that matches exactly what you are studying in school.",
   ],
   [
     "◇",
-    "Powered by the best AI models",
-    "Lenni uses top-tier AI models to generate lessons, quizzes, and exercises tailored to your exact level.",
+    "Step-by-step guidance",
+    "Unlike ChatGPT, Learning doesn't just give answers. It guides you through the reasoning so you truly understand.",
   ],
   [
     "✎",
-    "Learn, then prove it",
-    "Every topic ends with a quiz or exercise Lenni generates for you, so you validate what you learned, not just read it.",
+    "Practice until mastery",
+    "Every concept ends with interactive exercises. You don't move on until you've proven you understand.",
   ],
   [
     "○",
-    "Progress you can see",
-    "Completed, current, and upcoming topics update automatically, so you always know exactly where you stand.",
+    "Track your progress",
+    "See exactly which concepts you've mastered and where you need more practice. Visualize your growth.",
   ],
   [
     "△",
-    "One place, not one chat",
-    "No more starting a new conversation every time. Your goal, resources, practice, and history all live together.",
+    "Real-world context",
+    "Understand why math matters. See how concepts apply to business, construction, and daily life in Africa.",
   ],
   [
     "▣",
-    "Learn almost anything",
-    "Technology, business, creative skills, languages — tell Lenni the goal and it builds the path around it.",
+    "Two ways to learn",
+    "Follow the full school curriculum chapter-by-chapter, or jump in to solve a specific problem instantly.",
   ],
 ];
 
 const faqs = [
   [
-    "Do I need to already know the subject to start?",
-    "No. Lenni starts from your current level, whatever that is, and builds the path from there — beginner or advanced.",
+    "Is this just ChatGPT for math?",
+    "No. ChatGPT is a chatbot that gives answers. Learning is a structured tutor that guides you, checks your understanding, and follows your school curriculum.",
+  ],
+  [
+    "Which countries and classes are supported?",
+    "We are launching with curricula for major African education systems. You can select your country and class during onboarding.",
   ],
   [
     "How do credits work?",
-    "1 credit = 1 lesson, quiz, or exercise. You get 20 free credits to start. Buy more packs anytime — credits never expire.",
+    "1 credit = 1 concept lesson or practice session. You get 20 free credits to start. Buy more packs anytime — credits never expire.",
+  ],
+  [
+    "Can I use it just for homework help?",
+    "Yes! Use 'Quick Concept Mode' to ask about a specific problem (like fractions or derivatives) and get an instant, structured explanation.",
   ],
   [
     "What's free and what needs credits?",
-    "Skill detection, curriculum generation, and progress tracking are always free. Consuming content (lessons, quizzes, exercises) costs 1 credit each.",
+    "Curriculum browsing, progress tracking, and concept selection are always free. Consuming content (lessons, guided solving, exercises) costs 1 credit each.",
   ],
   [
-    "Can I change what I'm learning later?",
-    "Yes. Your first learning path is free. Set a new goal anytime, or add additional paths for $5 each.",
-  ],
-  [
-    "How is this different from asking ChatGPT or Claude directly?",
-    "A chat gives you an answer and forgets it. Lenni keeps a persistent path, tracks what you've actually learned, and knows what's next — closer to a structured course than a chat window.",
+    "Does it give me the answers?",
+    "Learning is designed to teach you how to solve problems, not just give you the result. It will guide you step-by-step.",
   ],
   [
     "Is there a free plan?",
-    "Yes — you get 20 free credits, 1 learning path, skill detection, and curriculum generation. No credit card required.",
-  ],
-  [
-    "What can I actually learn on Lenni?",
-    "Almost anything — programming languages, AI engineering, cybersecurity, product management, marketing, entrepreneurship, and more. If you can name the goal, Lenni can build the path.",
+    "Yes — you get 20 free credits, full curriculum access, and progress tracking. No credit card required.",
   ],
 ];
 
@@ -145,8 +154,8 @@ function Contours() {
 }
 
 // ---------------------------------------------------------------------------
-// HERO UI ILLUSTRATION — realistic connected app UI
-// Lesson tab shows a real course layout, not a chat
+// HERO UI ILLUSTRATION — Math Tutor Interface
+// Shows the "Quick Concept" mode solving an equation step-by-step
 // ---------------------------------------------------------------------------
 function HeroUIIllustration() {
   const [activeTab, setActiveTab] = useState<"lesson" | "exercise" | "chat">(
@@ -173,25 +182,25 @@ function HeroUIIllustration() {
   }, []);
 
   const chapters = [
-    { id: 1, title: "Foundations", lessons: 4, done: true },
-    { id: 2, title: "Core Concepts", lessons: 5, done: true },
+    { id: 1, title: "Algebra Basics", lessons: 4, done: true },
+    { id: 2, title: "Linear Equations", lessons: 5, done: true },
     {
       id: 3,
-      title: "Applied Practice",
+      title: "Quadratic Functions",
       lessons: 6,
       done: false,
       active: true,
       progress: 2,
     },
-    { id: 4, title: "Advanced Topics", lessons: 4, done: false },
-    { id: 5, title: "Capstone Project", lessons: 2, done: false },
+    { id: 4, title: "Geometry", lessons: 4, done: false },
+    { id: 5, title: "Statistics", lessons: 2, done: false },
   ];
 
   const quizOptions = [
-    "It increases the model's accuracy unconditionally",
-    "It controls how large each parameter update step is",
-    "It determines the number of training epochs",
-    "It sets the initial weights of the network",
+    "x = 2",
+    "x = 4",
+    "x = -4",
+    "x = 8",
   ];
 
   return (
@@ -215,11 +224,11 @@ function HeroUIIllustration() {
               <path d="M5 6V4.5a3 3 0 016 0V6" />
             </svg>
             <span className="font-mono text-label text-subtle">
-              lenni.app/paths/ai-engineering/lesson/3-3
+              learning.app/grade-10/algebra/lesson-3
             </span>
           </div>
           <div className="flex size-6 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-white">
-            A
+            S
           </div>
         </div>
 
@@ -229,10 +238,10 @@ function HeroUIIllustration() {
           <aside className="flex w-52 shrink-0 flex-col border-r border-ui-border-subtle bg-ui-raised/50 max-[640px]:hidden">
             <div className="border-b border-ui-border-subtle px-4 py-3">
               <div className="font-mono text-[9px] font-semibold uppercase tracking-wider text-subtle">
-                Current path
+                Current Path
               </div>
               <div className="mt-0.5 text-body-s font-bold leading-tight">
-                AI Engineering
+                Grade 10 · Mathematics
               </div>
               <div className="mt-2 h-1 overflow-hidden rounded-full bg-ui-border-subtle">
                 <div className="h-full w-[42%] rounded-full bg-accent" />
@@ -282,8 +291,8 @@ function HeroUIIllustration() {
                   )}
                   <div className="ml-6.5 mt-0.5 font-mono text-[9px] text-subtle">
                     {ch.active
-                      ? `${ch.progress} / ${ch.lessons} lessons`
-                      : `${ch.lessons} lessons`}
+                      ? `${ch.progress} / ${ch.lessons} concepts`
+                      : `${ch.lessons} concepts`}
                   </div>
                 </div>
               ))}
@@ -291,7 +300,7 @@ function HeroUIIllustration() {
 
             <div className="border-t border-ui-border-subtle px-2 py-3">
               {[
-                { icon: "◈", label: "My paths" },
+                { icon: "◈", label: "My Curriculum" },
                 { icon: "◎", label: "Progress" },
                 { icon: "◉", label: "Settings" },
               ].map(({ icon, label }) => (
@@ -313,14 +322,14 @@ function HeroUIIllustration() {
               <div>
                 <div className="flex items-center gap-2">
                   <span className="font-mono text-[9px] text-subtle">
-                    Chapter 3 · Lesson 3
+                    Chapter 3 · Concept 3
                   </span>
                   <span className="rounded-full bg-accent/10 px-2 py-0.5 font-mono text-[9px] font-bold text-accent">
                     IN PROGRESS
                   </span>
                 </div>
                 <div className="mt-0.5 text-body-s font-bold">
-                  Backpropagation & Gradient Flow
+                  Solving Quadratic Equations
                 </div>
               </div>
 
@@ -346,17 +355,16 @@ function HeroUIIllustration() {
               </div>
             </div>
 
-            {/* ── LESSON TAB — real course layout ── */}
+            {/* ── LESSON TAB — Math Explanation ── */}
             {activeTab === "lesson" && (
               <div className="flex flex-1 overflow-hidden">
                 {/* Course content */}
                 <div className="flex flex-1 flex-col overflow-y-auto px-6 py-5">
                   {/* Lesson intro */}
                   <p className="text-body-s leading-relaxed text-muted">
-                    Backpropagation is the algorithm that makes neural networks
-                    learn. It computes how much each weight in the network
-                    contributed to the final error, then nudges every weight in
-                    the direction that reduces it.
+                    A quadratic equation is any equation that can be rearranged
+                    in standard form as <code className="font-mono bg-ui-raised px-1 rounded">ax² + bx + c = 0</code>.
+                    To solve it, we need to find the values of <code className="font-mono bg-ui-raised px-1 rounded">x</code> that make the equation true.
                   </p>
 
                   {/* Section heading */}
@@ -365,69 +373,19 @@ function HeroUIIllustration() {
                       1
                     </span>
                     <h4 className="text-body-s font-bold text-foreground">
-                      The forward pass
+                      The Quadratic Formula
                     </h4>
                   </div>
                   <p className="text-body-s leading-relaxed text-muted">
-                    Data flows forward through every layer. Each neuron computes
-                    a weighted sum of its inputs and passes the result through
-                    an activation function. The final layer produces a
-                    prediction.
+                    The most reliable way to solve any quadratic equation is using the quadratic formula:
                   </p>
 
-                  {/* Visual: forward pass diagram */}
+                  {/* Visual: Formula */}
                   <div className="mt-4 flex items-center justify-center gap-2 rounded-xl border border-ui-border-subtle bg-ui-raised px-4 py-4">
-                    {["Input", "Hidden 1", "Hidden 2", "Output"].map(
-                      (label, i, arr) => (
-                        <div key={label} className="flex items-center gap-2">
-                          <div className="flex flex-col items-center gap-1">
-                            {Array.from({
-                              length: i === 0 || i === arr.length - 1 ? 2 : 3,
-                            }).map((_, j) => (
-                              <div
-                                key={j}
-                                className={`flex size-6 items-center justify-center rounded-full border text-[8px] font-bold
-                                ${
-                                  i === arr.length - 1
-                                    ? "border-accent bg-accent/10 text-accent"
-                                    : i === 0
-                                      ? "border-ui-border-subtle bg-ui-raised text-subtle"
-                                      : "border-positive/40 bg-positive/8 text-positive"
-                                }`}
-                              >
-                                {i === 0
-                                  ? "x"
-                                  : i === arr.length - 1
-                                    ? "ŷ"
-                                    : "h"}
-                              </div>
-                            ))}
-                            <span className="font-mono text-[8px] text-subtle mt-0.5">
-                              {label}
-                            </span>
-                          </div>
-                          {i < arr.length - 1 && (
-                            <div className="flex flex-col gap-1 items-center">
-                              {Array.from({ length: 2 }).map((_, j) => (
-                                <svg
-                                  key={j}
-                                  className="size-4 text-subtle"
-                                  viewBox="0 0 16 8"
-                                  fill="none"
-                                >
-                                  <path
-                                    d="M0 4h14M10 1l4 3-4 3"
-                                    stroke="currentColor"
-                                    strokeWidth="1.2"
-                                    strokeLinecap="round"
-                                  />
-                                </svg>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      ),
-                    )}
+                     <span className="font-mono text-body-l text-foreground">
+                      x = <span className="text-accent">-b ± √(b² - 4ac)</span>
+                      <span className="block text-center border-t border-ui-border-subtle mt-1 pt-1">2a</span>
+                    </span>
                   </div>
 
                   {/* Section heading */}
@@ -436,45 +394,11 @@ function HeroUIIllustration() {
                       2
                     </span>
                     <h4 className="text-body-s font-bold text-foreground">
-                      Computing the loss
+                      Step-by-Step Example
                     </h4>
                   </div>
                   <p className="text-body-s leading-relaxed text-muted">
-                    After the forward pass, we compare the prediction{" "}
-                    <code className="rounded bg-ui-raised px-1 font-mono text-[10px]">
-                      ŷ
-                    </code>{" "}
-                    to the true label{" "}
-                    <code className="rounded bg-ui-raised px-1 font-mono text-[10px]">
-                      y
-                    </code>{" "}
-                    using a loss function. Mean squared error is common for
-                    regression:
-                  </p>
-
-                  {/* Formula block */}
-                  <div className="mt-3 flex items-center justify-center rounded-xl border border-ui-border-subtle bg-ui-raised px-4 py-3">
-                    <span className="font-mono text-body-s text-foreground">
-                      L = <span className="text-accent">½</span> · (ŷ − y)
-                      <span className="text-accent align-super text-[9px]">
-                        2
-                      </span>
-                    </span>
-                  </div>
-
-                  {/* Section heading */}
-                  <div className="mt-5 mb-2 flex items-center gap-2">
-                    <span className="flex size-5 items-center justify-center rounded-full bg-accent text-[9px] font-bold text-white">
-                      3
-                    </span>
-                    <h4 className="text-body-s font-bold text-foreground">
-                      The backward pass
-                    </h4>
-                  </div>
-                  <p className="text-body-s leading-relaxed text-muted">
-                    Backprop uses the chain rule to compute the gradient of the
-                    loss with respect to every weight — layer by layer, working
-                    backwards from the output.
+                    Let's solve: <code className="font-mono bg-ui-raised px-1 rounded">x² - 5x + 6 = 0</code>
                   </p>
 
                   {/* Key concept callout */}
@@ -482,17 +406,12 @@ function HeroUIIllustration() {
                     <span className="mt-0.5 text-accent">◆</span>
                     <div className="text-body-s leading-relaxed text-muted">
                       <span className="font-semibold text-foreground">
-                        Key insight:{" "}
+                        Identify a, b, and c:{" "}
                       </span>
-                      The gradient tells each weight: "move this much, in this
-                      direction, to reduce the loss." That's the entire learning
-                      signal.
+                      In this equation, a=1, b=-5, and c=6. Plug these into the formula to find x.
                     </div>
                   </div>
                 </div>
-
-                {/* Lesson nav footer */}
-                <div className="absolute bottom-0 right-0 hidden" />
               </div>
             )}
 
@@ -503,7 +422,7 @@ function HeroUIIllustration() {
                   <div className="mb-4 flex items-center justify-between">
                     <div>
                       <div className="font-mono text-[9px] font-semibold text-accent">
-                        QUIZ · Chapter 3 · Lesson 3
+                        QUIZ · Chapter 3 · Concept 3
                       </div>
                       <div className="mt-0.5 text-body-s font-bold">
                         Question 2 of 4
@@ -521,11 +440,7 @@ function HeroUIIllustration() {
                   </div>
 
                   <div className="mb-4 rounded-xl border border-ui-border-subtle bg-ui-raised px-4 py-3 text-body-s font-semibold leading-snug">
-                    What does the{" "}
-                    <span className="rounded bg-accent/10 px-1 text-accent">
-                      learning rate
-                    </span>{" "}
-                    control during gradient descent?
+                    Solve for x: <span className="font-mono">2x + 8 = 16</span>
                   </div>
 
                   <div className="flex flex-col gap-2">
@@ -579,9 +494,7 @@ function HeroUIIllustration() {
                       >
                         {chosen === 1 ? "Correct! " : "Not quite — "}
                       </span>
-                      The learning rate controls the step size for each weight
-                      update. Too high and training overshoots; too low and it
-                      stalls.
+                      Subtract 8 from both sides (2x = 8), then divide by 2.
                     </div>
                   )}
                 </div>
@@ -603,19 +516,19 @@ function HeroUIIllustration() {
                   {[
                     {
                       role: "user" as const,
-                      text: "Can you give me a concrete example of backprop with actual numbers?",
+                      text: "I don't get why we subtract 5 first.",
                     },
                     {
-                      role: "lenni" as const,
-                      text: "Sure. Say weight w = 0.3, input x = 2, true label y = 1. Output = 0.6, loss = ½(0.6 − 1)² = 0.08. Gradient of loss w.r.t. w = (0.6 − 1) × 2 = −0.8. With learning rate 0.1: w_new = 0.3 − 0.1 × (−0.8) = 0.38.",
+                      role: "learning" as const,
+                      text: "Good question. We want to isolate x. Since +5 is added to 2x, we do the opposite (subtract 5) to cancel it out on that side.",
                     },
                     {
                       role: "user" as const,
-                      text: "So the weight moved toward producing the right answer?",
+                      text: "Okay, so 2x = 8. Then I divide by 2?",
                     },
                     {
-                      role: "lenni" as const,
-                      text: "Exactly. Each update is a small step in the direction that reduces the loss. Do this thousands of times across all weights and the network learns.",
+                      role: "learning" as const,
+                      text: "Exactly! You're getting it. What is 8 divided by 2?",
                     },
                   ].map((m, i) => (
                     <div
@@ -624,14 +537,14 @@ function HeroUIIllustration() {
                     >
                       <div
                         className={`flex size-7 shrink-0 items-center justify-center rounded-full text-[10px] font-bold
-                        ${m.role === "lenni" ? "bg-accent text-white" : "bg-ui-raised border border-ui-border-subtle text-muted"}`}
+                        ${m.role === "learning" ? "bg-accent text-white" : "bg-ui-raised border border-ui-border-subtle text-muted"}`}
                       >
-                        {m.role === "lenni" ? "L" : "A"}
+                        {m.role === "learning" ? "L" : "S"}
                       </div>
                       <div
                         className={`max-w-[78%] rounded-2xl px-4 py-2.5 text-body-s leading-relaxed
                         ${
-                          m.role === "lenni"
+                          m.role === "learning"
                             ? "rounded-tl-sm bg-ui-raised text-foreground"
                             : "rounded-tr-sm bg-accent text-white"
                         }`}
@@ -658,7 +571,7 @@ function HeroUIIllustration() {
                 <div className="border-t border-ui-border-subtle px-4 py-3">
                   <div className="flex items-center gap-2.5 rounded-xl border border-ui-border-subtle bg-ui-raised px-3.5 py-2.5">
                     <span className="flex-1 text-body-s text-subtle">
-                      Ask anything about this lesson…
+                      Ask about this step…
                     </span>
                     <button className="flex size-6 shrink-0 items-center justify-center rounded-lg bg-accent text-white">
                       <svg
@@ -682,15 +595,15 @@ function HeroUIIllustration() {
           <aside className="flex w-44 shrink-0 flex-col gap-3 border-l border-ui-border-subtle px-3 py-4 max-[900px]:hidden">
             <div>
               <div className="mb-2 font-mono text-[9px] font-semibold uppercase tracking-wider text-subtle">
-                AI Provider
+                Class Level
               </div>
               <div className="rounded-lg border border-accent/30 bg-accent/5 px-3 py-2">
                 <div className="flex items-center gap-1.5">
                   <span className="size-1.5 rounded-full bg-positive" />
-                  <span className="text-label font-semibold">OpenRouter</span>
+                  <span className="text-label font-semibold">Grade 10</span>
                 </div>
                 <div className="mt-0.5 font-mono text-[9px] text-subtle">
-                  claude-3.5-sonnet
+                  Curriculum: WAEC
                 </div>
               </div>
             </div>
@@ -701,9 +614,9 @@ function HeroUIIllustration() {
               </div>
               <div className="flex flex-col gap-1.5">
                 {[
-                  { label: "Lessons read", value: "2" },
-                  { label: "Quiz score", value: "82%" },
-                  { label: "Time spent", value: "34 min" },
+                  { label: "Concepts learned", value: "2" },
+                  { label: "Quiz score", value: "90%" },
+                  { label: "Time spent", value: "25 min" },
                 ].map(({ label, value }) => (
                   <div
                     key={label}
@@ -720,11 +633,26 @@ function HeroUIIllustration() {
               </div>
             </div>
 
-            <div className="rounded-lg border border-sun/30 bg-sun/5 px-3 py-2 text-center">
-              <div className="font-mono text-body-l font-bold text-sun">
-                🔥 7
-              </div>
-              <div className="font-mono text-[9px] text-subtle">day streak</div>
+            <div className="flex items-center justify-center gap-1.5 whitespace-nowrap rounded-lg border border-sun/30 bg-sun/5 px-3 py-2">
+              <svg
+                viewBox="0 0 24 24"
+                className="size-3.5 shrink-0 text-sun"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M12 2s-4.8 4.3-4.8 8.8c0 1.1.3 2.1.85 3-.35-.28-.95-.85-1.25-1.85 0 0-1.05 1.95.45 4.1.68 1 1.6 1.72 2.45 2.18.35.19.7.32.95.37.05.01.1.01.15.01s.1 0 .15-.01c.25-.05.6-.18.95-.37.85-.46 1.77-1.18 2.45-2.18 1.5-2.15.45-4.1.45-4.1-.3 1-.9 1.57-1.25 1.85.55-.9.85-1.9.85-3C16.8 6.3 12 2 12 2Z"
+                  fill="currentColor"
+                />
+                <path
+                  d="M12 14.6s-.85.85-1.15 1.85c-.1.35-.12.75.08 1.1.18.32.52.58.87.7.07.02.14.03.2.03s.13-.01.2-.03c.35-.12.69-.38.87-.7.2-.35.18-.75.08-1.1-.3-1-1.15-1.85-1.15-1.85Z"
+                  fill="white"
+                  opacity="0.9"
+                />
+              </svg>
+              <span className="font-mono text-label font-bold text-sun">
+                5 day streak
+              </span>
             </div>
 
             <div>
@@ -733,9 +661,9 @@ function HeroUIIllustration() {
               </div>
               <div className="flex flex-col gap-2">
                 {[
-                  { name: "ML Theory", pct: 72 },
-                  { name: "Python", pct: 85 },
-                  { name: "Optimisers", pct: 40 },
+                  { name: "Algebra", pct: 72 },
+                  { name: "Geometry", pct: 45 },
+                  { name: "Statistics", pct: 30 },
                 ].map(({ name, pct }) => (
                   <div key={name}>
                     <div className="mb-0.5 flex justify-between font-mono text-[9px] text-subtle">
@@ -759,7 +687,7 @@ function HeroUIIllustration() {
                 ← Previous
               </button>
               <button className="btn btn-primary btn-sm w-full text-[10px]">
-                Next lesson →
+                Next concept →
               </button>
             </div>
           </aside>
@@ -778,7 +706,7 @@ function HeroUIIllustration() {
             >
               <path d="M8 2L4 6l4 4" />
             </svg>
-            Previous lesson
+            Previous concept
           </button>
           <div className="flex items-center gap-1.5">
             {[1, 2, 3, 4, 5, 6].map((n) => (
@@ -809,29 +737,29 @@ function HeroUIIllustration() {
 }
 
 // ---------------------------------------------------------------------------
-// FEATURE ILLUSTRATION: Learning Plan
-// Shows a generated multi-chapter plan with estimated times
+// FEATURE ILLUSTRATION: Learning Plan (Curriculum)
+// Shows a generated math curriculum
 // ---------------------------------------------------------------------------
 function PlanIllustration() {
   const chapters = [
-    { n: 1, title: "Foundations", lessons: 4, hrs: 2, done: true },
-    { n: 2, title: "Core Concepts", lessons: 5, hrs: 3, done: true },
+    { n: 1, title: "Number Systems", lessons: 4, hrs: 2, done: true },
+    { n: 2, title: "Algebraic Expressions", lessons: 5, hrs: 3, done: true },
     {
       n: 3,
-      title: "Applied Practice",
+      title: "Linear Equations",
       lessons: 6,
       hrs: 3.5,
       done: false,
       active: true,
     },
-    { n: 4, title: "Advanced Topics", lessons: 4, hrs: 2.5, done: false },
-    { n: 5, title: "Final Project", lessons: 2, hrs: 1, done: false },
+    { n: 4, title: "Geometry & Shapes", lessons: 4, hrs: 2.5, done: false },
+    { n: 5, title: "Statistics", lessons: 2, hrs: 1, done: false },
   ];
   return (
     <div className="overflow-hidden rounded-2xl border border-ui-border-subtle bg-page shadow-lg">
       <div className="border-b border-ui-border-subtle bg-ui-raised px-4 py-2.5">
         <div className="font-mono text-label font-semibold text-subtle">
-          YOUR LEARNING PLAN · AI-generated
+          YOUR CURRICULUM · Grade 10
         </div>
       </div>
       <div className="divide-y divide-ui-border-subtle">
@@ -865,7 +793,7 @@ function PlanIllustration() {
                 )}
               </div>
               <div className="font-mono text-label text-subtle">
-                {ch.lessons} lessons · {ch.hrs} hrs
+                {ch.lessons} concepts · {ch.hrs} hrs
               </div>
             </div>
             {/* Mini progress bar */}
@@ -880,7 +808,7 @@ function PlanIllustration() {
       </div>
       <div className="flex items-center justify-between border-t border-ui-border-subtle bg-ui-raised px-4 py-2.5">
         <span className="font-mono text-label text-subtle">
-          21 lessons · ~12 hours total
+          21 concepts · ~12 hours total
         </span>
         <span className="font-mono text-label font-semibold text-accent">
           40% complete
@@ -891,44 +819,38 @@ function PlanIllustration() {
 }
 
 // ---------------------------------------------------------------------------
-// FEATURE ILLUSTRATION: Skill Intake
-// Shows how Lenni reads the user's level from GitHub / LinkedIn / Resume / Test
+// FEATURE ILLUSTRATION: Level Check
+// Shows how Learning identifies the student's level
 // ---------------------------------------------------------------------------
 function SkillIntakeIllustration() {
   const [active, setActive] = useState(0);
   useEffect(() => {
-    const t = setInterval(() => setActive((n) => (n + 1) % 4), 2400);
+    const t = setInterval(() => setActive((n) => (n + 1) % 3), 2400);
     return () => clearInterval(t);
   }, []);
 
   const sources = [
     {
       icon: "◈",
-      label: "GitHub",
-      lines: ["12 public repos", "Python · JS · Rust", "ML projects detected"],
+      label: "Select Class",
+      lines: ["Country: Nigeria", "Class: SS2", "Curriculum: WAEC"],
       color: "text-accent",
     },
     {
       icon: "◉",
-      label: "LinkedIn",
-      lines: ["3 yrs experience", "Software Engineer", "2 ML-related roles"],
+      label: "Diagnostic Test",
+      lines: ["Scored 65 / 100", "Strong: Algebra", "Weak: Geometry"],
       color: "text-positive",
     },
     {
       icon: "▤",
-      label: "Resume",
+      label: "Past Results",
       lines: [
-        "BSc Computer Science",
-        "PyTorch · TensorFlow",
-        "Deployed 2 models",
+        "Last Term: B+",
+        "Struggled with Calculus",
+        "Good at Statistics",
       ],
       color: "text-sun",
-    },
-    {
-      icon: "◎",
-      label: "Skill test",
-      lines: ["Scored 74 / 100", "Strong: data structures", "Weak: optimisers"],
-      color: "text-ember",
     },
   ];
 
@@ -936,10 +858,10 @@ function SkillIntakeIllustration() {
     <div className="overflow-hidden rounded-2xl border border-ui-border-subtle bg-page shadow-lg">
       <div className="border-b border-ui-border-subtle bg-ui-raised px-4 py-2.5">
         <div className="font-mono text-label font-semibold text-subtle">
-          SKILL LEVEL DETECTION
+          LEVEL DETECTION
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-2 p-3">
+      <div className="grid grid-cols-1 gap-2 p-3">
         {sources.map((s, i) => (
           <div
             key={s.label}
@@ -957,7 +879,7 @@ function SkillIntakeIllustration() {
               {s.label}
               {i === active && (
                 <span className="ml-auto rounded-full bg-accent/10 px-1.5 py-0.5 text-[8px] font-bold text-accent">
-                  READING
+                  ACTIVE
                 </span>
               )}
             </div>
@@ -971,11 +893,11 @@ function SkillIntakeIllustration() {
       </div>
       <div className="border-t border-ui-border-subtle bg-accent/5 px-4 py-3">
         <div className="font-mono text-label font-semibold text-accent">
-          LENNI CONCLUSION
+          LEARNING CONCLUSION
         </div>
         <div className="mt-1 text-body-s text-muted">
           Intermediate level detected. Your path starts at{" "}
-          <strong className="text-foreground">Chapter 2</strong>, skipping
+          <strong className="text-foreground">Algebra II</strong>, skipping
           basics you already know.
         </div>
       </div>
@@ -985,22 +907,22 @@ function SkillIntakeIllustration() {
 
 // ---------------------------------------------------------------------------
 // FEATURE ILLUSTRATION: Lesson + Chat
-// Shows AI-generated lesson content and inline Q&A
+// Shows AI guiding a student through a math problem
 // ---------------------------------------------------------------------------
 function LessonChatIllustration() {
   const messages = [
     {
-      role: "lenni",
-      text: "Attention lets the model weigh every token against every other — that's why Transformers capture long-range dependencies so well.",
+      role: "learning",
+      text: "To find the area of a triangle, we use the formula: Area = ½ × base × height. Do you know which numbers represent the base and height here?",
     },
-    { role: "user", text: "Why can't RNNs do the same thing?" },
+    { role: "user", text: "Is the base 10cm?" },
     {
-      role: "lenni",
-      text: "RNNs pass context through a hidden state, so distant information gets diluted. Attention looks at everything at once, no forgetting.",
+      role: "learning",
+      text: "Yes, exactly! The bottom side is 10cm. Now, look at the vertical line. What is the height?",
     },
     {
       role: "user",
-      text: "That makes sense. What's the time complexity trade-off?",
+      text: "Oh, it's 6cm. So 0.5 * 10 * 6?",
     },
   ];
   return (
@@ -1010,7 +932,7 @@ function LessonChatIllustration() {
           <div className="font-mono text-label text-subtle">
             Chapter 4 · Lesson 1
           </div>
-          <div className="text-body-s font-bold">Attention Mechanisms</div>
+          <div className="text-body-s font-bold">Area of Triangles</div>
         </div>
         <span className="ml-auto rounded-full border border-ui-border-subtle px-2 py-0.5 font-mono text-[9px] text-subtle">
           Chat to ask anything
@@ -1024,13 +946,13 @@ function LessonChatIllustration() {
           >
             <div
               className={`flex size-6 shrink-0 items-center justify-center rounded-full text-[10px] font-bold
-              ${m.role === "lenni" ? "bg-accent text-white" : "bg-ui-raised text-muted border border-ui-border-subtle"}`}
+              ${m.role === "learning" ? "bg-accent text-white" : "bg-ui-raised text-muted border border-ui-border-subtle"}`}
             >
-              {m.role === "lenni" ? "L" : "U"}
+              {m.role === "learning" ? "L" : "S"}
             </div>
             <div
               className={`max-w-[82%] rounded-xl px-3 py-2 text-body-s leading-relaxed
-              ${m.role === "lenni" ? "bg-ui-raised text-foreground" : "bg-accent text-white"}`}
+              ${m.role === "learning" ? "bg-ui-raised text-foreground" : "bg-accent text-white"}`}
             >
               {m.text}
             </div>
@@ -1055,7 +977,7 @@ function LessonChatIllustration() {
       <div className="border-t border-ui-border-subtle px-4 py-3">
         <div className="flex items-center gap-2 rounded-lg border border-ui-border-subtle bg-ui-raised px-3 py-2">
           <span className="flex-1 text-body-s text-subtle">
-            Ask anything about this lesson…
+            Ask about this step…
           </span>
           <span className="flex size-5 items-center justify-center rounded bg-accent text-white text-[10px]">
             ↑
@@ -1068,23 +990,23 @@ function LessonChatIllustration() {
 
 // ---------------------------------------------------------------------------
 // FEATURE ILLUSTRATION: Exercise / Quiz
-// Shows an AI-generated quiz with evaluation feedback
+// Shows a math problem with feedback
 // ---------------------------------------------------------------------------
 function ExerciseIllustration() {
   const [chosen, setChosen] = useState<number | null>(null);
   const options = [
-    "Quadratic in sequence length — O(n²)",
-    "Linear in sequence length — O(n)",
-    "Logarithmic — O(log n)",
-    "Constant — O(1)",
+    "x = 5",
+    "x = 10",
+    "x = 2",
+    "x = 8",
   ];
-  const correct = 0;
+  const correct = 2;
   return (
     <div className="overflow-hidden rounded-2xl border border-ui-border-subtle bg-page shadow-lg">
       <div className="border-b border-ui-border-subtle bg-ui-raised px-4 py-2.5 flex items-center justify-between">
         <div>
           <div className="font-mono text-label text-subtle">
-            EXERCISE · Chapter 4
+            EXERCISE · Chapter 2
           </div>
           <div className="text-body-s font-bold">AI-generated quiz</div>
         </div>
@@ -1094,8 +1016,7 @@ function ExerciseIllustration() {
       </div>
       <div className="px-4 pt-4 pb-2">
         <div className="mb-3 text-body font-semibold leading-snug">
-          What is the time complexity of the self-attention mechanism with
-          respect to sequence length?
+          Solve for x: <span className="font-mono">3x - 4 = 2</span>
         </div>
         <div className="flex flex-col gap-2">
           {options.map((opt, i) => (
@@ -1133,12 +1054,12 @@ function ExerciseIllustration() {
           ${chosen === correct ? "bg-positive/8 text-positive" : "bg-ui-raised text-muted"}`}
         >
           {chosen === correct
-            ? "Correct! Self-attention computes pairwise scores between all tokens — O(n²) time and memory, which is why efficient variants like FlashAttention matter."
-            : "Not quite. Self-attention scores every pair of tokens, giving O(n²) complexity — the main scalability challenge for long sequences."}
+            ? "Correct! Add 4 to both sides (3x = 6), then divide by 3."
+            : "Not quite. Try adding 4 to both sides first to isolate the 3x term."}
         </div>
       ) : (
         <div className="mx-4 mb-4 mt-2 font-mono text-label text-subtle">
-          Select an answer to see Lenni's feedback.
+          Select an answer to see feedback.
         </div>
       )}
     </div>
@@ -1152,10 +1073,10 @@ function ProgressIllustration() {
   const days = ["M", "T", "W", "T", "F", "S", "S"];
   const bars = [55, 70, 48, 85, 92, 60, 78];
   const skills = [
-    { name: "ML Theory", pct: 82 },
-    { name: "Python / NumPy", pct: 70 },
-    { name: "Model Training", pct: 55 },
-    { name: "Evaluation", pct: 38 },
+    { name: "Algebra", pct: 82 },
+    { name: "Geometry", pct: 70 },
+    { name: "Calculus", pct: 55 },
+    { name: "Statistics", pct: 38 },
   ];
   return (
     <div className="overflow-hidden rounded-2xl border border-ui-border-subtle bg-page shadow-lg">
@@ -1168,7 +1089,7 @@ function ProgressIllustration() {
         {/* Stat row */}
         <div className="mb-4 grid grid-cols-4 gap-2">
           {[
-            { v: "14", l: "Lessons", c: "text-accent" },
+            { v: "14", l: "Concepts", c: "text-accent" },
             { v: "11", l: "Quizzes", c: "text-positive" },
             { v: "82%", l: "Avg score", c: "text-positive" },
             { v: "7d", l: "Streak", c: "text-sun" },
@@ -1208,7 +1129,7 @@ function ProgressIllustration() {
 
         {/* Skill growth */}
         <div className="mb-2 font-mono text-label font-semibold text-subtle">
-          SKILL GROWTH
+          MASTERY BY TOPIC
         </div>
         <div className="flex flex-col gap-2">
           {skills.map(({ name, pct }) => (
@@ -1240,15 +1161,33 @@ export default function Home() {
   const [faq, setFaq] = useState(-1),
     [menu, setMenu] = useState(false),
     [step, setStep] = useState(0);
+  const [subjectsOpen, setSubjectsOpen] = useState(false);
+  const [mobileSubjectsOpen, setMobileSubjectsOpen] = useState(false);
   const router = useRouter();
   const subjectScrollRef = useRef<HTMLDivElement>(null);
+  const subjectsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const t = setInterval(() => setStep((s) => (s + 1) % 4), 3200);
     return () => clearInterval(t);
   }, []);
 
-  // const start = useCallback(() => router.push("/register"), [router]);
+  useEffect(() => {
+    if (!subjectsOpen) return;
+    const onDown = (e: MouseEvent) => {
+      if (subjectsRef.current && !subjectsRef.current.contains(e.target as Node)) setSubjectsOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSubjectsOpen(false);
+    };
+    document.addEventListener("mousedown", onDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [subjectsOpen]);
+
   const start = useCallback(() => router.push("/waitlist"), [router]);
 
   return (
@@ -1259,18 +1198,101 @@ export default function Home() {
         <nav className="sticky top-0 z-30 border-b border-transparent bg-page/80 backdrop-blur-md">
           <div className="mx-auto flex w-full max-w-content items-center justify-between gap-4 px-4 py-4 sm:px-8 sm:py-6 lg:px-11">
             <Logo />
-            <div className="hidden items-center gap-8 md:flex [&_a]:text-body-s [&_a]:font-semibold [&_a]:text-muted [&_a:hover]:text-accent">
-              {NAV_LINKS.map(([href, label]) => (
-                <a href={href} key={href}>
-                  {label}
-                </a>
-              ))}
+            <div className="hidden items-center gap-7 md:flex">
+              {/* Subjects dropdown — "Subjects" recommended; "Explore" is a more generic alternative */}
+              <div ref={subjectsRef} className="relative">
+                <button
+                  aria-expanded={subjectsOpen}
+                  aria-haspopup="menu"
+                  onClick={() => setSubjectsOpen((v) => !v)}
+                  className="flex items-center gap-1.5 text-body-s font-semibold text-muted transition hover:text-accent"
+                  type="button"
+                >
+                  Subjects
+                  <svg
+                    className={`size-3.5 shrink-0 transition-transform ${subjectsOpen ? "rotate-180" : ""}`}
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.7"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M4 6l4 4 4-4" />
+                  </svg>
+                </button>
+                {subjectsOpen && (
+                  <div
+                    role="menu"
+                    className="absolute left-0 top-full z-40 mt-3 w-[360px] overflow-hidden rounded-2xl border border-ui-border-subtle bg-page p-2 shadow-[0_16px_40px_-12px_rgba(0,0,0,0.18)]"
+                  >
+                    <div className="px-3 pb-2 pt-1">
+                      <div className="font-mono text-[10px] font-semibold uppercase tracking-wider text-subtle">Choose a subject</div>
+                    </div>
+                    <div className="grid gap-1">
+                      {SUBJECTS.map((s) => (
+                        <button
+                          key={s.label}
+                          role="menuitem"
+                          disabled={!s.available}
+                          onClick={() => {
+                            if (!s.available) return;
+                            setSubjectsOpen(false);
+                            const el = document.getElementById("features");
+                            if (el) el.scrollIntoView({ behavior: "smooth" });
+                            else start();
+                          }}
+                          className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition ${
+                            s.available
+                              ? "hover:bg-accent/8 hover:text-accent"
+                              : "cursor-not-allowed opacity-60"
+                          }`}
+                          type="button"
+                        >
+                          <span
+                            className={`flex size-8 shrink-0 items-center justify-center rounded-lg border text-[13px] font-bold ${
+                              s.available
+                                ? "border-accent/20 bg-accent/10 text-accent"
+                                : "border-ui-border-subtle bg-ui-raised text-subtle"
+                            }`}
+                          >
+                            {s.icon}
+                          </span>
+                          <span className="min-w-0 flex-1">
+                            <span className={`block text-body-s font-semibold leading-none ${s.available ? "text-foreground" : "text-muted"}`}>
+                              {s.label}
+                            </span>
+                            <span className="block truncate font-mono text-[10px] leading-none text-subtle mt-1">{s.desc}</span>
+                          </span>
+                          {s.available ? (
+                            <span className="shrink-0 rounded-full bg-positive/10 px-2 py-0.5 font-mono text-[9px] font-bold text-positive">Live</span>
+                          ) : (
+                            <span className="shrink-0 rounded-full border border-ui-border-subtle bg-ui-raised px-2 py-0.5 font-mono text-[9px] font-bold text-subtle">Coming soon</span>
+                          )}
+                        </button>
+                      ))}
+                    </div>
+                    <div className="mt-2 rounded-xl bg-ui-raised px-3 py-2.5">
+                      <div className="font-mono text-[10px] font-semibold text-subtle">Not seeing your subject?</div>
+                      <button onClick={() => { setSubjectsOpen(false); start(); }} className="mt-1 text-body-s font-semibold text-accent hover:underline" type="button">Join waitlist →</button>
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div className="flex items-center gap-8 [&_a]:text-body-s [&_a]:font-semibold [&_a]:text-muted [&_a:hover]:text-accent">
+                {NAV_LINKS.map(([href, label]) => (
+                  <a href={href} key={href}>
+                    {label}
+                  </a>
+                ))}
+              </div>
             </div>
             <div className="flex items-center gap-2">
               <div className="hidden items-center gap-2 md:flex">
                 <ThemeToggle compact />
                 <button className="btn btn-primary" onClick={start}>
-                  Join waitlist
+                  Start learning
                 </button>
               </div>
               <button
@@ -1303,6 +1325,53 @@ export default function Home() {
               className="border-t border-ui-border-subtle bg-page px-4 pb-5 pt-2 md:hidden"
               id="mobile-navigation"
             >
+              {/* Mobile Subjects */}
+              <button
+                onClick={() => setMobileSubjectsOpen((v) => !v)}
+                aria-expanded={mobileSubjectsOpen}
+                className="flex w-full items-center justify-between rounded-chip px-3 py-3 text-body font-semibold text-muted transition hover:bg-ui-raised hover:text-foreground"
+                type="button"
+              >
+                <span className="flex items-center gap-2">Subjects</span>
+                <svg
+                  className={`size-4 shrink-0 transition-transform ${mobileSubjectsOpen ? "rotate-180" : ""}`}
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.7"
+                  strokeLinecap="round"
+                  aria-hidden="true"
+                >
+                  <path d="M4 6l4 4 4-4" />
+                </svg>
+              </button>
+              {mobileSubjectsOpen && (
+                <div className="mb-2 ml-1 grid gap-1 rounded-xl border border-ui-border-subtle bg-ui-raised/50 p-2">
+                  {SUBJECTS.map((s) => (
+                    <button
+                      key={s.label}
+                      disabled={!s.available}
+                      onClick={() => {
+                        if (!s.available) return;
+                        setMenu(false);
+                        setMobileSubjectsOpen(false);
+                        const el = document.getElementById("features");
+                        if (el) el.scrollIntoView({ behavior: "smooth" });
+                        else start();
+                      }}
+                      className={`flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-left ${s.available ? "bg-page shadow-sm" : "opacity-60"}`}
+                      type="button"
+                    >
+                      <span className={`flex size-7 shrink-0 items-center justify-center rounded-lg border text-[12px] font-bold ${s.available ? "border-accent/20 bg-accent/10 text-accent" : "border-ui-border-subtle bg-page text-subtle"}`}>{s.icon}</span>
+                      <span className="min-w-0 flex-1">
+                        <span className={`block text-body-s font-semibold leading-none ${s.available ? "text-foreground" : "text-muted"}`}>{s.label}</span>
+                        <span className="block truncate font-mono text-[10px] text-subtle">{s.available ? "Available now" : "Coming soon"}</span>
+                      </span>
+                      {!s.available && <span className="rounded-full bg-page px-2 py-0.5 font-mono text-[9px] font-bold text-subtle border border-ui-border-subtle">Soon</span>}
+                    </button>
+                  ))}
+                </div>
+              )}
               {NAV_LINKS.map(([href, label]) => (
                 <a
                   className="block rounded-chip px-3 py-3 text-body font-semibold text-muted transition hover:bg-ui-raised hover:text-foreground"
@@ -1322,7 +1391,7 @@ export default function Home() {
                   }}
                   type="button"
                 >
-                  Join waitlist
+                  Start learning
                 </button>
                 <div className="mt-4 px-1">
                   <ThemeToggle />
@@ -1336,11 +1405,11 @@ export default function Home() {
         <section>
           <div className="mx-auto mt-14 w-full px-6 text-center">
             <div className="mb-4 kicker text-accent justify-center text-center">
-              Your AI Learning Environment
+              AI Mathematics Tutor
             </div>
             <div className="relative inline-block w-full">
               <h1 className="mx-auto font-heading text-display-m md:text-display-2xl">
-                <span className="block">Learn anything.</span>
+                <span className="block">Understand Math.</span>
                 <span className="block">
                   Your{" "}
                   <span className="animate-stamp-in edge [--edge-color:var(--color-success-strong)] mx-auto mt-2 inline-block w-fit -rotate-2 rounded-[20px] bg-positive px-5 pb-2.5 pt-1 text-white md:mx-0">
@@ -1355,42 +1424,22 @@ export default function Home() {
               />
             </div>
             <p className="mx-auto mt-6 max-w-sm text-body text-muted md:max-w-md md:text-body-l">
-              Lenni reads your current skills, builds a personalised learning
-              plan with chapters and exercises, teaches you with the AI you
-              choose, and tracks your growth — all in one place.
+              Learning helps you master mathematics step-by-step. Aligned with
+              your school curriculum, it explains concepts clearly and guides
+              you until you truly understand.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
               <button className="btn btn-primary btn-lg" onClick={start}>
-                Join waitlist
+                Start learning
               </button>
               <a className="btn btn-secondary btn-lg" href="#how-it-works">
                 See how it works
               </a>
             </div>
             <div className="mt-4 text-body-s text-subtle">
-              20 free credits · No subscription · Pay as you learn
+              20 free credits · Aligned with African Curricula · No subscription
             </div>
           </div>
-
-          {/*
-           * Subject card scroll strip — commented out, replaced by HeroUIIllustration.
-           * To restore: remove this comment block and delete <HeroUIIllustration />.
-           *
-           * <div className="relative mx-auto mt-6 w-full max-w-260">
-           *   <div className="mb-3 kicker text-subtle justify-center text-center">Learn almost anything</div>
-           *   <div ref={subjectScrollRef} className="flex snap-x gap-3 overflow-x-auto px-11 pb-4 pt-1 scrollbar-none max-[760px]:px-4 [&::-webkit-scrollbar]:hidden">
-           *     {subjects.map(([title, tag, color, icon]) => (
-           *       <article className="card card-interactive w-44 shrink-0 snap-start px-4 py-5 text-left" key={title}>
-           *         <div className={`mb-4 flex size-11.5 items-center justify-center rounded-[13px] [&_svg]:size-5.75 ${roleIconColors[color]}`}>
-           *           <RoleIcon name={icon} />
-           *         </div>
-           *         <div className="text-body font-semibold">{title}</div>
-           *         <div className="mt-1 font-mono text-label text-subtle">{tag}</div>
-           *       </article>
-           *     ))}
-           *   </div>
-           * </div>
-           */}
 
           {/* Hero UI illustration */}
           <HeroUIIllustration />
@@ -1400,15 +1449,15 @@ export default function Home() {
         <Section
           id="problem"
           kicker="The problem"
-          title="AI can answer your questions. But can it teach you?"
-          sub="ChatGPT, Claude, Gemini and other AI models are great at explaining things. But learning is more than asking questions — you need a clear path, the right resources, practice, feedback, and a way to know how far you've come."
+          title="Chatbots give answers. Tutors teach understanding."
+          sub="Students often use generic AI to solve math problems. But getting the answer isn't learning. You need a guide who explains the 'why', checks your work, and follows your school curriculum."
         >
           <div className="mt-11 grid grid-cols-2 gap-3 max-[760px]:grid-cols-1">
             {[
-              "A new chat every time, with no memory of what you've already learned",
-              "Answers with no structure — no path, no order, no next step",
-              "No way to test whether it actually sank in",
-              "No sense of progress, so you never know how far you've come",
+              "Generic AI gives the answer immediately, skipping the learning process",
+              "Explanations are often too advanced or don't match your class level",
+              "No structure — just a messy chat history with no progress tracking",
+              "No connection to your actual school curriculum or exams",
             ].map((x) => (
               <div className="flex items-start gap-3 card px-6 py-5" key={x}>
                 <div className="flex size-6.5 shrink-0 items-center justify-center rounded-full bg-negative-subtle text-body-s font-extrabold text-negative">
@@ -1423,19 +1472,19 @@ export default function Home() {
         {/* ── Solution ────────────────────────────────────────────────────── */}
         <Section
           id="solution"
-          kicker="The Lenni way"
-          title="More than an AI chatbot."
-          sub="Chat with AI and you get an answer. Learn with Lenni and you build knowledge — Lenni turns AI into a structured learning experience."
+          kicker="The Learning way"
+          title="More than a calculator. A dedicated math tutor."
+          sub="Learning turns AI into a structured learning experience. It doesn't just solve the equation; it teaches you how to solve it yourself."
         >
           <div className="mt-11 grid grid-cols-[1fr_auto_1fr] items-center gap-5 max-[760px]:grid-cols-1">
             <Compare
-              label="A chat with AI"
-              quote="Heres your answer."
+              label="Asking ChatGPT"
+              quote="Here is the answer: x = 4."
               items={[
-                "One-off, disconnected replies",
-                "No memory of your goal",
-                "No sense of your progress",
-                "You have to structure it yourself",
+                "One-off answers with no context",
+                "No memory of your progress",
+                "Often hallucinates or makes calculation errors",
+                "You have to prompt it perfectly to get good help",
               ]}
               old
             />
@@ -1443,13 +1492,13 @@ export default function Home() {
               →
             </div>
             <Compare
-              label="Learning with Lenni"
-              quote="Lets build your path."
+              label="Learning with Learning"
+              quote="Let's solve this step-by-step."
               items={[
-                "Built from your goal and current level",
-                "One place for your whole journey",
-                "Tracks what you've learned and proven",
-                "Quizzes and exercises to validate it",
+                "Guides you through the reasoning process",
+                "Adapts explanations to your class level (e.g. Grade 10)",
+                "Checks your understanding with quizzes",
+                "Tracks your mastery of every concept",
               ]}
             />
           </div>
@@ -1458,8 +1507,8 @@ export default function Home() {
         {/* ── Features — with per-feature illustrations ────────────────────── */}
         <Section
           id="features"
-          kicker="What Lenni does"
-          title="Everything you need, nothing you have to plan yourself."
+          kicker="What Learning does"
+          title="Everything you need to master mathematics."
         >
           {/* Feature cards row */}
           <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -1477,50 +1526,49 @@ export default function Home() {
 
           {/* ── Deep-dive illustrations ────────────────────────────────────── */}
 
-          {/* 1. Skill intake */}
+          {/* 1. Curriculum Alignment */}
           <div className="mt-20 grid grid-cols-[1fr_1fr] items-center gap-10 max-[760px]:grid-cols-1">
             <div>
-              <div className="mb-3 kicker text-accent">Skill detection</div>
+              <div className="mb-3 kicker text-accent">Curriculum Mode</div>
               <h3 className="font-display text-display-s font-bold leading-snug md:text-display-m">
-                Lenni meets you where you are.
+                Follow your school's path.
               </h3>
               <p className="mt-3 text-body leading-relaxed text-muted">
-                Connect your GitHub, LinkedIn, or resume — or take a quick
-                adaptive test. Lenni analyses your actual skills and builds a
-                path that starts from your real level, not a generic beginner
-                course.
+                Select your country and class. Learning generates a complete
+                mathematics curriculum broken into chapters and concepts,
+                matching exactly what you study in school.
               </p>
               <ul className="mt-5 flex flex-col gap-2 [&_li]:flex [&_li]:gap-2 [&_li]:text-body-s [&_li]:text-muted [&_li]:before:font-bold [&_li]:before:text-positive [&_li]:before:content-['✓']">
-                <li>GitHub repos & language detection</li>
-                <li>LinkedIn work history & seniority</li>
-                <li>Resume parsing for skills & education</li>
-                <li>Adaptive skill test if you prefer</li>
+                <li>Aligned with WAEC, NECO, and local curricula</li>
+                <li>Structured chapters and concepts</li>
+                <li>Track progress from Chapter 1 to Finals</li>
+                <li>Never miss a topic again</li>
               </ul>
             </div>
-            <SkillIntakeIllustration />
+            <PlanIllustration />
           </div>
 
-          {/* 2. Learning plan */}
+          {/* 2. Level Check */}
           <div className="mt-20 grid grid-cols-[1fr_1fr] items-center gap-10 max-[760px]:grid-cols-1">
             <div className="order-2 max-[760px]:order-1">
-              <PlanIllustration />
+              <SkillIntakeIllustration />
             </div>
             <div className="order-1 max-[760px]:order-2">
-              <div className="mb-3 kicker text-accent">Learning plan</div>
+              <div className="mb-3 kicker text-accent">Smart Detection</div>
               <h3 className="font-display text-display-s font-bold leading-snug md:text-display-m">
-                A structured path, not a pile of links.
+                Learning meets you where you are.
               </h3>
               <p className="mt-3 text-body leading-relaxed text-muted">
-                Lenni generates a complete curriculum broken into chapters and
-                lessons, with estimated time for each. The plan adapts as you
-                learn — finish a chapter early, and the next one updates
-                automatically.
+                Not sure where to start? Learning analyzes your class level or
+                runs a quick diagnostic test to identify your strengths and
+                weaknesses. It builds a path that skips what you know and
+                focuses on what you need.
               </p>
               <ul className="mt-5 flex flex-col gap-2 [&_li]:flex [&_li]:gap-2 [&_li]:text-body-s [&_li]:text-muted [&_li]:before:font-bold [&_li]:before:text-positive [&_li]:before:content-['✓']">
-                <li>Chapters and lessons generated for your goal</li>
-                <li>Time estimates per topic</li>
-                <li>Plan updates as you complete lessons</li>
-                <li>Skip what you already know</li>
+                <li>Select your Country and Class</li>
+                <li>Optional diagnostic test</li>
+                <li>Identifies weak areas instantly</li>
+                <li>Personalized starting point</li>
               </ul>
             </div>
           </div>
@@ -1528,20 +1576,20 @@ export default function Home() {
           {/* 3. Lesson + Chat */}
           <div className="mt-20 grid grid-cols-[1fr_1fr] items-center gap-10 max-[760px]:grid-cols-1">
             <div>
-              <div className="mb-3 kicker text-accent">AI lessons + chat</div>
+              <div className="mb-3 kicker text-accent">Guided Learning</div>
               <h3 className="font-display text-display-s font-bold leading-snug md:text-display-m">
                 Learn, then ask. Without losing your place.
               </h3>
               <p className="mt-3 text-body leading-relaxed text-muted">
-                Each lesson is generated by your chosen AI model, tailored to
-                your level. Got a question mid-lesson? Just ask — Lenni answers
-                in context and keeps the lesson on track.
+                Each concept is explained clearly with examples. Stuck on a
+                step? Ask the AI tutor. It answers in context, guiding you
+                without just giving the solution away.
               </p>
               <ul className="mt-5 flex flex-col gap-2 [&_li]:flex [&_li]:gap-2 [&_li]:text-body-s [&_li]:text-muted [&_li]:before:font-bold [&_li]:before:text-positive [&_li]:before:content-['✓']">
-                <li>Lessons generated to your exact level</li>
+                <li>Clear, step-by-step explanations</li>
                 <li>Ask questions without losing context</li>
-                <li>Works with any AI provider</li>
-                <li>All history saved — revisit anytime</li>
+                <li>Real-world examples (Business, Construction, etc.)</li>
+                <li>Adapts to your learning speed</li>
               </ul>
             </div>
             <LessonChatIllustration />
@@ -1554,21 +1602,20 @@ export default function Home() {
             </div>
             <div className="order-1 max-[760px]:order-2">
               <div className="mb-3 kicker text-accent">
-                Exercises & evaluation
+                Practice & Mastery
               </div>
               <h3 className="font-display text-display-s font-bold leading-snug md:text-display-m">
                 Don't just read it. Prove you learned it.
               </h3>
               <p className="mt-3 text-body leading-relaxed text-muted">
-                Every chapter ends with AI-generated quizzes and exercises.
-                Lenni evaluates your answers, explains what you got wrong, and
-                only marks a topic complete when you've actually demonstrated
-                understanding.
+                Every concept ends with AI-generated quizzes. Learning evaluates
+                your answers, explains mistakes, and only marks a topic complete
+                when you've demonstrated understanding.
               </p>
               <ul className="mt-5 flex flex-col gap-2 [&_li]:flex [&_li]:gap-2 [&_li]:text-body-s [&_li]:text-muted [&_li]:before:font-bold [&_li]:before:text-positive [&_li]:before:content-['✓']">
-                <li>Quizzes generated per chapter</li>
-                <li>Instant AI feedback on every answer</li>
-                <li>Retake until you pass</li>
+                <li>Quizzes generated per concept</li>
+                <li>Instant feedback on every answer</li>
+                <li>Retake until you master it</li>
                 <li>Score history kept on your profile</li>
               </ul>
             </div>
@@ -1582,15 +1629,14 @@ export default function Home() {
                 See exactly how far you've come.
               </h3>
               <p className="mt-3 text-body leading-relaxed text-muted">
-                Lenni tracks every lesson, quiz score, and learning streak. Your
-                dashboard shows which skills are growing, where you're
-                strongest, and what needs more attention — so you always know
-                what to do next.
+                Learning tracks every concept mastered and quiz score. Your
+                dashboard shows which math topics are growing and where you need
+                more practice — so you always know what to study next.
               </p>
               <ul className="mt-5 flex flex-col gap-2 [&_li]:flex [&_li]:gap-2 [&_li]:text-body-s [&_li]:text-muted [&_li]:before:font-bold [&_li]:before:text-positive [&_li]:before:content-['✓']">
-                <li>Lessons and quiz scores tracked automatically</li>
-                <li>Skill growth per topic</li>
-                <li>Daily activity and streak</li>
+                <li>Concept mastery tracking</li>
+                <li>Topic-specific skill growth</li>
+                <li>Daily activity and streaks</li>
                 <li>Full history across all your paths</li>
               </ul>
             </div>
@@ -1602,25 +1648,25 @@ export default function Home() {
         <Section
           id="how-it-works"
           kicker="How it works"
-          title="From goal to mastery in four steps."
+          title="From confusion to mastery in four steps."
         >
           <div className="mt-11 flex flex-col md:flex-row items-stretch gap-4">
             {[
               [
-                "Choose what to learn",
-                "\u201CI want to become an AI Engineer.\u201D Tell Lenni your goal.",
+                "Select your class",
+                "\u201CI am in Grade 10, Nigeria.\u201D Tell Learning your context.",
               ],
               [
                 "Get your learning path",
-                "Built from your current knowledge, not a generic curriculum.",
+                "A structured curriculum built for your specific class level.",
               ],
               [
-                "Learn with your AI",
-                "Explain, question, and practice with the model you choose.",
+                "Learn & Practice",
+                "Understand concepts with AI guidance and solve exercises.",
               ],
               [
-                "Test and track progress",
-                "Quizzes validate it. Your path updates as you go.",
+                "Track mastery",
+                "Quizzes validate it. Your path updates as you progress.",
               ],
             ].map(([t, d], i) => (
               <button
@@ -1646,18 +1692,18 @@ export default function Home() {
         <Section
           id="your-ai"
           kicker="Powered by the best AI"
-          title="Enterprise-grade AI, accessible to everyone."
-          sub="Lenni uses top-tier AI models to generate personalised lessons, quizzes, and exercises. No configuration needed — just start learning."
+          title="Enterprise-grade AI, focused on Mathematics."
+          sub="Learning uses top-tier AI models to generate personalised lessons, quizzes, and exercises. No configuration needed — just start learning."
         >
           <div className="mt-11 grid grid-cols-2 gap-3 max-[760px]:grid-cols-1">
             {[
-              ["Claude & GPT-4", "Industry-leading models power your lessons and exercises."],
-              ["Personalised to you", "AI adapts content to your level, pace, and learning style."],
+              ["Pedagogy-First", "AI trained to teach, not just answer. It guides you step-by-step."],
+              ["Curriculum Aware", "Knows what Grade 10 students should know vs Grade 12."],
               [
                 "No setup required",
-                "We handle the AI infrastructure. You just focus on learning.",
+                "We handle the AI infrastructure. You just focus on math.",
               ],
-              ["Always improving", "New models and features are added as Lenni grows."],
+              ["Always improving", "New models and features are added as Learning grows."],
             ].map(([t, d]) => (
               <div className="card px-6 py-5" key={t}>
                 <div className="text-body font-semibold">{t}</div>
@@ -1684,33 +1730,33 @@ export default function Home() {
             <div className="grid grid-cols-3 gap-4 max-[900px]:grid-cols-1">
               <Price
                 name="Starter"
-                desc="Enough for one full learning path."
+                desc="Enough for one full chapter."
                 price="$9"
                 billed="100 credits · never expire"
                 features={[
                   "100 credits",
-                  "1 credit = 1 lesson, quiz, or exercise",
+                  "1 credit = 1 concept lesson or quiz",
                   "Credits never expire",
                   "Use across any learning path",
                 ]}
-                action="Join waitlist"
+                action="Start learning"
                 start={start}
               />
               <Price
                 featured
                 name="Pro"
-                desc="Best value for serious learners."
+                desc="Best value for serious students."
                 price="$19"
                 billed="300 credits · never expire"
                 features={[
                   "300 credits",
-                  "1 credit = 1 lesson, quiz, or exercise",
+                  "1 credit = 1 concept lesson or quiz",
                   "Credits never expire",
                   "Save 33% vs Starter",
                   "Priority AI responses",
                 ]}
                 note="Most popular."
-                action="Join waitlist"
+                action="Start learning"
                 start={start}
               />
               <Price
@@ -1721,11 +1767,11 @@ export default function Home() {
                 billed="Minimum 10 credits"
                 features={[
                   "Pay per credit, no bundle",
-                  "1 credit = 1 lesson, quiz, or exercise",
+                  "1 credit = 1 concept lesson or quiz",
                   "Credits never expire",
                   "Add more anytime",
                 ]}
-                action="Join waitlist"
+                action="Start learning"
                 start={start}
               />
             </div>
@@ -1740,18 +1786,18 @@ export default function Home() {
               {[
                 [
                   "◆",
-                  "Skill detection",
-                  "Connect GitHub, LinkedIn, or take a test. AI identifies your level.",
+                  "Curriculum Access",
+                  "Browse full math curricula for your country and class.",
                 ],
                 [
                   "◇",
-                  "Curriculum generation",
-                  "AI builds a full learning path with chapters and lesson outlines.",
+                  "Progress Tracking",
+                  "Track what you've learned across all your paths.",
                 ],
                 [
                   "✎",
-                  "Progress tracking",
-                  "Track what you've learned across all your paths.",
+                  "Quick Concept Mode",
+                  "Ask one-off questions and get instant explanations.",
                 ],
               ].map(([icon, title, text]) => (
                 <div
@@ -1773,7 +1819,7 @@ export default function Home() {
             <p className="text-body-s text-muted">
               Free plan includes{" "}
               <strong className="text-foreground">1 learning path</strong>. Need
-              more? Add additional paths for{" "}
+              more? Add additional paths (e.g., extra subjects) for{" "}
               <strong className="text-foreground">$5 each</strong> — one-time,
               yours forever.
             </p>
@@ -1808,10 +1854,10 @@ export default function Home() {
         {/* ── CTA ─────────────────────────────────────────────────────────── */}
         <section className="mx-auto mt-24 w-full max-w-205 px-6">
           <div className="rounded-card bg-linear-to-br from-accent to-accent-strong px-10 py-14 text-center [&_h2]:font-display [&_h2]:text-display-m [&_h2]:text-white [&_p]:mx-auto [&_p]:mb-7 [&_p]:mt-3 [&_p]:text-body [&_p]:text-white/85 [&_.btn]:border-white [&_.btn]:bg-white [&_.btn]:text-accent [&_.btn]:shadow-[0_4px_0_var(--color-brand-subtle)] md:[&_h2]:text-display-l">
-            <h2>Start learning something new.</h2>
-            <p>Choose a goal. Lenni builds your path. You master it.</p>
+            <h2>Start mastering mathematics.</h2>
+            <p>Select your class. Learning builds your path. You master it.</p>
             <button className="btn btn-primary btn-lg" onClick={start}>
-              Join waitlist →
+              Start learning →
             </button>
           </div>
         </section>
@@ -1979,7 +2025,7 @@ function Footer({ start }: { start: () => void }) {
         <div className="[&_p]:max-w-55 [&_p]:text-body-s [&_p]:leading-[1.6] [&_p]:text-subtle">
           <Logo />
           <p>
-            Your AI learning environment — a structured path, not just a
+            Your AI mathematics tutor — a structured path, not just a
             one-time answer.
           </p>
         </div>
@@ -1988,7 +2034,6 @@ function Footer({ start }: { start: () => void }) {
           <a href="#features">Features</a>
           <a href="#pricing">Pricing</a>
           <a href="#faq">FAQ</a>
-          <a href="/creators">For Creators</a>
         </div>
         <div className="[&_a]:mb-3 [&_a]:block [&_a]:text-body-s [&_a]:text-muted [&_button]:mb-3 [&_button]:block [&_button]:text-body-s [&_button]:text-muted">
           <div className="mb-3 kicker text-subtle">Company</div>
@@ -1997,12 +2042,12 @@ function Footer({ start }: { start: () => void }) {
         </div>
         <div className="[&_a]:mb-3 [&_a]:block [&_a]:text-body-s [&_a]:text-muted [&_button]:mb-3 [&_button]:block [&_button]:text-body-s [&_button]:text-muted">
           <div className="mb-3 kicker text-subtle">Get started</div>
-          <button onClick={start}>Join waitlist</button>
+          <button onClick={start}>Start learning</button>
         </div>
       </div>
       <div className="flex justify-between gap-2 pt-6 [&_span]:text-body-s [&_span]:text-subtle">
-        <span>&copy; {year} Lenni. All rights reserved.</span>
-        <span>Made for self learners.</span>
+        <span>&copy; {year} Learning. All rights reserved.</span>
+        <span>Made for African students.</span>
       </div>
     </footer>
   );

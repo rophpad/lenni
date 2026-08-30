@@ -720,11 +720,26 @@ function HeroUIIllustration() {
               </div>
             </div>
 
-            <div className="rounded-lg border border-sun/30 bg-sun/5 px-3 py-2 text-center">
-              <div className="font-mono text-body-l font-bold text-sun">
-                🔥 7
-              </div>
-              <div className="font-mono text-[9px] text-subtle">day streak</div>
+            <div className="flex items-center justify-center gap-1.5 whitespace-nowrap rounded-lg border border-sun/30 bg-sun/5 px-3 py-2">
+              <svg
+                viewBox="0 0 24 24"
+                className="size-3.5 shrink-0 text-sun"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M12 2s-4.8 4.3-4.8 8.8c0 1.1.3 2.1.85 3-.35-.28-.95-.85-1.25-1.85 0 0-1.05 1.95.45 4.1.68 1 1.6 1.72 2.45 2.18.35.19.7.32.95.37.05.01.1.01.15.01s.1 0 .15-.01c.25-.05.6-.18.95-.37.85-.46 1.77-1.18 2.45-2.18 1.5-2.15.45-4.1.45-4.1-.3 1-.9 1.57-1.25 1.85.55-.9.85-1.9.85-3C16.8 6.3 12 2 12 2Z"
+                  fill="currentColor"
+                />
+                <path
+                  d="M12 14.6s-.85.85-1.15 1.85c-.1.35-.12.75.08 1.1.18.32.52.58.87.7.07.02.14.03.2.03s.13-.01.2-.03c.35-.12.69-.38.87-.7.2-.35.18-.75.08-1.1-.3-1-1.15-1.85-1.15-1.85Z"
+                  fill="white"
+                  opacity="0.9"
+                />
+              </svg>
+              <span className="font-mono text-label font-bold text-sun">
+                7 day streak
+              </span>
             </div>
 
             <div>
