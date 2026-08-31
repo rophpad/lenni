@@ -49,7 +49,7 @@ const features = [
   [
     "◆",
     "Aligned with your curriculum",
-    "Select your country and class. Learning builds a path that matches exactly what you are studying in school.",
+    "Choose your subject, country and class. Learning builds a path that matches exactly what you are studying — from Maths to AI.",
   ],
   [
     "◇",
@@ -64,28 +64,28 @@ const features = [
   [
     "○",
     "Track your progress",
-    "See exactly which concepts you've mastered and where you need more practice. Visualize your growth.",
+    "See exactly which concepts you've mastered and where you need more practice. Visualize growth across any subject.",
   ],
   [
     "△",
     "Real-world context",
-    "Understand why math matters. See how concepts apply to business, construction, and daily life in Africa.",
+    "Understand why it matters. See how concepts apply to business, technology, and daily life — not just the textbook.",
   ],
   [
     "▣",
     "Two ways to learn",
-    "Follow the full school curriculum chapter-by-chapter, or jump in to solve a specific problem instantly.",
+    "Follow a full curriculum chapter-by-chapter, or jump in to solve a specific problem instantly.",
   ],
 ];
 
 const faqs = [
   [
     "Is this just ChatGPT for math?",
-    "No. ChatGPT is a chatbot that gives answers. Learning is a structured tutor that guides you, checks your understanding, and follows your school curriculum.",
+    "No. ChatGPT is a chatbot that gives answers. Learning is a structured tutor that guides you, checks your understanding, and follows your curriculum — starting with Mathematics (live) and expanding to every subject.",
   ],
   [
-    "Which countries and classes are supported?",
-    "We are launching with curricula for major African education systems. You can select your country and class during onboarding.",
+    "Which subjects, countries and classes are supported?",
+    "Mathematics is live now for major African curricula (e.g. WAEC, Grade 7–12). Physics, Chemistry, Biology, English, CS, AI and Blockchain are coming next — join the waitlist to vote for what's next.",
   ],
   [
     "How do credits work?",
@@ -93,7 +93,7 @@ const faqs = [
   ],
   [
     "Can I use it just for homework help?",
-    "Yes! Use 'Quick Concept Mode' to ask about a specific problem (like fractions or derivatives) and get an instant, structured explanation.",
+    "Yes! Use 'Quick Concept Mode' to ask about a specific problem (like fractions, derivatives, or any concept in your subject) and get an instant, structured explanation.",
   ],
   [
     "What's free and what needs credits?",
@@ -738,7 +738,7 @@ function HeroUIIllustration() {
 
 // ---------------------------------------------------------------------------
 // FEATURE ILLUSTRATION: Learning Plan (Curriculum)
-// Shows a generated math curriculum
+// Shows a generated curriculum — Mathematics example (live), same structure for every subject
 // ---------------------------------------------------------------------------
 function PlanIllustration() {
   const chapters = [
@@ -757,10 +757,11 @@ function PlanIllustration() {
   ];
   return (
     <div className="overflow-hidden rounded-2xl border border-ui-border-subtle bg-page shadow-lg">
-      <div className="border-b border-ui-border-subtle bg-ui-raised px-4 py-2.5">
+      <div className="border-b border-ui-border-subtle bg-ui-raised px-4 py-2.5 flex items-center justify-between">
         <div className="font-mono text-label font-semibold text-subtle">
-          YOUR CURRICULUM · Grade 10
+          EXAMPLE · Mathematics · Grade 10
         </div>
+        <span className="rounded-full bg-positive/10 px-2 py-0.5 font-mono text-[9px] font-bold text-positive">Live</span>
       </div>
       <div className="divide-y divide-ui-border-subtle">
         {chapters.map((ch) => (
@@ -1225,7 +1226,7 @@ export default function Home() {
                 {subjectsOpen && (
                   <div
                     role="menu"
-                    className="absolute left-0 top-full z-40 mt-3 w-[360px] overflow-hidden rounded-2xl border border-ui-border-subtle bg-page p-2 shadow-[0_16px_40px_-12px_rgba(0,0,0,0.18)]"
+                    className="absolute left-0 top-full z-40 mt-3 w-90 overflow-hidden rounded-2xl border border-ui-border-subtle bg-page p-2 shadow-[0_16px_40px_-12px_rgba(0,0,0,0.18)]"
                   >
                     <div className="px-3 pb-2 pt-1">
                       <div className="font-mono text-[10px] font-semibold uppercase tracking-wider text-subtle">Choose a subject</div>
@@ -1235,18 +1236,20 @@ export default function Home() {
                         <button
                           key={s.label}
                           role="menuitem"
-                          disabled={!s.available}
                           onClick={() => {
-                            if (!s.available) return;
                             setSubjectsOpen(false);
-                            const el = document.getElementById("features");
-                            if (el) el.scrollIntoView({ behavior: "smooth" });
-                            else start();
+                            if (s.available) {
+                              const el = document.getElementById("features");
+                              if (el) el.scrollIntoView({ behavior: "smooth" });
+                              else start();
+                            } else {
+                              router.push(`/waitlist?subject=${encodeURIComponent(s.label)}`);
+                            }
                           }}
                           className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition ${
                             s.available
                               ? "hover:bg-accent/8 hover:text-accent"
-                              : "cursor-not-allowed opacity-60"
+                              : "hover:bg-ui-raised"
                           }`}
                           type="button"
                         >
@@ -1350,16 +1353,18 @@ export default function Home() {
                   {SUBJECTS.map((s) => (
                     <button
                       key={s.label}
-                      disabled={!s.available}
                       onClick={() => {
-                        if (!s.available) return;
                         setMenu(false);
                         setMobileSubjectsOpen(false);
-                        const el = document.getElementById("features");
-                        if (el) el.scrollIntoView({ behavior: "smooth" });
-                        else start();
+                        if (s.available) {
+                          const el = document.getElementById("features");
+                          if (el) el.scrollIntoView({ behavior: "smooth" });
+                          else start();
+                        } else {
+                          router.push(`/waitlist?subject=${encodeURIComponent(s.label)}`);
+                        }
                       }}
-                      className={`flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-left ${s.available ? "bg-page shadow-sm" : "opacity-60"}`}
+                      className={`flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-left ${s.available ? "bg-page shadow-sm" : "bg-page/50 hover:bg-page"}`}
                       type="button"
                     >
                       <span className={`flex size-7 shrink-0 items-center justify-center rounded-lg border text-[12px] font-bold ${s.available ? "border-accent/20 bg-accent/10 text-accent" : "border-ui-border-subtle bg-page text-subtle"}`}>{s.icon}</span>
@@ -1405,11 +1410,11 @@ export default function Home() {
         <section>
           <div className="mx-auto mt-14 w-full px-6 text-center">
             <div className="mb-4 kicker text-accent justify-center text-center">
-              AI Mathematics Tutor
+              AI Learning Platform · 8 Subjects
             </div>
             <div className="relative inline-block w-full">
               <h1 className="mx-auto font-heading text-display-m md:text-display-2xl">
-                <span className="block">Understand Math.</span>
+                <span className="block">Learn anything.</span>
                 <span className="block">
                   Your{" "}
                   <span className="animate-stamp-in edge [--edge-color:var(--color-success-strong)] mx-auto mt-2 inline-block w-fit -rotate-2 rounded-[20px] bg-positive px-5 pb-2.5 pt-1 text-white md:mx-0">
@@ -1417,27 +1422,43 @@ export default function Home() {
                   </span>
                 </span>
               </h1>
-              <Spark className="-top-4 right-8 md:right-36" color="sun" />
-              <Spark
-                className="bottom-2 left-12 size-4 md:left-48"
-                color="ember"
-              />
+              {/* Floating icons at exact star positions — SVG only, no text */}
+              <div
+                className="absolute -top-4 right-8 flex size-9 items-center justify-center rounded-full border border-caution/15 bg-page shadow-[0_8px_24px_-10px_rgba(0,0,0,0.15)] md:right-36 animate-pulse md:size-10"
+                aria-hidden="true"
+              >
+                {/* Maths — summation ∑ */}
+                <svg viewBox="0 0 24 24" className="size-5 text-caution md:size-[22px]" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M17 6H7L13.2 12H7L17 18H7" />
+                </svg>
+              </div>
+              <div
+                className="absolute bottom-2 left-12 flex size-7 items-center justify-center rounded-full border border-accent/15 bg-page shadow-[0_8px_24px_-10px_rgba(0,0,0,0.12)] md:left-48 md:size-9"
+                style={{ animation: "pulse 3s 0.6s infinite" }}
+                aria-hidden="true"
+              >
+                {/* Chemistry — flask */}
+                <svg viewBox="0 0 24 24" className="size-4 text-accent md:size-5" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M9 3h6M10 7a3 3 0 004 0" />
+                  <path d="M8 9h8l1.2 7.2A4 4 0 0113.4 20h-2.8a4 4 0 01-3.8-3.8z" />
+                  <path d="M11.2 15a1 1 0 100 2M13.6 12.8a1 1 0 100 1.6" />
+                </svg>
+              </div>
             </div>
             <p className="mx-auto mt-6 max-w-sm text-body text-muted md:max-w-md md:text-body-l">
-              Learning helps you master mathematics step-by-step. Aligned with
-              your school curriculum, it explains concepts clearly and guides
-              you until you truly understand.
+              From <strong className="font-semibold text-foreground">Mathematics</strong> to AI, Blockchain, Physics &amp; more —
+              Learning builds a personal path from what you already know and guides you until you truly understand.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
               <button className="btn btn-primary btn-lg" onClick={start}>
-                Start learning
+                Start learning — Maths live
               </button>
-              <a className="btn btn-secondary btn-lg" href="#how-it-works">
-                See how it works
+              <a className="btn btn-secondary btn-lg" href="#subjects">
+                Browse subjects
               </a>
             </div>
             <div className="mt-4 text-body-s text-subtle">
-              20 free credits · Aligned with African Curricula · No subscription
+              Mathematics live now · 7 more subjects coming soon · 20 free credits
             </div>
           </div>
 
@@ -1445,19 +1466,83 @@ export default function Home() {
           <HeroUIIllustration />
         </section>
 
+        {/* ── Subjects ────────────────────────────────────────────────────── */}
+        <Section
+          id="subjects"
+          kicker="Choose your subject"
+          title="One platform. Any subject you want to master."
+          sub="Mathematics is live today — with the same structured path, guided lessons and mastery checks coming to every other subject."
+        >
+          <div className="mt-10 grid grid-cols-4 gap-4 max-[900px]:grid-cols-2 max-[560px]:grid-cols-1">
+            {SUBJECTS.map((s) => (
+              <div
+                key={s.label}
+                className={`relative flex flex-col rounded-2xl border p-5 text-left transition ${
+                  s.available
+                    ? "border-accent/20 bg-accent/5 shadow-sm"
+                    : "border-ui-border-subtle bg-page opacity-80"
+                }`}
+              >
+                {s.available && (
+                  <span className="absolute right-3 top-3 rounded-full bg-positive px-2 py-0.5 font-mono text-[9px] font-bold text-white">
+                    Live
+                  </span>
+                )}
+                {!s.available && (
+                  <span className="absolute right-3 top-3 rounded-full border border-ui-border-subtle bg-ui-raised px-2 py-0.5 font-mono text-[9px] font-bold text-subtle">
+                    Coming soon
+                  </span>
+                )}
+                <div
+                  className={`mb-3 flex size-9 items-center justify-center rounded-xl border text-[14px] font-bold ${
+                    s.available
+                      ? "border-accent/20 bg-accent/10 text-accent"
+                      : "border-ui-border-subtle bg-ui-raised text-subtle"
+                  }`}
+                >
+                  {s.icon}
+                </div>
+                <div className="text-body font-bold leading-tight">{s.label}</div>
+                <div className="mt-1 line-clamp-2 text-body-s leading-snug text-muted">{s.desc}</div>
+                <div className="mt-4">
+                  {s.available ? (
+                    <button onClick={start} className="text-body-s font-semibold text-accent hover:underline" type="button">
+                      Start learning →
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => router.push(`/waitlist?subject=${encodeURIComponent(s.label)}`)}
+                      className="text-body-s font-semibold text-subtle hover:text-muted"
+                      type="button"
+                    >
+                      Join waitlist
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-2 text-body-s text-subtle">
+            <span>Want another subject first?</span>
+            <button onClick={start} className="font-semibold text-accent hover:underline" type="button">
+              Tell us what to launch next →
+            </button>
+          </div>
+        </Section>
+
         {/* ── Problem ─────────────────────────────────────────────────────── */}
         <Section
           id="problem"
           kicker="The problem"
           title="Chatbots give answers. Tutors teach understanding."
-          sub="Students often use generic AI to solve math problems. But getting the answer isn't learning. You need a guide who explains the 'why', checks your work, and follows your school curriculum."
+          sub="Students use generic AI to solve problems — from equations to essays. But getting the answer isn't learning. You need a guide who explains the 'why', checks your work, and follows a real curriculum."
         >
           <div className="mt-11 grid grid-cols-2 gap-3 max-[760px]:grid-cols-1">
             {[
               "Generic AI gives the answer immediately, skipping the learning process",
-              "Explanations are often too advanced or don't match your class level",
+              "Explanations are often too advanced or don't match your level",
               "No structure — just a messy chat history with no progress tracking",
-              "No connection to your actual school curriculum or exams",
+              "No connection to your actual curriculum or exams",
             ].map((x) => (
               <div className="flex items-start gap-3 card px-6 py-5" key={x}>
                 <div className="flex size-6.5 shrink-0 items-center justify-center rounded-full bg-negative-subtle text-body-s font-extrabold text-negative">
@@ -1473,8 +1558,8 @@ export default function Home() {
         <Section
           id="solution"
           kicker="The Learning way"
-          title="More than a calculator. A dedicated math tutor."
-          sub="Learning turns AI into a structured learning experience. It doesn't just solve the equation; it teaches you how to solve it yourself."
+          title="More than answers. A dedicated tutor."
+          sub="Learning turns AI into a structured learning experience. It doesn't just solve the problem — it teaches you how to solve it yourself, in any subject."
         >
           <div className="mt-11 grid grid-cols-[1fr_auto_1fr] items-center gap-5 max-[760px]:grid-cols-1">
             <Compare
@@ -1483,7 +1568,7 @@ export default function Home() {
               items={[
                 "One-off answers with no context",
                 "No memory of your progress",
-                "Often hallucinates or makes calculation errors",
+                "Often hallucinates or skips steps",
                 "You have to prompt it perfectly to get good help",
               ]}
               old
@@ -1496,9 +1581,9 @@ export default function Home() {
               quote="Let's solve this step-by-step."
               items={[
                 "Guides you through the reasoning process",
-                "Adapts explanations to your class level (e.g. Grade 10)",
+                "Adapts explanations to your level and subject",
                 "Checks your understanding with quizzes",
-                "Tracks your mastery of every concept",
+                "Tracks mastery across any subject",
               ]}
             />
           </div>
@@ -1508,7 +1593,7 @@ export default function Home() {
         <Section
           id="features"
           kicker="What Learning does"
-          title="Everything you need to master mathematics."
+          title="Everything you need to master any subject."
         >
           {/* Feature cards row */}
           <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -1531,18 +1616,18 @@ export default function Home() {
             <div>
               <div className="mb-3 kicker text-accent">Curriculum Mode</div>
               <h3 className="font-display text-display-s font-bold leading-snug md:text-display-m">
-                Follow your school's path.
+                Follow any subject's path.
               </h3>
               <p className="mt-3 text-body leading-relaxed text-muted">
-                Select your country and class. Learning generates a complete
-                mathematics curriculum broken into chapters and concepts,
-                matching exactly what you study in school.
+                Choose your subject, country and class. Learning generates a
+                complete curriculum broken into chapters and concepts — from
+                Mathematics (live) to Physics, AI and Blockchain (coming soon).
               </p>
               <ul className="mt-5 flex flex-col gap-2 [&_li]:flex [&_li]:gap-2 [&_li]:text-body-s [&_li]:text-muted [&_li]:before:font-bold [&_li]:before:text-positive [&_li]:before:content-['✓']">
-                <li>Aligned with WAEC, NECO, and local curricula</li>
-                <li>Structured chapters and concepts</li>
+                <li>Aligned with WAEC, NECO, and other curricula</li>
+                <li>Structured chapters and concepts per subject</li>
                 <li>Track progress from Chapter 1 to Finals</li>
-                <li>Never miss a topic again</li>
+                <li>Switch subjects anytime</li>
               </ul>
             </div>
             <PlanIllustration />
@@ -1630,12 +1715,12 @@ export default function Home() {
               </h3>
               <p className="mt-3 text-body leading-relaxed text-muted">
                 Learning tracks every concept mastered and quiz score. Your
-                dashboard shows which math topics are growing and where you need
-                more practice — so you always know what to study next.
+                dashboard shows which topics are growing — across any subject —
+                and where you need more practice.
               </p>
               <ul className="mt-5 flex flex-col gap-2 [&_li]:flex [&_li]:gap-2 [&_li]:text-body-s [&_li]:text-muted [&_li]:before:font-bold [&_li]:before:text-positive [&_li]:before:content-['✓']">
-                <li>Concept mastery tracking</li>
-                <li>Topic-specific skill growth</li>
+                <li>Concept mastery per subject</li>
+                <li>Skill growth by topic</li>
                 <li>Daily activity and streaks</li>
                 <li>Full history across all your paths</li>
               </ul>
@@ -1653,12 +1738,12 @@ export default function Home() {
           <div className="mt-11 flex flex-col md:flex-row items-stretch gap-4">
             {[
               [
-                "Select your class",
-                "\u201CI am in Grade 10, Nigeria.\u201D Tell Learning your context.",
+                "Choose your subject",
+                "Mathematics today — AI, Blockchain & more soon. Tell Learning your goal.",
               ],
               [
                 "Get your learning path",
-                "A structured curriculum built for your specific class level.",
+                "A structured curriculum built for your level and subject.",
               ],
               [
                 "Learn & Practice",
@@ -1692,18 +1777,18 @@ export default function Home() {
         <Section
           id="your-ai"
           kicker="Powered by the best AI"
-          title="Enterprise-grade AI, focused on Mathematics."
-          sub="Learning uses top-tier AI models to generate personalised lessons, quizzes, and exercises. No configuration needed — just start learning."
+          title="Enterprise-grade AI, for any subject."
+          sub="Learning uses top-tier AI models to generate personalised lessons, quizzes, and exercises — tuned for Mathematics today, expanding to every subject next."
         >
           <div className="mt-11 grid grid-cols-2 gap-3 max-[760px]:grid-cols-1">
             {[
               ["Pedagogy-First", "AI trained to teach, not just answer. It guides you step-by-step."],
-              ["Curriculum Aware", "Knows what Grade 10 students should know vs Grade 12."],
+              ["Curriculum Aware", "Knows what a beginner vs advanced learner should see — per subject."],
               [
                 "No setup required",
-                "We handle the AI infrastructure. You just focus on math.",
+                "We handle the AI infrastructure. You just focus on learning.",
               ],
-              ["Always improving", "New models and features are added as Learning grows."],
+              ["Always improving", "New subjects and models are added as Learning grows."],
             ].map(([t, d]) => (
               <div className="card px-6 py-5" key={t}>
                 <div className="text-body font-semibold">{t}</div>
@@ -1787,7 +1872,7 @@ export default function Home() {
                 [
                   "◆",
                   "Curriculum Access",
-                  "Browse full math curricula for your country and class.",
+                  "Browse full curricula for your subject, country and class.",
                 ],
                 [
                   "◇",
@@ -1854,8 +1939,8 @@ export default function Home() {
         {/* ── CTA ─────────────────────────────────────────────────────────── */}
         <section className="mx-auto mt-24 w-full max-w-205 px-6">
           <div className="rounded-card bg-linear-to-br from-accent to-accent-strong px-10 py-14 text-center [&_h2]:font-display [&_h2]:text-display-m [&_h2]:text-white [&_p]:mx-auto [&_p]:mb-7 [&_p]:mt-3 [&_p]:text-body [&_p]:text-white/85 [&_.btn]:border-white [&_.btn]:bg-white [&_.btn]:text-accent [&_.btn]:shadow-[0_4px_0_var(--color-brand-subtle)] md:[&_h2]:text-display-l">
-            <h2>Start mastering mathematics.</h2>
-            <p>Select your class. Learning builds your path. You master it.</p>
+            <h2>Start learning anything.</h2>
+            <p>Choose your subject. Learning builds your path. You master it.</p>
             <button className="btn btn-primary btn-lg" onClick={start}>
               Start learning →
             </button>
@@ -2025,7 +2110,7 @@ function Footer({ start }: { start: () => void }) {
         <div className="[&_p]:max-w-55 [&_p]:text-body-s [&_p]:leading-[1.6] [&_p]:text-subtle">
           <Logo />
           <p>
-            Your AI mathematics tutor — a structured path, not just a
+            Your AI tutor for any subject — a structured path, not just a
             one-time answer.
           </p>
         </div>
