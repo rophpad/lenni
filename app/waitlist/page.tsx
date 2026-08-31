@@ -5,8 +5,6 @@ import { useRouter } from "next/navigation";
 import { Logo } from "../components/logo";
 import { ThemeToggle } from "../components/theme-toggle";
 
-type Role = "learner" | "creator" | "";
-
 const SUBJECT_OPTIONS: Array<{ label: string; icon: string; desc: string; live: boolean }> = [
   { label: "Mathematics", icon: "∑", desc: "WAEC, Grade 7–12", live: true },
   { label: "Physics", icon: "◈", desc: "Mechanics & energy", live: false },
@@ -22,11 +20,10 @@ export default function WaitlistPage() {
   const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [role, setRole] = useState<Role>("");
   const [subjects, setSubjects] = useState<string[]>(["Mathematics"]);
   const [state, setState] = useState<"idle" | "saving" | "done" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
-  const [touched, setTouched] = useState({ name: false, email: false, role: false, subjects: false });
+  const [touched, setTouched] = useState({ name: false, email: false, subjects: false });
 
   // Preselect from ?subject= or ?subjects=Mathematics,AI
   useEffect(() => {
@@ -44,9 +41,8 @@ export default function WaitlistPage() {
 
   const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
   const nameValid = name.trim().length >= 2;
-  const roleValid = role === "learner" || role === "creator";
   const subjectsValid = subjects.length > 0;
-  const formValid = emailValid && nameValid && roleValid && subjectsValid;
+  const formValid = emailValid && nameValid && subjectsValid;
 
   function toggleSubject(label: string) {
     setSubjects((prev) => (prev.includes(label) ? prev.filter((s) => s !== label) : [...prev, label]));
@@ -56,7 +52,7 @@ export default function WaitlistPage() {
 
   async function join() {
     if (!formValid) {
-      setTouched({ name: true, email: true, role: true, subjects: true });
+      setTouched({ name: true, email: true, subjects: true });
       return;
     }
     setState("saving");
@@ -68,8 +64,7 @@ export default function WaitlistPage() {
         body: JSON.stringify({
           name: name.trim(),
           email: email.trim(),
-          role,
-          source: role,
+          source: "waitlist-page",
           subjects,
         }),
       });
@@ -243,43 +238,6 @@ export default function WaitlistPage() {
                 <p className="mt-2 font-mono text-[10px] leading-snug text-subtle">
                   Mathematics is live now — the rest are coming soon. Your picks help us decide what to launch next.
                 </p>
-              </div>
-
-              <div>
-                <label className="mb-2 block font-mono text-label font-semibold text-subtle">
-                  I&apos;m interested as a <span className="text-negative">*</span>
-                </label>
-                <div className="flex gap-3">
-                  {[
-                    { value: "learner" as const, label: "Learner", desc: "I want to learn" },
-                    { value: "creator" as const, label: "Creator / Business", desc: "I want to teach" },
-                  ].map(({ value, label, desc }) => (
-                    <button
-                      key={value}
-                      type="button"
-                      onClick={() => {
-                        setRole(value);
-                        setTouched((p) => ({ ...p, role: true }));
-                        setState("idle");
-                        setErrorMsg("");
-                      }}
-                      className={`flex-1 rounded-control border px-4 py-3 text-left transition
-                        ${
-                          role === value
-                            ? "border-accent bg-accent/10 text-accent"
-                            : touched.role && !roleValid
-                              ? "border-negative/50 bg-page text-muted"
-                              : "border-ui-border-subtle bg-page text-muted hover:border-accent/50"
-                        }`}
-                    >
-                      <span className="block text-body-s font-semibold">{label}</span>
-                      <span className="block text-label text-subtle">{desc}</span>
-                    </button>
-                  ))}
-                </div>
-                {touched.role && !roleValid && (
-                  <p className="mt-1 text-label text-negative">Please choose an option.</p>
-                )}
               </div>
             </div>
 
