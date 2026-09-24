@@ -1248,8 +1248,7 @@ export default function Home() {
     return () => clearInterval(t);
   }, []);
 
-  // const start = useCallback(() => router.push("/register"), [router]);
-  const start = useCallback(() => router.push("/waitlist"), [router]);
+  const login = useCallback(() => router.push("/login"), [router]);
 
   return (
     <>
@@ -1269,8 +1268,8 @@ export default function Home() {
             <div className="flex items-center gap-2">
               <div className="hidden items-center gap-2 md:flex">
                 <ThemeToggle compact />
-                <button className="btn btn-primary" onClick={start}>
-                  Join waitlist
+                <button className="btn btn-primary" onClick={login}>
+                  Log in
                 </button>
               </div>
               <button
@@ -1318,11 +1317,11 @@ export default function Home() {
                   className="btn btn-primary w-full"
                   onClick={() => {
                     setMenu(false);
-                    start();
+                    login();
                   }}
                   type="button"
                 >
-                  Join waitlist
+                  Log in
                 </button>
                 <div className="mt-4 px-1">
                   <ThemeToggle />
@@ -1360,8 +1359,8 @@ export default function Home() {
               choose, and tracks your growth — all in one place.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
-              <button className="btn btn-primary btn-lg" onClick={start}>
-                Join waitlist
+              <button className="btn btn-primary btn-lg" onClick={login}>
+                Log in
               </button>
               <a className="btn btn-secondary btn-lg" href="#how-it-works">
                 See how it works
@@ -1693,8 +1692,8 @@ export default function Home() {
                   "Credits never expire",
                   "Use across any learning path",
                 ]}
-                action="Join waitlist"
-                start={start}
+                action="Log in"
+                start={login}
               />
               <Price
                 featured
@@ -1710,8 +1709,8 @@ export default function Home() {
                   "Priority AI responses",
                 ]}
                 note="Most popular."
-                action="Join waitlist"
-                start={start}
+                action="Log in"
+                start={login}
               />
               <Price
                 name="Pay-as-you-go"
@@ -1725,8 +1724,8 @@ export default function Home() {
                   "Credits never expire",
                   "Add more anytime",
                 ]}
-                action="Join waitlist"
-                start={start}
+                action="Log in"
+                start={login}
               />
             </div>
           </div>
@@ -1810,13 +1809,13 @@ export default function Home() {
           <div className="rounded-card bg-linear-to-br from-accent to-accent-strong px-10 py-14 text-center [&_h2]:font-display [&_h2]:text-display-m [&_h2]:text-white [&_p]:mx-auto [&_p]:mb-7 [&_p]:mt-3 [&_p]:text-body [&_p]:text-white/85 [&_.btn]:border-white [&_.btn]:bg-white [&_.btn]:text-accent [&_.btn]:shadow-[0_4px_0_var(--color-brand-subtle)] md:[&_h2]:text-display-l">
             <h2>Start learning something new.</h2>
             <p>Choose a goal. Lenni builds your path. You master it.</p>
-            <button className="btn btn-primary btn-lg" onClick={start}>
-              Join waitlist →
+            <button className="btn btn-primary btn-lg" onClick={login}>
+              Log in →
             </button>
           </div>
         </section>
 
-        <Footer start={start} />
+        <Footer login={login} />
       </main>
     </>
   );
@@ -1971,7 +1970,7 @@ function Price({
   );
 }
 
-function Footer({ start }: { start: () => void }) {
+function Footer({ login }: { login: () => void }) {
   const year = new Date().getFullYear();
   return (
     <footer className="mx-auto mt-20 w-full max-w-content px-11 pb-8 pt-12">
@@ -1997,7 +1996,7 @@ function Footer({ start }: { start: () => void }) {
         </div>
         <div className="[&_a]:mb-3 [&_a]:block [&_a]:text-body-s [&_a]:text-muted [&_button]:mb-3 [&_button]:block [&_button]:text-body-s [&_button]:text-muted">
           <div className="mb-3 kicker text-subtle">Get started</div>
-          <button onClick={start}>Join waitlist</button>
+          <button onClick={login}>Log in</button>
         </div>
       </div>
       <div className="flex justify-between gap-2 pt-6 [&_span]:text-body-s [&_span]:text-subtle">
